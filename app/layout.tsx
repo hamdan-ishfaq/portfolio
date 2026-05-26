@@ -67,6 +67,7 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
     >
       <head>
+        {/* eslint-disable-next-line @next/next/no-page-custom-font -- icon font loaded once in root layout */}
         <link
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"

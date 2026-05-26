@@ -43,7 +43,7 @@ export async function GET(request: Request) {
       stars: data.stargazers_count,
       forks: data.forks_count,
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

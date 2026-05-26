@@ -29,8 +29,6 @@ export function Tabs({ tabs, defaultTab, className = '' }: TabsProps) {
     }
   }
 
-  const activeTab = tabs.find((t) => t.id === activeId);
-
   return (
     <div className={className}>
       {/* Tab list */}

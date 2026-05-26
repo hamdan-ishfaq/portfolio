@@ -55,7 +55,7 @@ export function ContactForm() {
           toast.show('Failed to send message. Please try again.', 'error');
         }
       }
-    } catch (err) {
+    } catch {
       toast.show('An unexpected error occurred.', 'error');
     } finally {
       setIsSubmitting(false);
