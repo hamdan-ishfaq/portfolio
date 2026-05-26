@@ -75,10 +75,16 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} mesh-bg text-on-surface antialiased min-h-screen flex flex-col selection:bg-primary/30 selection:text-primary-fixed`}
+        className={`${geistSans.variable} ${geistMono.variable} ds-body mesh-bg min-h-screen flex flex-col selection:bg-primary/25 selection:text-on-surface`}
         style={{ fontFamily: 'var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif' }}
         suppressHydrationWarning
       >
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-primary focus:text-on-primary focus:font-semibold focus:outline-none focus:ring-2 focus:ring-secondary"
+        >
+          Skip to main content
+        </a>
         {children}
         <Analytics />
       </body>

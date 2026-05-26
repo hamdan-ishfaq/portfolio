@@ -42,7 +42,7 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
         </div>
       </nav>
 
-      <main className="flex-grow pt-6 sm:pt-xl pb-12 sm:pb-2xl w-full">
+      <main id="main-content" className="flex-grow pt-6 sm:pt-xl pb-12 sm:pb-2xl w-full">
         <header className="page-container mb-10 sm:mb-2xl space-y-4 sm:space-y-lg">
           <div className="flex flex-wrap items-center gap-2 text-sm">
             <StatusBadge status={project.project_status} />

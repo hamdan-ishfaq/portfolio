@@ -1,10 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import type { DevlogEntry, DevlogEntryType } from '@/types';
+import type { DevlogEntry, DevlogEntryType, DevlogEntryVersion } from '@/types';
 import { Modal } from '@/components/ui/Modal';
 import { useToast } from '@/components/ui/Toast';
-import { deleteDevlogEntry, getDevlogEntries, upsertDevlogEntry } from '@/lib/actions/devlog';
+import { formatDateTime } from '@/lib/format-date';
+import {
+  deleteDevlogEntry,
+  getDevlogEntries,
+  getDevlogVersions,
+  upsertDevlogEntry,
+} from '@/lib/actions/devlog';
 
 const ENTRY_TYPES: { value: DevlogEntryType; label: string }[] = [
   { value: 'milestone', label: 'Milestone' },
@@ -32,6 +38,10 @@ const emptyEntry = {
 export function DevlogEditor({ projectId, initialEntries }: DevlogEditorProps) {
   const [entries, setEntries] = useState(initialEntries);
   const [modalOpen, setModalOpen] = useState(false);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [historyTitle, setHistoryTitle] = useState('');
+  const [historyVersions, setHistoryVersions] = useState<DevlogEntryVersion[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(emptyEntry);
   const { show: toast } = useToast();
@@ -55,6 +65,17 @@ export function DevlogEditor({ projectId, initialEntries }: DevlogEditorProps) {
       published: entry.published,
     });
     setModalOpen(true);
+  };
+
+  const openHistory = async (entry: DevlogEntry) => {
+    setHistoryTitle(entry.title);
+    setHistoryOpen(true);
+    setHistoryLoading(true);
+    setHistoryVersions([]);
+
+    const versions = await getDevlogVersions(entry.id);
+    setHistoryVersions(versions);
+    setHistoryLoading(false);
   };
 
   const refreshEntries = async () => {
@@ -109,7 +130,14 @@ export function DevlogEditor({ projectId, initialEntries }: DevlogEditorProps) {
                   {entry.published ? 'Published' : 'Draft'}
                 </p>
               </div>
-              <div className="flex gap-2 shrink-0">
+              <div className="flex gap-2 shrink-0 flex-wrap justify-end">
+                <button
+                  type="button"
+                  onClick={() => openHistory(entry)}
+                  className="text-sm text-on-surface-variant hover:text-on-surface hover:underline"
+                >
+                  History
+                </button>
                 <button
                   type="button"
                   onClick={() => openEdit(entry)}
@@ -134,12 +162,16 @@ export function DevlogEditor({ projectId, initialEntries }: DevlogEditorProps) {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         title={editingId ? 'Edit devlog entry' : 'New devlog entry'}
+        id="devlog-editor"
       >
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs uppercase text-on-surface-variant">Type</label>
+              <label htmlFor="devlog-type" className="text-xs uppercase text-on-surface-variant">
+                Type
+              </label>
               <select
+                id="devlog-type"
                 value={form.type}
                 onChange={(e) => setForm({ ...form, type: e.target.value as DevlogEntryType })}
                 className="w-full mt-1 bg-surface-container border border-white/10 rounded-lg px-3 py-2 text-on-surface text-sm"
@@ -152,8 +184,11 @@ export function DevlogEditor({ projectId, initialEntries }: DevlogEditorProps) {
               </select>
             </div>
             <div>
-              <label className="text-xs uppercase text-on-surface-variant">Date</label>
+              <label htmlFor="devlog-date" className="text-xs uppercase text-on-surface-variant">
+                Date
+              </label>
               <input
+                id="devlog-date"
                 type="date"
                 value={form.entry_date}
                 onChange={(e) => setForm({ ...form, entry_date: e.target.value })}
@@ -162,8 +197,11 @@ export function DevlogEditor({ projectId, initialEntries }: DevlogEditorProps) {
             </div>
           </div>
           <div>
-            <label className="text-xs uppercase text-on-surface-variant">Title</label>
+            <label htmlFor="devlog-title" className="text-xs uppercase text-on-surface-variant">
+              Title
+            </label>
             <input
+              id="devlog-title"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
               className="w-full mt-1 bg-surface-container border border-white/10 rounded-lg px-3 py-2 text-on-surface text-sm"
@@ -171,8 +209,11 @@ export function DevlogEditor({ projectId, initialEntries }: DevlogEditorProps) {
           </div>
           {form.type === 'fix' && issueEntries.length > 0 && (
             <div>
-              <label className="text-xs uppercase text-on-surface-variant">Link to issue</label>
+              <label htmlFor="devlog-link" className="text-xs uppercase text-on-surface-variant">
+                Link to issue
+              </label>
               <select
+                id="devlog-link"
                 value={form.linked_entry_id ?? ''}
                 onChange={(e) => setForm({ ...form, linked_entry_id: e.target.value || null })}
                 className="w-full mt-1 bg-surface-container border border-white/10 rounded-lg px-3 py-2 text-on-surface text-sm"
@@ -187,8 +228,11 @@ export function DevlogEditor({ projectId, initialEntries }: DevlogEditorProps) {
             </div>
           )}
           <div>
-            <label className="text-xs uppercase text-on-surface-variant">Content (Markdown)</label>
+            <label htmlFor="devlog-content" className="text-xs uppercase text-on-surface-variant">
+              Content (Markdown)
+            </label>
             <textarea
+              id="devlog-content"
               value={form.content}
               onChange={(e) => setForm({ ...form, content: e.target.value })}
               rows={8}
@@ -211,6 +255,44 @@ export function DevlogEditor({ projectId, initialEntries }: DevlogEditorProps) {
             Save entry
           </button>
         </div>
+      </Modal>
+
+      <Modal
+        isOpen={historyOpen}
+        onClose={() => setHistoryOpen(false)}
+        title={`Version history — ${historyTitle}`}
+        id="devlog-history"
+      >
+        {historyLoading ? (
+          <p className="text-sm text-on-surface-variant py-4">Loading versions…</p>
+        ) : historyVersions.length === 0 ? (
+          <p className="text-sm text-on-surface-variant py-4">
+            No prior versions saved yet. Versions are created automatically when you edit content.
+          </p>
+        ) : (
+          <ul className="space-y-4 max-h-[60vh] overflow-y-auto">
+            {historyVersions.map((version, index) => (
+              <li
+                key={version.id}
+                className="rounded-lg border border-white/10 bg-surface-container/50 p-3 space-y-2"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs font-medium text-primary">
+                    Version {historyVersions.length - index}
+                  </span>
+                  <span className="text-xs text-on-surface-variant">
+                    {formatDateTime(version.saved_at)}
+                  </span>
+                </div>
+                <pre className="text-xs text-on-surface-variant whitespace-pre-wrap font-mono max-h-40 overflow-y-auto">
+                  {version.content.length > 500
+                    ? `${version.content.slice(0, 500)}…`
+                    : version.content}
+                </pre>
+              </li>
+            ))}
+          </ul>
+        )}
       </Modal>
     </section>
   );

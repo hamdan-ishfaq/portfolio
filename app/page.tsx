@@ -8,7 +8,7 @@ import { Footer } from '@/components/public/Footer';
 import { ToastProvider } from '@/components/ui/Toast';
 import type { GlobalSettings, Project, TimelineEvent } from '@/types';
 
-export const revalidate = 3600; // Cache for 1 hour
+export const revalidate = 300;
 
 export default async function Home() {
   const supabase = await createServerSupabaseClient();
@@ -27,7 +27,7 @@ export default async function Home() {
   return (
     <ToastProvider>
       <Navbar settings={settings} />
-      <main className="pt-20 sm:pt-24 pb-16 sm:pb-32">
+      <main id="main-content" className="pt-20 sm:pt-24 pb-16 sm:pb-32">
         <Hero settings={settings} />
         <ProjectSections projects={projects} />
         <Timeline events={events} />

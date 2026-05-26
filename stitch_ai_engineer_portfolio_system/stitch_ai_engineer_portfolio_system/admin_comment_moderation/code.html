@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Comment Moderation - AIEngineer.io</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;family=JetBrains+Mono:wght@100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#2c1600",
+                        "surface-container-lowest": "#060e20",
+                        "surface-container-low": "#131b2e",
+                        "on-surface": "#dae2fd",
+                        "surface-bright": "#31394d",
+                        "outline": "#88929b",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "surface-container-high": "#222a3d",
+                        "surface-container": "#171f33",
+                        "on-tertiary-fixed-variant": "#693c00",
+                        "inverse-primary": "#006591",
+                        "error": "#ffb4ab",
+                        "on-primary": "#00344d",
+                        "inverse-surface": "#dae2fd",
+                        "on-tertiary-container": "#4d2b00",
+                        "on-error": "#690005",
+                        "primary-container": "#0ea5e9",
+                        "tertiary": "#ffb86e",
+                        "inverse-on-surface": "#283044",
+                        "outline-variant": "#3e4850",
+                        "primary": "#89ceff",
+                        "tertiary-fixed": "#ffdcbd",
+                        "secondary": "#4cd7f6",
+                        "background": "#0b1326",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#004c6e",
+                        "surface-container-highest": "#2d3449",
+                        "primary-fixed": "#c9e6ff",
+                        "on-background": "#dae2fd",
+                        "surface-dim": "#0b1326",
+                        "tertiary-fixed-dim": "#ffb86e",
+                        "tertiary-container": "#de8712",
+                        "on-secondary": "#003640",
+                        "on-secondary-container": "#00424e",
+                        "secondary-container": "#03b5d3",
+                        "surface": "#0b1326",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "secondary-fixed": "#acedff",
+                        "on-primary-fixed": "#001e2f",
+                        "primary-fixed-dim": "#89ceff",
+                        "surface-variant": "#2d3449",
+                        "error-container": "#93000a",
+                        "surface-tint": "#89ceff",
+                        "on-secondary-fixed": "#001f26",
+                        "on-primary-container": "#003751",
+                        "on-tertiary": "#492900",
+                        "on-surface-variant": "#bec8d2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "xs": "0.25rem",
+                        "sm": "0.5rem",
+                        "2xl": "4rem",
+                        "lg": "1.5rem",
+                        "container-max": "1200px",
+                        "md": "1rem",
+                        "xl": "2.5rem",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Geist", "sans-serif"],
+                        "body-base": ["Geist", "sans-serif"],
+                        "body-sm": ["Geist", "sans-serif"],
+                        "display-lg": ["Geist", "sans-serif"],
+                        "label-caps": ["Geist", "sans-serif"],
+                        "code-base": ["JetBrains Mono", "monospace"],
+                        "headline-md": ["Geist", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "body-base": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "code-base": ["14px", { "lineHeight": "1.6", "fontWeight": "450" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #0b1326; color: #dae2fd; }
+        
+        /* Glassmorphism utilities */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-surface {
+            background: rgba(19, 27, 46, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Checkbox Styling */
+        input[type="checkbox"] {
+            appearance: none;
+            background-color: transparent;
+            margin: 0;
+            font: inherit;
+            color: currentColor;
+            width: 1.15em;
+            height: 1.15em;
+            border: 1px solid #88929b;
+            border-radius: 0.25rem;
+            display: grid;
+            place-content: center;
+        }
+
+        input[type="checkbox"]::before {
+            content: "";
+            width: 0.65em;
+            height: 0.65em;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            box-shadow: inset 1em 1em var(--tw-colors-background);
+            background-color: #89ceff;
+            transform-origin: bottom left;
+            clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+        }
+
+        input[type="checkbox"]:checked::before {
+            transform: scale(1);
+        }
+        
+        input[type="checkbox"]:checked {
+            background-color: #0ea5e9;
+            border-color: #0ea5e9;
+        }
+        
+        input[type="checkbox"]:focus {
+            outline: 2px solid #89ceff;
+            outline-offset: max(2px, 0.15em);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #2d3449; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3e4850; }
+    </style>
+</head>
+<body class="font-body-base text-body-base min-h-screen flex flex-col md:flex-row antialiased overflow-x-hidden selection:bg-primary-container/30 selection:text-primary">
+<!-- Top Navigation (Mobile Only) -->
+<nav class="md:hidden w-full bg-surface-container-low border-b border-white/5 px-md py-sm flex justify-between items-center z-40 sticky top-0">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary" data-icon="admin_panel_settings">admin_panel_settings</span>
+<span class="font-headline-md text-headline-md text-primary">Admin Console</span>
+</div>
+<button class="text-on-surface p-2 rounded-lg hover:bg-white/5 transition-colors" id="mobileMenuBtn">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+</nav>
+<!-- SideNavBar (Shared Component) -->
+<aside class="bg-surface-container-low text-secondary font-body-sm text-body-sm h-screen w-[240px] fixed md:sticky left-0 top-0 border-r border-white/5 shadow-md flex flex-col p-md space-y-sm z-50 transform -translate-x-full md:translate-x-0 transition-transform duration-300" id="sideNav">
+<div class="flex items-center justify-between mb-xl">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest border border-white/10 overflow-hidden flex-shrink-0">
+<img alt="Engineer Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a software engineer. The lighting is studio quality, creating a moody, tech-focused atmosphere. The overall style aligns with a high-end, dark mode SaaS interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDjMajh9GaVlV8J2byE5yL8A_k7eAGbWGrb1K_X7AE_d752EsSzW26rxCrgpmHg6DbEMWUQIZpST_ECkzlFAM_5emWptZBzCOatpzER-tOa8hxZtedMpsNWNIHJmrEcjKgI6DWOcNupY97CqY6oKeWSYyTSGQ2K4xz0X8wzG49vzmYKeyADfw-IQoPfltW2a1jwxYMlfQQaeFw10ZrYRvQwmkqZQSrgTLRlc_l_ta81Lyjq6ADE-YMHkHfztexlTo_HshgxvTUIvum"/>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-primary text-[18px]">Admin Console</h2>
+<p class="text-on-surface-variant font-label-caps text-label-caps">System Overview</p>
+</div>
+</div>
+<button class="md:hidden text-on-surface-variant p-1" id="closeMobileNav">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-sm px-3 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:scale-[1.02] transition-transform transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-sm px-3 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:scale-[1.02] transition-transform transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="folder_open">folder_open</span>
+                Projects
+            </a>
+<!-- Active State Navigation -->
+<a class="flex items-center gap-sm px-3 py-2 bg-secondary-container text-on-secondary-container rounded-lg font-semibold hover:scale-[1.02] transition-transform transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="chat_bubble" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+                Comments
+            </a>
+<a class="flex items-center gap-sm px-3 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:scale-[1.02] transition-transform transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="timeline">timeline</span>
+                Timeline
+            </a>
+<a class="flex items-center gap-sm px-3 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:scale-[1.02] transition-transform transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="inbox">inbox</span>
+                Inbox
+            </a>
+<a class="flex items-center gap-sm px-3 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:scale-[1.02] transition-transform transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="upload_file">upload_file</span>
+                CV Upload
+            </a>
+<a class="flex items-center gap-sm px-3 py-2 text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:scale-[1.02] transition-transform transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="mt-auto pt-md">
+<button class="w-full py-2 px-4 rounded-lg border border-outline-variant text-on-surface hover:bg-surface-container-highest transition-colors flex items-center justify-center gap-sm text-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="open_in_new">open_in_new</span>
+                View Live Site
+            </button>
+</div>
+</aside>
+<!-- Overlay for mobile nav -->
+<div class="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 hidden md:hidden" id="navOverlay"></div>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col min-w-0 pb-2xl relative">
+<!-- Content Area -->
+<div class="flex-1 w-full max-w-[1440px] mx-auto px-md md:px-xl pt-lg md:pt-2xl">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-md mb-xl">
+<div>
+<div class="flex items-center gap-sm mb-2">
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface tracking-tighter">Comment Moderation</h1>
+<span class="bg-error/10 text-error border border-error/20 px-2.5 py-0.5 rounded-full text-sm font-medium flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+                            12 Pending
+                        </span>
+</div>
+<p class="text-on-surface-variant max-w-2xl">Review, approve, or remove user comments across all active projects. Pending items require attention.</p>
+</div>
+<div class="flex items-center gap-sm">
+<button class="bg-surface-container-high hover:bg-surface-container-highest border border-white/5 text-on-surface px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
+                        Filter
+                    </button>
+<button class="bg-surface-container-high hover:bg-surface-container-highest border border-white/5 text-on-surface px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="search">search</span>
+                        Search
+                    </button>
+</div>
+</div>
+<!-- Moderation Workspace Bento Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-lg">
+<!-- Main Table Area -->
+<div class="xl:col-span-12 glass-card rounded-xl overflow-hidden flex flex-col">
+<!-- Bulk Actions Toolbar -->
+<div class="bg-surface-container-low/50 border-b border-white/5 p-4 flex items-center justify-between sticky top-0 z-10 backdrop-blur-md">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<input class="rounded border-outline-variant" id="selectAll" type="checkbox"/>
+<label class="text-sm text-on-surface-variant select-none cursor-pointer" for="selectAll">Select All</label>
+</div>
+<div class="h-4 w-px bg-white/10"></div>
+<span class="text-sm text-on-surface-variant"><span class="font-bold text-on-surface" id="selectedCount">0</span> selected</span>
+</div>
+<div class="flex items-center gap-2 opacity-50 pointer-events-none transition-opacity duration-200" id="bulkActionContainer">
+<button class="px-3 py-1.5 rounded-md text-sm border border-outline-variant text-on-surface hover:bg-surface-container-highest transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="block">block</span>
+                                Reject Selected
+                            </button>
+<button class="px-3 py-1.5 rounded-md text-sm bg-gradient-to-r from-primary-container/20 to-primary/20 border border-primary/30 text-primary hover:from-primary-container/30 hover:to-primary/30 transition-colors flex items-center gap-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span>
+                                Approve Selected
+                            </button>
+</div>
+</div>
+<!-- Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-lowest/30 border-b border-white/5 text-on-surface-variant font-label-caps text-label-caps">
+<th class="p-4 w-[48px]"></th>
+<th class="p-4 font-semibold">Author</th>
+<th class="p-4 font-semibold">Comment</th>
+<th class="p-4 font-semibold">Context</th>
+<th class="p-4 font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5" id="commentList">
+<!-- Row 1 (Pending) -->
+<tr class="group hover:bg-surface-container-lowest/50 transition-colors">
+<td class="p-4 align-top">
+<input class="comment-checkbox rounded border-outline-variant mt-1" type="checkbox"/>
+</td>
+<td class="p-4 align-top">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary-container/20 flex items-center justify-center text-tertiary font-bold text-sm shrink-0 border border-tertiary/20">
+                                                AL
+                                            </div>
+<div>
+<div class="font-medium text-on-surface">Alex Mercer</div>
+<div class="text-xs text-on-surface-variant mt-0.5">alex@example.com</div>
+</div>
+</div>
+</td>
+<td class="p-4 align-top w-2/5">
+<div class="relative">
+<span class="absolute -left-3 top-0 text-primary/30 material-symbols-outlined text-[12px] rotate-180" data-icon="format_quote">format_quote</span>
+<p class="text-sm text-on-surface leading-relaxed pl-2 line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
+                                                I noticed a slight performance degradation when loading the WebGL context on mobile devices. Have you considered implementing lazy loading for the initial canvas texture? Great work otherwise!
+                                            </p>
+</div>
+</td>
+<td class="p-4 align-top">
+<div class="flex flex-col gap-1">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-surface-container text-xs text-secondary w-fit border border-white/5">
+<span class="material-symbols-outlined text-[14px]" data-icon="dataset">dataset</span>
+                                                Neural Engine v2
+                                            </span>
+<span class="text-xs text-on-surface-variant mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="schedule">schedule</span>
+                                                2 hours ago
+                                            </span>
+</div>
+</td>
+<td class="p-4 align-top text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 rounded text-on-surface-variant hover:text-error hover:bg-error/10 transition-colors" title="Reject">
+<span class="material-symbols-outlined text-[20px]" data-icon="close">close</span>
+</button>
+<button class="p-1.5 rounded text-on-surface-variant hover:text-primary hover:bg-primary/10 transition-colors" title="Approve">
+<span class="material-symbols-outlined text-[20px]" data-icon="check">check</span>
+</button>
+<button class="p-1.5 rounded text-on-surface-variant hover:bg-surface-container-highest transition-colors" title="More Options">
+<span class="material-symbols-outlined text-[20px]" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 (Flagged) -->
+<tr class="group hover:bg-surface-container-lowest/50 transition-colors bg-error/5">
+<td class="p-4 align-top">
+<input class="comment-checkbox rounded border-outline-variant mt-1" type="checkbox"/>
+</td>
+<td class="p-4 align-top">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant shrink-0 border border-white/10 overflow-hidden">
+<span class="material-symbols-outlined text-[16px]" data-icon="person">person</span>
+</div>
+<div>
+<div class="font-medium text-on-surface flex items-center gap-2">
+                                                    AnonUser99
+                                                    <span class="bg-error/20 text-error px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">Flagged</span>
+</div>
+<div class="text-xs text-on-surface-variant mt-0.5">IP: 192.168.1.*</div>
+</div>
+</div>
+</td>
+<td class="p-4 align-top w-2/5">
+<div class="relative">
+<span class="absolute -left-3 top-0 text-error/30 material-symbols-outlined text-[12px] rotate-180" data-icon="format_quote">format_quote</span>
+<p class="text-sm text-on-surface leading-relaxed pl-2 line-clamp-2 group-hover:line-clamp-none transition-all duration-300 opacity-70 italic">
+                                                [Automated moderation flag: Potential spam link detected. Contains multiple URLs to unverified domains.] Check out my site http://spam-example.com for cheap API keys...
+                                            </p>
+</div>
+</td>
+<td class="p-4 align-top">
+<div class="flex flex-col gap-1">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-surface-container text-xs text-secondary w-fit border border-white/5">
+<span class="material-symbols-outlined text-[14px]" data-icon="description">description</span>
+                                                About Page
+                                            </span>
+<span class="text-xs text-on-surface-variant mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="schedule">schedule</span>
+                                                5 hours ago
+                                            </span>
+</div>
+</td>
+<td class="p-4 align-top text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 rounded text-error bg-error/10 hover:bg-error/20 transition-colors" title="Delete">
+<span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+</button>
+<button class="p-1.5 rounded text-on-surface-variant hover:text-primary hover:bg-primary/10 transition-colors" title="Override &amp; Approve">
+<span class="material-symbols-outlined text-[20px]" data-icon="check">check</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 (Pending) -->
+<tr class="group hover:bg-surface-container-lowest/50 transition-colors">
+<td class="p-4 align-top">
+<input class="comment-checkbox rounded border-outline-variant mt-1" type="checkbox"/>
+</td>
+<td class="p-4 align-top">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary font-bold text-sm shrink-0 border border-secondary/20">
+                                                SR
+                                            </div>
+<div>
+<div class="font-medium text-on-surface">Sarah Reed</div>
+<div class="text-xs text-on-surface-variant mt-0.5">sarah.dev@github</div>
+</div>
+</div>
+</td>
+<td class="p-4 align-top w-2/5">
+<div class="relative">
+<span class="absolute -left-3 top-0 text-primary/30 material-symbols-outlined text-[12px] rotate-180" data-icon="format_quote">format_quote</span>
+<p class="text-sm text-on-surface leading-relaxed pl-2 line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
+                                                The architecture pattern used in this project is fascinating. Did you utilize a specific state management library, or is it custom? I'm trying to implement something similar for my masters thesis.
+                                            </p>
+</div>
+</td>
+<td class="p-4 align-top">
+<div class="flex flex-col gap-1">
+<span class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-surface-container text-xs text-secondary w-fit border border-white/5">
+<span class="material-symbols-outlined text-[14px]" data-icon="code">code</span>
+                                                React FinTech Dash
+                                            </span>
+<span class="text-xs text-on-surface-variant mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="schedule">schedule</span>
+                                                1 day ago
+                                            </span>
+</div>
+</td>
+<td class="p-4 align-top text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="p-1.5 rounded text-on-surface-variant hover:text-error hover:bg-error/10 transition-colors" title="Reject">
+<span class="material-symbols-outlined text-[20px]" data-icon="close">close</span>
+</button>
+<button class="p-1.5 rounded text-on-surface-variant hover:text-primary hover:bg-primary/10 transition-colors" title="Approve">
+<span class="material-symbols-outlined text-[20px]" data-icon="check">check</span>
+</button>
+<button class="p-1.5 rounded text-on-surface-variant hover:bg-surface-container-highest transition-colors" title="Reply">
+<span class="material-symbols-outlined text-[20px]" data-icon="reply">reply</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination footer -->
+<div class="border-t border-white/5 p-4 flex items-center justify-between text-sm text-on-surface-variant bg-surface-container-lowest/30 mt-auto">
+<div>Showing 1 to 3 of 12 pending comments</div>
+<div class="flex items-center gap-2">
+<button class="p-1 rounded hover:bg-surface-container-highest disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[20px]" data-icon="chevron_left">chevron_left</span>
+</button>
+<span class="px-2">Page 1 of 4</span>
+<button class="p-1 rounded hover:bg-surface-container-highest">
+<span class="material-symbols-outlined text-[20px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State Concept (Hidden by default, used for illustration purposes) -->
+<div class="hidden flex-col items-center justify-center py-2xl text-center glass-card rounded-xl mt-lg border border-dashed border-white/10">
+<div class="w-24 h-24 mb-6 rounded-full bg-surface-container flex items-center justify-center border border-white/5 relative">
+<span class="material-symbols-outlined text-[48px] text-surface-bright" data-icon="forum">forum</span>
+<span class="absolute top-2 right-2 flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">No pending comments</h3>
+<p class="text-on-surface-variant max-w-sm mb-6">You're all caught up! There are currently no new comments requiring moderation across your projects.</p>
+<button class="px-4 py-2 rounded-lg border border-outline-variant text-on-surface hover:bg-surface-container-highest transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="history">history</span>
+                    View Moderation History
+                </button>
+</div>
+</div>
+</main>
+<script>
+        // Simple Interaction Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile Nav Toggle
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeMobileNav = document.getElementById('closeMobileNav');
+            const sideNav = document.getElementById('sideNav');
+            const navOverlay = document.getElementById('navOverlay');
+
+            function toggleNav() {
+                const isOpen = !sideNav.classList.contains('-translate-x-full');
+                if (isOpen) {
+                    sideNav.classList.add('-translate-x-full');
+                    navOverlay.classList.add('hidden');
+                    document.body.style.overflow = '';
+                } else {
+                    sideNav.classList.remove('-translate-x-full');
+                    navOverlay.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+
+            mobileMenuBtn?.addEventListener('click', toggleNav);
+            closeMobileNav?.addEventListener('click', toggleNav);
+            navOverlay?.addEventListener('click', toggleNav);
+
+            // Bulk Actions Logic
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.comment-checkbox');
+            const selectedCountSpan = document.getElementById('selectedCount');
+            const bulkActionContainer = document.getElementById('bulkActionContainer');
+
+            function updateBulkActions() {
+                const checkedCount = document.querySelectorAll('.comment-checkbox:checked').length;
+                selectedCountSpan.textContent = checkedCount;
+                
+                if (checkedCount > 0) {
+                    bulkActionContainer.classList.remove('opacity-50', 'pointer-events-none');
+                } else {
+                    bulkActionContainer.classList.add('opacity-50', 'pointer-events-none');
+                }
+
+                // Update "Select All" state
+                if (checkedCount === 0) {
+                    selectAll.checked = false;
+                    selectAll.indeterminate = false;
+                } else if (checkedCount === checkboxes.length) {
+                    selectAll.checked = true;
+                    selectAll.indeterminate = false;
+                } else {
+                    selectAll.checked = false;
+                    selectAll.indeterminate = true;
+                }
+            }
+
+            selectAll?.addEventListener('change', (e) => {
+                checkboxes.forEach(cb => {
+                    cb.checked = e.target.checked;
+                    // Trigger highlighting logic if needed here
+                });
+                updateBulkActions();
+            });
+
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', updateBulkActions);
+            });
+        });
+    </script>
+</body></html>
