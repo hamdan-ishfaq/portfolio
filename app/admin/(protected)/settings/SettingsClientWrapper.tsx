@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import type { GlobalSettings } from '@/types';
+import type { GlobalSettings, HeroTechItem } from '@/types';
+import { DEFAULT_HERO_TECH_STACK } from '@/lib/defaults/hero-tech-stack';
 import { FileUploadInput } from '@/components/admin/FileUploadInput';
 import { useToast } from '@/components/ui/Toast';
 import { updateGlobalSettings } from '@/lib/actions/settings';
@@ -10,14 +11,45 @@ type SettingsClientWrapperProps = {
   initialSettings: GlobalSettings;
 };
 
+function normalizeHeroStack(stack: HeroTechItem[] | null | undefined): HeroTechItem[] {
+  if (stack && stack.length > 0) return stack;
+  return DEFAULT_HERO_TECH_STACK;
+}
+
 export function SettingsClientWrapper({ initialSettings }: SettingsClientWrapperProps) {
-  const [form, setForm] = useState(initialSettings);
+  const [form, setForm] = useState({
+    ...initialSettings,
+    hero_tech_stack: normalizeHeroStack(initialSettings.hero_tech_stack),
+  });
   const [saving, setSaving] = useState(false);
   const { show: toast } = useToast();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const updateTechItem = (index: number, field: keyof HeroTechItem, value: string) => {
+    setForm((prev) => ({
+      ...prev,
+      hero_tech_stack: prev.hero_tech_stack.map((item, i) =>
+        i === index ? { ...item, [field]: value } : item
+      ),
+    }));
+  };
+
+  const addTechItem = () => {
+    setForm((prev) => ({
+      ...prev,
+      hero_tech_stack: [...prev.hero_tech_stack, { label: 'New skill', icon: 'code' }],
+    }));
+  };
+
+  const removeTechItem = (index: number) => {
+    setForm((prev) => ({
+      ...prev,
+      hero_tech_stack: prev.hero_tech_stack.filter((_, i) => i !== index),
+    }));
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -34,6 +66,7 @@ export function SettingsClientWrapper({ initialSettings }: SettingsClientWrapper
       twitter: form.twitter,
       seo_title_suffix: form.seo_title_suffix,
       meta_description: form.meta_description,
+      hero_tech_stack: form.hero_tech_stack.filter((item) => item.label.trim()),
     });
     setSaving(false);
     if (!res.success) {
@@ -109,6 +142,76 @@ export function SettingsClientWrapper({ initialSettings }: SettingsClientWrapper
               className="w-full mt-1 bg-surface-container border border-white/10 rounded-lg px-3 py-2 text-on-surface"
             />
           </div>
+        </div>
+
+        <div className="border-t border-white/5 pt-6 space-y-4">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h3 className="font-headline-md text-headline-md text-on-surface">
+                Homepage tech stack
+              </h3>
+              <p className="text-sm text-on-surface-variant mt-1">
+                Shown in the hero grid. Icon names from{' '}
+                <a
+                  href="https://fonts.google.com/icons"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline"
+                >
+                  Material Symbols
+                </a>{' '}
+                (e.g. <code className="text-xs">code</code>, <code className="text-xs">cloud</code>
+                ).
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={addTechItem}
+              className="text-sm px-3 py-1.5 rounded-lg bg-primary/20 text-primary border border-primary/30 shrink-0"
+            >
+              Add item
+            </button>
+          </div>
+
+          <ul className="space-y-3">
+            {form.hero_tech_stack.map((item, index) => (
+              <li
+                key={index}
+                className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-3 items-end rounded-lg border border-white/10 bg-surface-container/50 p-3"
+              >
+                <div>
+                  <label className="text-xs uppercase text-on-surface-variant">Label</label>
+                  <input
+                    value={item.label}
+                    onChange={(e) => updateTechItem(index, 'label', e.target.value)}
+                    className="w-full mt-1 bg-surface-container border border-white/10 rounded-lg px-3 py-2 text-on-surface text-sm"
+                    placeholder="Python"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs uppercase text-on-surface-variant">Icon</label>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="material-symbols-outlined text-primary text-xl shrink-0">
+                      {item.icon || 'code'}
+                    </span>
+                    <input
+                      value={item.icon}
+                      onChange={(e) => updateTechItem(index, 'icon', e.target.value)}
+                      className="w-full bg-surface-container border border-white/10 rounded-lg px-3 py-2 text-on-surface text-sm font-mono"
+                      placeholder="code"
+                    />
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeTechItem(index)}
+                  className="text-sm text-error hover:underline px-2 py-2"
+                >
+                  Remove
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <button

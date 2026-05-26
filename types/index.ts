@@ -9,6 +9,12 @@ export interface TechStackItem {
   category: TechCategory;
 }
 
+/** Homepage hero tech grid (Material Symbols icon + label). */
+export interface HeroTechItem {
+  label: string;
+  icon: string;
+}
+
 export type DevlogEntryType =
   | 'milestone'
   | 'daily_log'
@@ -123,6 +129,7 @@ export interface GlobalSettings {
   twitter: string | null;
   seo_title_suffix: string;
   meta_description: string;
+  hero_tech_stack: HeroTechItem[];
   updated_at: string;
 }
 

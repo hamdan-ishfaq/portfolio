@@ -1,6 +1,7 @@
 'use client';
 
 import type { GlobalSettings } from '@/types';
+import { DEFAULT_HERO_TECH_STACK } from '@/lib/defaults/hero-tech-stack';
 import { FadeIn } from '@/components/ui/FadeIn';
 
 type HeroProps = {
@@ -10,24 +11,14 @@ type HeroProps = {
 export function Hero({ settings }: HeroProps) {
   const firstName = settings?.display_name?.split(' ')[0] ?? 'Alex Chen';
 
-  const techStack = [
-    { icon: 'code', label: 'Python', hoverClass: 'group-hover:text-primary' },
-    { icon: 'schema', label: 'PyTorch', hoverClass: 'group-hover:text-secondary' },
-    { icon: 'database', label: 'PostgreSQL', hoverClass: 'group-hover:text-primary' },
-    { icon: 'memory', label: 'CUDA', hoverClass: 'group-hover:text-secondary' },
-    { icon: 'cloud', label: 'AWS', hoverClass: 'group-hover:text-primary' },
-    { icon: 'box', label: 'Docker', hoverClass: 'group-hover:text-secondary' },
-    { icon: 'api', label: 'FastAPI', hoverClass: 'group-hover:text-primary' },
-    { icon: 'analytics', label: 'TensorFlow', hoverClass: 'group-hover:text-secondary' },
-  ];
+  const storedStack = settings?.hero_tech_stack?.filter((item) => item.label?.trim());
+  const techStack = storedStack && storedStack.length > 0 ? storedStack : DEFAULT_HERO_TECH_STACK;
 
   return (
-    /* Exactly matches Stitch: max-w-container-max mx-auto px-lg min-h-[921px] flex flex-col justify-center relative */
     <section
       className="page-container min-h-[70vh] sm:min-h-[80vh] lg:min-h-[921px] flex flex-col justify-center relative py-12 sm:py-0"
       id="home"
     >
-      {/* Ambient glow blobs */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute top-1/4 right-1/4 w-[280px] sm:w-[500px] h-[280px] sm:h-[500px] bg-primary/5 rounded-full blur-[80px] sm:blur-[100px]"></div>
         <div className="absolute bottom-1/4 left-1/4 w-[220px] sm:w-[400px] h-[220px] sm:h-[400px] bg-secondary/5 rounded-full blur-[60px] sm:blur-[80px]"></div>
@@ -58,7 +49,6 @@ export function Hero({ settings }: HeroProps) {
                 'Architecting scalable machine learning pipelines and deploying state-of-the-art models for real-world impact. Specializing in LLMs, Computer Vision, and high-performance inference.'}
             </p>
 
-            {/* Buttons — Stitch: flex flex-wrap gap-md */}
             <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-md">
               <a
                 className="btn-primary px-6 py-3 rounded-lg font-body-base font-semibold flex items-center justify-center gap-2 w-full sm:w-auto"
@@ -66,12 +56,10 @@ export function Hero({ settings }: HeroProps) {
                 target={settings?.cv_file_url ? '_blank' : undefined}
                 rel="noopener noreferrer"
               >
-                {/* Stitch: material-symbols-outlined text-sm */}
                 <span className="material-symbols-outlined text-sm">download</span>
                 Download CV
               </a>
 
-              {/* View Projects — Stitch: btn-secondary px-6 py-3 rounded-lg font-body-base font-semibold flex items-center gap-2 */}
               <a
                 className="btn-secondary px-6 py-3 rounded-lg font-body-base font-semibold flex items-center justify-center gap-2 w-full sm:w-auto"
                 href="#projects"
@@ -93,17 +81,17 @@ export function Hero({ settings }: HeroProps) {
             </h3>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-sm">
-              {techStack.map((tech) => (
+              {techStack.map((tech, index) => (
                 <div
-                  key={tech.label}
+                  key={`${tech.label}-${index}`}
                   className="aspect-square rounded-lg bg-surface-container flex flex-col items-center justify-center border border-white/5 hover-glow transition-all duration-300 cursor-default group"
                 >
                   <span
-                    className={`material-symbols-outlined text-on-surface-variant ${tech.hoverClass} text-2xl mb-1`}
+                    className={`material-symbols-outlined text-on-surface-variant ${index % 2 === 0 ? 'group-hover:text-primary' : 'group-hover:text-secondary'} text-2xl mb-1`}
                   >
                     {tech.icon}
                   </span>
-                  <span className="text-[10px] text-on-surface-variant font-code-base">
+                  <span className="text-[10px] text-on-surface-variant font-code-base text-center px-1">
                     {tech.label}
                   </span>
                 </div>

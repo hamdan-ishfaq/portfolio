@@ -120,6 +120,7 @@ CREATE TABLE settings (
   twitter TEXT,
   seo_title_suffix TEXT DEFAULT '',
   meta_description TEXT DEFAULT '',
+  hero_tech_stack JSONB DEFAULT '[]',
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 
