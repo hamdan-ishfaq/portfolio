@@ -1,15 +1,39 @@
-export default function Home() {
-  const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { Hero } from '@/components/public/Hero';
+import { ProjectSections } from '@/components/public/ProjectSections';
+import { Timeline } from '@/components/public/Timeline';
+import { ContactForm } from '@/components/public/ContactForm';
+import { Navbar } from '@/components/public/Navbar';
+import { Footer } from '@/components/public/Footer';
+import { ToastProvider } from '@/components/ui/Toast';
+import type { GlobalSettings, Project, TimelineEvent } from '@/types';
+
+export const revalidate = 3600; // Cache for 1 hour
+
+export default async function Home() {
+  const supabase = await createServerSupabaseClient();
+
+  // Fetch all required data in parallel
+  const [settingsRes, projectsRes, timelineRes] = await Promise.all([
+    supabase.from('settings').select('*').single(),
+    supabase.from('projects').select('*').eq('published', true).order('order', { ascending: true }),
+    supabase.from('timeline_events').select('*').order('start_date', { ascending: false }),
+  ]);
+
+  const settings = (settingsRes.data as GlobalSettings) ?? null;
+  const projects = (projectsRes.data as Project[]) ?? [];
+  const events = (timelineRes.data as TimelineEvent[]) ?? [];
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24 text-center">
-      <h1 className="text-2xl font-bold mb-4">Environment Setup Check</h1>
-      <p className="text-lg">
-        Firebase Project ID:
-        <span className="ml-2 font-mono bg-zinc-800 text-green-400 p-1 rounded">
-          {projectId || 'NOT FOUND - CHECK .ENV.LOCAL'}
-        </span>
-      </p>
-    </main>
+    <ToastProvider>
+      <Navbar settings={settings} />
+      <main className="pt-20 sm:pt-24 pb-16 sm:pb-32">
+        <Hero settings={settings} />
+        <ProjectSections projects={projects} />
+        <Timeline events={events} />
+        <ContactForm />
+      </main>
+      <Footer settings={settings} />
+    </ToastProvider>
   );
 }

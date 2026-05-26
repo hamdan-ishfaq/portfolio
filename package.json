@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
+    "verify:supabase": "node scripts/verify-supabase.mjs",
+    "test:smoke": "node scripts/smoke-test.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky"
@@ -15,10 +17,10 @@
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@hookform/resolvers": "^5.4.0",
+    "@supabase/ssr": "^0.10.3",
+    "@supabase/supabase-js": "^2.106.2",
     "@uiw/react-md-editor": "^4.1.1",
     "@vercel/analytics": "^2.0.1",
-    "firebase": "^12.13.0",
-    "firebase-admin": "^13.10.0",
     "framer-motion": "^12.40.0",
     "lucide-react": "^1.16.0",
     "next": "16.2.6",
@@ -29,6 +31,7 @@
     "rehype-highlight": "^7.0.2",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",
+    "resend": "^6.12.4",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -40,6 +43,7 @@
     "eslint-config-next": "16.2.6",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.5",
+    "playwright": "^1.60.0",
     "prettier": "^3.8.3",
     "tailwindcss": "^4",
     "typescript": "^5"
