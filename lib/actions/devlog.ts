@@ -44,7 +44,13 @@ export async function upsertDevlogEntry(
   const decoded = await verifyAdminSession();
 
   const parsed = DevlogSchema.safeParse(formData);
-  if (!parsed.success) return { success: false, error: 'validation_failed' };
+  if (!parsed.success) {
+    console.error('Validation failed for devlog entry:', parsed.error.format());
+    return {
+      success: false,
+      error: `Validation failed: ${parsed.error.issues.map((e) => `${e.path.join('.')}: ${e.message}`).join(', ')}`,
+    };
+  }
 
   if (entryId) {
     // Auto-versioning: save snapshot of current content before overwriting

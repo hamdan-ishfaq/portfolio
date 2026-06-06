@@ -106,7 +106,13 @@ export async function upsertProject(
   const decoded = await verifyAdminSession();
 
   const parsed = ProjectFormSchema.safeParse(formData);
-  if (!parsed.success) return { success: false, error: 'validation_failed' };
+  if (!parsed.success) {
+    console.error('Validation failed for project:', parsed.error.format());
+    return {
+      success: false,
+      error: `Validation failed: ${parsed.error.issues.map((e) => `${e.path.join('.')}: ${e.message}`).join(', ')}`,
+    };
+  }
 
   const payload = { ...parsed.data, updated_at: new Date().toISOString() };
 
