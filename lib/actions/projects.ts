@@ -16,7 +16,7 @@ const ProjectFormSchema = z.object({
     .min(1)
     .max(200)
     .regex(/^[a-z0-9-]+$/),
-  short_description: z.string().max(1000).optional(),
+  short_description: z.string().optional(),
   full_description: z.string().optional(),
   cover_image_url: z.string().nullable().optional(),
   tech_stack: z.array(z.object({ tag: z.string(), category: z.string() })).optional(),
