@@ -46,12 +46,12 @@ export function ProjectCard({ project, tier }: ProjectCardProps) {
             </h3>
             <p className="text-on-surface-variant mb-6 line-clamp-3">{project.short_description}</p>
             <div className="flex flex-wrap gap-2 mb-8">
-              {project.tech_stack.slice(0, 4).map((tech) => (
+              {(project.tech_stack || []).slice(0, 4).map((tech) => (
                 <TechBadge key={tech.tag} tag={tech.tag} category={tech.category} />
               ))}
-              {project.tech_stack.length > 4 && (
+              {(project.tech_stack || []).length > 4 && (
                 <span className="text-xs text-on-surface-variant px-2 py-1 flex items-center">
-                  +{project.tech_stack.length - 4} more
+                  +{(project.tech_stack || []).length - 4} more
                 </span>
               )}
             </div>
@@ -96,7 +96,7 @@ export function ProjectCard({ project, tier }: ProjectCardProps) {
           {project.short_description}
         </p>
         <div className="flex flex-wrap gap-2 mb-4">
-          {project.tech_stack.slice(0, 3).map((tech) => (
+          {(project.tech_stack || []).slice(0, 3).map((tech) => (
             <TechBadge key={tech.tag} tag={tech.tag} category={tech.category} />
           ))}
         </div>

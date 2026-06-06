@@ -59,7 +59,7 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
           </div>
 
           <div className="flex flex-wrap gap-2">
-            {project.tech_stack.map((tech) => (
+            {(project.tech_stack || []).map((tech) => (
               <TechBadge key={tech.tag} tag={tech.tag} category={tech.category} />
             ))}
           </div>
