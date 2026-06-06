@@ -8,6 +8,7 @@ import { Tabs } from '@/components/ui/Tabs';
 import { DemoRequestModal } from '@/components/public/DemoRequestModal';
 import { ProjectCommentForm } from '@/components/public/ProjectCommentForm';
 import { LoomVideo } from '@/components/public/LoomVideo';
+import { ensureExternalUrl } from '@/lib/format-url';
 import { parseLoomVideoId } from '@/lib/loom';
 import { formatDate } from '@/lib/format-date';
 import type { Project, ProjectComment, DevlogEntry } from '@/types';
@@ -75,7 +76,7 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
             </button>
             {project.github_repo && (
               <a
-                href={project.github_repo}
+                href={ensureExternalUrl(project.github_repo)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex w-full sm:w-auto items-center justify-center gap-xs px-md py-3 sm:py-sm rounded-lg bg-transparent border border-outline-variant text-on-surface-variant hover:text-on-surface hover:bg-surface-container hover:border-outline transition-all duration-200 font-label-caps text-label-caps"
@@ -86,7 +87,7 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
             )}
             {project.live_demo_url && (
               <a
-                href={project.live_demo_url}
+                href={ensureExternalUrl(project.live_demo_url)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex w-full sm:w-auto items-center justify-center gap-xs px-md py-3 sm:py-sm rounded-lg bg-transparent border border-outline-variant text-on-surface-variant hover:text-on-surface hover:bg-surface-container hover:border-outline transition-all duration-200 font-label-caps text-label-caps"
@@ -97,7 +98,7 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
             )}
             {project.linkedin_url && (
               <a
-                href={project.linkedin_url}
+                href={ensureExternalUrl(project.linkedin_url)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex w-full sm:w-auto items-center justify-center gap-xs px-md py-3 sm:py-sm rounded-lg bg-transparent border border-outline-variant text-on-surface-variant hover:text-on-surface hover:bg-surface-container hover:border-outline transition-all duration-200 font-label-caps text-label-caps"
