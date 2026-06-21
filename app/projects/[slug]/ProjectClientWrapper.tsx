@@ -11,6 +11,8 @@ import { LoomVideo } from '@/components/public/LoomVideo';
 import { ensureExternalUrl } from '@/lib/format-url';
 import { parseLoomVideoId } from '@/lib/loom';
 import { formatDate } from '@/lib/format-date';
+import { useLocale } from '@/components/providers/LocaleProvider';
+import { LanguageToggle } from '@/components/ui/LanguageToggle';
 import type { Project, ProjectComment, DevlogEntry } from '@/types';
 
 type ProjectClientWrapperProps = {
@@ -20,13 +22,14 @@ type ProjectClientWrapperProps = {
 };
 
 export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClientWrapperProps) {
+  const { t } = useLocale();
   const [demoModalOpen, setDemoModalOpen] = useState(false);
   const loomVideoId =
     parseLoomVideoId(project.loom_video_id_demo) ?? parseLoomVideoId(project.loom_video_id_arch);
 
   return (
-    <div className="bg-background text-on-background min-h-screen selection:bg-primary-container/30 selection:text-primary-fixed antialiased flex flex-col font-body-base">
-      <nav className="w-full border-b border-white/5 bg-surface/70 backdrop-blur-xl sticky top-0 z-40">
+    <div className="public-page selection:bg-primary-container/30 selection:text-primary-fixed antialiased flex flex-col font-body-base">
+      <nav className="public-page-nav">
         <div className="page-container py-3 sm:py-md flex justify-between items-center gap-3">
           <Link
             className="inline-flex items-center gap-xs text-on-surface-variant hover:text-primary transition-colors duration-200 group font-label-caps text-label-caps min-w-0"
@@ -35,10 +38,13 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
             <span className="material-symbols-outlined text-[18px] shrink-0 group-hover:-translate-x-1 transition-transform">
               arrow_back
             </span>
-            <span className="truncate">Back to Home</span>
+            <span className="truncate">{t('projectPage.back')}</span>
           </Link>
-          <div className="hidden sm:block font-code-base text-code-base text-on-surface-variant/50 truncate">
-            /projects/{project.slug}
+          <div className="flex items-center gap-2 shrink-0">
+            <LanguageToggle className="hidden sm:inline-flex" />
+            <div className="hidden sm:block font-code-base text-code-base text-on-surface-variant/50 truncate">
+              /projects/{project.slug}
+            </div>
           </div>
         </div>
       </nav>
@@ -72,7 +78,7 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
               className="inline-flex w-full sm:w-auto items-center justify-center gap-sm px-lg py-3 sm:py-sm rounded-lg bg-gradient-to-r from-primary-container to-secondary-container shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] text-on-primary-container font-label-caps text-label-caps hover:scale-[1.02] transition-transform duration-200 ease-out"
             >
               <span className="material-symbols-outlined text-[18px]">play_circle</span>
-              Request Live Demo
+              {t('projectPage.requestDemo')}
             </button>
             {project.github_repo && (
               <a
@@ -82,7 +88,7 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
                 className="inline-flex w-full sm:w-auto items-center justify-center gap-xs px-md py-3 sm:py-sm rounded-lg bg-transparent border border-outline-variant text-on-surface-variant hover:text-on-surface hover:bg-surface-container hover:border-outline transition-all duration-200 font-label-caps text-label-caps"
               >
                 <span className="material-symbols-outlined text-[18px]">code</span>
-                GitHub
+                {t('common.github')}
               </a>
             )}
             {project.live_demo_url && (
@@ -93,7 +99,7 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
                 className="inline-flex w-full sm:w-auto items-center justify-center gap-xs px-md py-3 sm:py-sm rounded-lg bg-transparent border border-outline-variant text-on-surface-variant hover:text-on-surface hover:bg-surface-container hover:border-outline transition-all duration-200 font-label-caps text-label-caps"
               >
                 <span className="material-symbols-outlined text-[18px]">open_in_new</span>
-                Live Demo
+                {t('projectPage.liveDemo')}
               </a>
             )}
             {project.linkedin_url && (
@@ -119,13 +125,13 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
                 <span className="material-symbols-outlined text-4xl text-on-surface-variant">
                   videocam_off
                 </span>
-                <p className="text-sm text-on-surface-variant">Demo video coming soon.</p>
+                <p className="text-sm text-on-surface-variant">{t('projectPage.demoSoon')}</p>
                 <button
                   type="button"
                   onClick={() => setDemoModalOpen(true)}
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-container text-on-primary-container text-sm font-semibold hover:opacity-90 transition-opacity"
                 >
-                  Request a live walkthrough
+                  {t('projectPage.requestWalkthrough')}
                 </button>
               </div>
             </div>
@@ -138,7 +144,7 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
             tabs={[
               {
                 id: 'overview',
-                label: 'Overview',
+                label: t('projectPage.overview'),
                 content: (
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-xl">
                     <div className="lg:col-span-2 min-w-0">
@@ -147,7 +153,7 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
                     <div className="space-y-4 sm:space-y-md">
                       <div className="glass-card p-4 sm:p-lg rounded-xl flex flex-col gap-sm">
                         <h3 className="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">
-                          Status
+                          {t('projectPage.status')}
                         </h3>
                         <p className="font-body-base text-body-base text-on-surface capitalize">
                           {project.project_status}
@@ -155,14 +161,14 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
                       </div>
                       <div className="glass-card p-4 sm:p-lg rounded-xl flex flex-col gap-sm">
                         <h3 className="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">
-                          Timeline
+                          {t('projectPage.timeline')}
                         </h3>
                         <p className="font-body-base text-body-base text-on-surface">
                           {project.project_start_date
                             ? formatDate(project.project_start_date)
-                            : 'Started'}
+                            : t('common.started')}
                           {project.is_ongoing
-                            ? ' - Present'
+                            ? ` - ${t('common.present')}`
                             : project.project_end_date
                               ? ` - ${formatDate(project.project_end_date)}`
                               : ''}
@@ -174,13 +180,13 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
               },
               {
                 id: 'devlog',
-                label: 'Devlog',
+                label: t('projectPage.devlog'),
                 content: (
                   <div className="max-w-3xl space-y-8 sm:space-y-xl relative">
                     <div className="absolute left-[15px] md:left-[23px] top-4 bottom-0 w-[2px] bg-outline-variant/30" />
                     {devlogs.length === 0 ? (
                       <div className="pl-10 sm:pl-xl md:pl-2xl text-on-surface-variant">
-                        No updates yet.
+                        {t('projectPage.noDevlog')}
                       </div>
                     ) : (
                       devlogs.map((update, index) => (
@@ -216,13 +222,13 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
               },
               {
                 id: 'discussion',
-                label: 'Discussion',
+                label: t('projectPage.discussion'),
                 content: (
                   <div className="max-w-3xl space-y-6 sm:space-y-xl">
                     <ProjectCommentForm projectId={project.id} />
                     <div className="space-y-4 sm:space-y-md">
                       {comments.length === 0 ? (
-                        <div className="text-on-surface-variant">No comments yet.</div>
+                        <div className="text-on-surface-variant">{t('projectPage.noComments')}</div>
                       ) : (
                         comments.map((comment) => (
                           <div key={comment.id} className="flex gap-3 sm:gap-md">

@@ -74,20 +74,16 @@ export function TimelineClientWrapper({ initialEvents }: TimelineClientWrapperPr
   };
 
   return (
-    <div className="max-w-[1200px] mx-auto p-md md:p-xl space-y-xl">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div className="admin-page space-y-xl">
+      <div className="admin-page-header">
         <div>
-          <h2 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface tracking-tight">
-            Timeline
-          </h2>
-          <p className="text-on-surface-variant font-body-base mt-2">
-            Manage academic, corporate, and achievement history.
-          </p>
+          <h2 className="type-section">Timeline</h2>
+          <p className="type-lead mt-2 text-sm">Academic, corporate, and achievement history.</p>
         </div>
         <button
           type="button"
           onClick={openCreate}
-          className="flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-primary-container to-secondary-container text-on-primary-container font-semibold hover:scale-[1.02] transition-transform"
+          className="btn-primary flex items-center gap-2 px-6 py-3 rounded-lg font-semibold shrink-0"
         >
           <span className="material-symbols-outlined text-[20px]">add</span>
           Add Event

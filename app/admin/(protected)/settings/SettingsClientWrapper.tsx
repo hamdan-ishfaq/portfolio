@@ -77,14 +77,10 @@ export function SettingsClientWrapper({ initialSettings }: SettingsClientWrapper
   };
 
   return (
-    <div className="max-w-[800px] mx-auto p-md md:p-xl space-y-xl">
+    <div className="admin-page admin-page--narrow space-y-xl">
       <div>
-        <h2 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface tracking-tight">
-          Settings
-        </h2>
-        <p className="text-on-surface-variant font-body-base mt-2">
-          Global identity, social links, and SEO defaults.
-        </p>
+        <h2 className="type-section">Settings</h2>
+        <p className="type-lead mt-2 text-sm">Global identity, social links, and SEO defaults.</p>
       </div>
 
       <form onSubmit={handleSave} className="glass-card rounded-xl p-lg space-y-6">

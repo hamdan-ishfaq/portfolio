@@ -47,14 +47,10 @@ export function InboxClientWrapper({
   };
 
   return (
-    <div className="max-w-[1200px] mx-auto p-md md:p-xl space-y-xl">
+    <div className="admin-page space-y-xl">
       <div>
-        <h2 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface tracking-tight">
-          Inbox
-        </h2>
-        <p className="text-on-surface-variant font-body-base mt-2">
-          Contact messages and live demo requests.
-        </p>
+        <h2 className="type-section">Inbox</h2>
+        <p className="type-lead mt-2 text-sm">Contact messages and live demo requests.</p>
       </div>
 
       <Tabs

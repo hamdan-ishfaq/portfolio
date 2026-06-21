@@ -98,19 +98,17 @@ export function CommentsClientWrapper({ initialComments }: CommentsClientWrapper
 
   return (
     <div className="flex-1 flex flex-col min-w-0 pb-2xl relative h-full">
-      <div className="flex-1 w-full max-w-[1440px] mx-auto px-md md:px-xl pt-lg md:pt-2xl">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-md mb-xl">
+      <div className="admin-page admin-page--wide pt-lg md:pt-2xl">
+        <div className="admin-page-header">
           <div>
-            <div className="flex items-center gap-sm mb-2">
-              <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface tracking-tighter">
-                Comment Moderation
-              </h1>
+            <div className="flex flex-wrap items-center gap-sm mb-2">
+              <h1 className="type-section">Comment moderation</h1>
               <span className="bg-error/10 text-error border border-error/20 px-2.5 py-0.5 rounded-full text-sm font-medium flex items-center gap-1">
                 <span className="w-2 h-2 rounded-full bg-error animate-pulse"></span>
                 {pendingCommentsCount} Pending
               </span>
             </div>
-            <p className="text-on-surface-variant max-w-2xl">
+            <p className="type-lead text-sm max-w-2xl">
               Review, approve, or remove user comments across all active projects.
             </p>
           </div>
@@ -127,7 +125,7 @@ export function CommentsClientWrapper({ initialComments }: CommentsClientWrapper
           </div>
         ) : (
           <div className="glass-card rounded-xl overflow-hidden flex flex-col">
-            <div className="bg-surface-container-low/50 border-b border-white/5 p-4 flex items-center justify-between sticky top-0 z-10 backdrop-blur-md">
+            <div className="admin-toolbar flex items-center justify-between sticky top-0 z-10">
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <input
@@ -169,7 +167,7 @@ export function CommentsClientWrapper({ initialComments }: CommentsClientWrapper
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-surface-container-lowest/30 border-b border-white/5 text-on-surface-variant font-label-caps text-label-caps">
+                  <tr className="admin-table-head text-on-surface-variant font-label-caps text-label-caps">
                     <th className="p-4 w-[48px]"></th>
                     <th className="p-4 font-semibold">Author</th>
                     <th className="p-4 font-semibold">Comment</th>

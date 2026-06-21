@@ -1,55 +1,58 @@
+'use client';
+
 import type { GlobalSettings } from '@/types';
+import { useLocale } from '@/components/providers/LocaleProvider';
 
 type FooterProps = {
   settings: GlobalSettings | null;
 };
 
 export function Footer({ settings }: FooterProps) {
+  const { t } = useLocale();
   const year = new Date().getFullYear();
-  const brandName = settings?.display_name ?? 'AIEngineer.io';
+  const brandName = settings?.display_name?.trim() || 'Hamdan Ishfaq';
 
   return (
-    <footer className="bg-surface-container-lowest py-10 sm:py-xl border-t border-white/5 mt-12 sm:mt-2xl">
-      <div className="page-container flex flex-col gap-6 md:flex-row md:justify-between md:items-center">
-        <p className="font-body-sm text-body-sm text-on-surface-variant text-center md:text-left">
-          © {year} {brandName}
-        </p>
+    <footer className="border-t border-white/8 mt-16 sm:mt-24 py-10 sm:py-12">
+      <div className="page-container flex flex-col gap-6 md:flex-row md:justify-between md:items-end">
+        <div>
+          <p className="font-mono text-xs text-on-surface-variant uppercase tracking-widest mb-2">
+            {brandName}
+          </p>
+          <p className="font-body-sm text-body-sm text-on-surface-variant">
+            © {year}. {t('footer.builtWith')}
+          </p>
+        </div>
 
-        <div className="flex items-center justify-center flex-wrap gap-4 sm:gap-md">
+        <div className="flex items-center flex-wrap gap-5 sm:gap-6">
           {settings?.github && (
             <a
-              className="text-on-surface-variant hover:text-secondary transition-colors font-body-sm text-body-sm"
+              className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors min-h-11 inline-flex items-center"
               href={settings.github}
               target="_blank"
               rel="noopener noreferrer"
             >
-              GitHub
+              {t('common.github')}
             </a>
           )}
           {settings?.linkedin && (
             <a
-              className="text-on-surface-variant hover:text-secondary transition-colors font-body-sm text-body-sm"
+              className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors min-h-11 inline-flex items-center"
               href={settings.linkedin}
               target="_blank"
               rel="noopener noreferrer"
             >
-              LinkedIn
+              {t('common.linkedin')}
             </a>
           )}
-          {settings?.twitter && (
+          {settings?.email && (
             <a
-              className="text-on-surface-variant hover:text-secondary transition-colors font-body-sm text-body-sm"
-              href={settings.twitter}
-              target="_blank"
-              rel="noopener noreferrer"
+              className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors min-h-11 inline-flex items-center"
+              href={`mailto:${settings.email}`}
             >
-              Twitter
+              {t('common.email')}
             </a>
           )}
-        </div>
-
-        <div className="font-label-caps text-label-caps text-on-surface text-center md:text-right">
-          {brandName}
         </div>
       </div>
     </footer>

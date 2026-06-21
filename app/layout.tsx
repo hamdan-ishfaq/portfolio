@@ -1,6 +1,11 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { cookies } from 'next/headers';
+import { Geist, Geist_Mono, Instrument_Serif } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
+import { SiteBackdrop } from '@/components/public/SiteBackdrop';
+import { ClientProviders } from '@/components/providers/ClientProviders';
+import { SkipLink } from '@/components/ui/SkipLink';
+import { LOCALE_COOKIE, parseLocale, parseTheme, THEME_COOKIE } from '@/lib/preferences';
 import './globals.css';
 
 const geistSans = Geist({
@@ -11,6 +16,13 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
+});
+
+const instrumentSerif = Instrument_Serif({
+  variable: '--font-instrument-serif',
+  subsets: ['latin'],
+  weight: '400',
+  style: ['normal', 'italic'],
 });
 
 export const metadata: Metadata = {
@@ -35,34 +47,20 @@ export const metadata: Metadata = {
   },
 };
 
-// Inline script runs before React hydration to prevent FOUC.
-// Reads localStorage or system preference and sets class on <html>.
-const themeScript = `
-(function() {
-  try {
-    var stored = localStorage.getItem('theme');
-    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    if (stored === 'dark' || (!stored && prefersDark)) {
-      document.documentElement.classList.add('dark');
-    } else if (stored === 'light') {
-      document.documentElement.classList.remove('dark');
-    } else {
-      // Default: dark mode
-      document.documentElement.classList.add('dark');
-    }
-  } catch(e) {}
-})();
-`;
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const locale = parseLocale(cookieStore.get(LOCALE_COOKIE)?.value);
+  const theme = parseTheme(cookieStore.get(THEME_COOKIE)?.value);
+  const isDark = theme === 'dark';
+
   return (
     <html
-      lang="en"
-      className="scroll-smooth"
+      lang={locale}
+      className={isDark ? 'scroll-smooth dark' : 'scroll-smooth'}
       suppressHydrationWarning
       data-scroll-behavior="smooth"
     >
@@ -72,21 +70,19 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"
         />
-        {/* Inline theme script — must run before body renders */}
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ds-body mesh-bg min-h-screen flex flex-col selection:bg-primary/25 selection:text-on-surface`}
+        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ds-body mesh-bg min-h-screen flex flex-col selection:bg-primary/25 selection:text-on-surface`}
         style={{ fontFamily: 'var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif' }}
         suppressHydrationWarning
       >
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-primary focus:text-on-primary focus:font-semibold focus:outline-none focus:ring-2 focus:ring-secondary"
-        >
-          Skip to main content
-        </a>
-        {children}
+        <ClientProviders initialLocale={locale}>
+          <SiteBackdrop />
+          <div className="site-content flex flex-col flex-1 min-h-screen">
+            <SkipLink />
+            {children}
+          </div>
+        </ClientProviders>
         <Analytics />
       </body>
     </html>

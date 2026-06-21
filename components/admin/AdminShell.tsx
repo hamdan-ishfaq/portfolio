@@ -5,6 +5,8 @@ import { usePathname } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { logoutAction } from '@/lib/actions/auth';
 import { ToastProvider } from '@/components/ui/Toast';
+import { useLocale } from '@/components/providers/LocaleProvider';
+import { LanguageToggle } from '@/components/ui/LanguageToggle';
 
 type NavLink = {
   label: string;
@@ -12,7 +14,7 @@ type NavLink = {
   icon: string;
   fill?: boolean;
   badge?: number;
-  badgeClass?: string;
+  badgeVariant?: 'error' | 'accent';
 };
 
 type AdminShellProps = {
@@ -30,30 +32,29 @@ function NavItem({
   pathname: string;
   onNavigate?: () => void;
 }) {
-  const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
+  const isActive =
+    link.href === '/admin'
+      ? pathname === '/admin' || pathname === '/admin/dashboard'
+      : pathname === link.href || pathname.startsWith(`${link.href}/`);
 
   return (
     <Link
       href={link.href}
       onClick={onNavigate}
-      className={
-        isActive
-          ? 'bg-secondary-container text-on-secondary-container rounded-lg font-semibold flex items-center gap-3 px-3 py-2 transition-colors duration-200'
-          : 'text-on-surface-variant hover:bg-surface-container-high flex items-center gap-3 px-3 py-2 rounded-lg transition-colors duration-200 group'
-      }
+      className={`admin-nav-item ${isActive ? 'admin-nav-item--active' : ''}`}
     >
-      <div className="flex items-center gap-3 flex-1 min-w-0">
-        <span
-          className={`material-symbols-outlined shrink-0 ${!isActive && 'group-hover:text-primary transition-colors'}`}
-          style={link.fill && isActive ? { fontVariationSettings: "'FILL' 1" } : undefined}
-        >
-          {link.icon}
-        </span>
-        <span className="font-body-sm text-body-sm truncate">{link.label}</span>
-      </div>
+      <span
+        className="material-symbols-outlined"
+        style={link.fill && isActive ? { fontVariationSettings: "'FILL' 1" } : undefined}
+      >
+        {link.icon}
+      </span>
+      <span className="truncate">{link.label}</span>
       {link.badge !== undefined && link.badge > 0 && (
         <span
-          className={`${link.badgeClass} font-label-caps text-[10px] px-2 py-0.5 rounded-full shrink-0`}
+          className={`admin-nav-badge ${
+            link.badgeVariant === 'error' ? 'admin-nav-badge--error' : 'admin-nav-badge--accent'
+          }`}
         >
           {link.badge}
         </span>
@@ -62,30 +63,49 @@ function NavItem({
   );
 }
 
+function SidebarBrand() {
+  const { t } = useLocale();
+  return (
+    <div className="admin-sidebar__brand">
+      <div className="admin-sidebar__mark">
+        <span className="material-symbols-outlined text-[20px]">hub</span>
+      </div>
+      <div className="min-w-0">
+        <p className="admin-sidebar__title">
+          {t('admin.consoleBefore')}{' '}
+          <span className="type-accent-serif">{t('admin.consoleAccent')}</span>
+        </p>
+        <p className="admin-sidebar__subtitle">{t('admin.subtitle')}</p>
+      </div>
+    </div>
+  );
+}
+
 export function AdminShell({ children, pendingComments, unreadInbox }: AdminShellProps) {
+  const { t } = useLocale();
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const navLinks: NavLink[] = [
-    { label: 'Dashboard', href: '/admin', icon: 'dashboard', fill: true },
-    { label: 'Projects', href: '/admin/projects', icon: 'folder_open' },
+    { label: t('admin.dashboard'), href: '/admin', icon: 'dashboard', fill: true },
+    { label: t('admin.projects'), href: '/admin/projects', icon: 'folder_open' },
     {
-      label: 'Comments',
+      label: t('admin.comments'),
       href: '/admin/comments',
       icon: 'chat_bubble',
       badge: pendingComments || undefined,
-      badgeClass: 'bg-error text-on-error',
+      badgeVariant: 'error',
     },
-    { label: 'Timeline', href: '/admin/timeline', icon: 'timeline' },
+    { label: t('admin.timeline'), href: '/admin/timeline', icon: 'timeline' },
     {
-      label: 'Inbox',
+      label: t('admin.inbox'),
       href: '/admin/inbox',
       icon: 'inbox',
       badge: unreadInbox || undefined,
-      badgeClass: 'bg-primary text-on-primary',
+      badgeVariant: 'accent',
     },
-    { label: 'CV Upload', href: '/admin/cv', icon: 'upload_file' },
+    { label: t('admin.cvUpload'), href: '/admin/cv', icon: 'upload_file' },
   ];
 
   const handleLogout = () => {
@@ -94,110 +114,93 @@ export function AdminShell({ children, pendingComments, unreadInbox }: AdminShel
     });
   };
 
-  const sidebarContent = (onNavigate?: () => void) => (
-    <>
-      <nav className="flex-1 space-y-1 overflow-y-auto">
-        {navLinks.map((link) => (
-          <NavItem key={link.href} link={link} pathname={pathname} onNavigate={onNavigate} />
-        ))}
-        <Link
-          href="/admin/settings"
-          onClick={onNavigate}
-          className="text-on-surface-variant hover:bg-surface-container-high flex items-center gap-3 px-3 py-2 rounded-lg transition-colors duration-200 group mt-4"
-        >
-          <span className="material-symbols-outlined group-hover:text-primary transition-colors">
-            settings
-          </span>
-          <span className="font-body-sm text-body-sm">Settings</span>
-        </Link>
-      </nav>
+  const sidebarFooter = (onNavigate?: () => void) => (
+    <div className="admin-sidebar__footer">
+      <Link
+        href="/"
+        onClick={onNavigate}
+        className="btn-secondary w-full py-2 px-4 rounded-lg text-sm font-medium flex items-center justify-center gap-2"
+      >
+        <span className="material-symbols-outlined text-[18px]">open_in_new</span>
+        {t('admin.viewSite')}
+      </Link>
+      <button
+        type="button"
+        onClick={handleLogout}
+        disabled={isPending}
+        className="btn-ghost w-full py-2 px-4 rounded-lg text-sm flex items-center justify-center gap-2 border border-transparent hover:border-error/20 hover:text-error disabled:opacity-50"
+      >
+        <span className="material-symbols-outlined text-[18px]">logout</span>
+        {isPending ? t('admin.signingOut') : t('admin.logout')}
+      </button>
+    </div>
+  );
 
-      <div className="pt-4 mt-auto border-t border-white/5 space-y-2">
-        <Link
-          href="/"
-          onClick={onNavigate}
-          className="w-full bg-transparent border border-outline-variant text-on-surface font-body-sm text-body-sm py-2 px-4 rounded-lg hover:bg-primary/10 transition-colors flex items-center justify-center gap-2"
-        >
-          <span className="material-symbols-outlined text-[18px]">open_in_new</span>
-          View Live Site
-        </Link>
-        <button
-          type="button"
-          onClick={handleLogout}
-          disabled={isPending}
-          className="w-full bg-transparent border border-outline-variant/50 text-on-surface-variant hover:text-error hover:border-error/30 font-body-sm text-body-sm py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
-        >
-          <span className="material-symbols-outlined text-[18px]">logout</span>
-          {isPending ? 'Signing out…' : 'Logout'}
-        </button>
-      </div>
-    </>
+  const sidebarNav = (onNavigate?: () => void) => (
+    <nav className="admin-nav" aria-label="Admin navigation">
+      {navLinks.map((link) => (
+        <NavItem key={link.href} link={link} pathname={pathname} onNavigate={onNavigate} />
+      ))}
+      <NavItem
+        link={{ label: t('admin.settings'), href: '/admin/settings', icon: 'settings' }}
+        pathname={pathname}
+        onNavigate={onNavigate}
+      />
+    </nav>
   );
 
   return (
     <ToastProvider>
-      <div className="bg-background text-on-background min-h-screen flex flex-col md:flex-row font-body-base">
-        {/* Mobile top bar */}
-        <header className="md:hidden sticky top-0 z-50 bg-surface-container-low border-b border-white/5 px-4 py-3 flex items-center justify-between">
+      <div className="admin-shell font-body-base">
+        <header className="admin-topbar">
           <div className="min-w-0">
-            <p className="font-headline-md text-primary truncate leading-none">Admin Console</p>
-            <p className="font-label-caps text-[10px] text-on-surface-variant mt-1">
-              System Overview
+            <p className="admin-sidebar__title truncate">
+              {t('admin.consoleBefore')}{' '}
+              <span className="type-accent-serif">{t('admin.consoleAccent')}</span>
             </p>
+            <p className="admin-sidebar__subtitle">{t('admin.subtitle')}</p>
           </div>
-          <button
-            type="button"
-            onClick={() => setMobileOpen(true)}
-            aria-label="Open admin menu"
-            className="p-2 rounded-lg border border-white/10 text-on-surface-variant"
-          >
-            <span className="material-symbols-outlined">menu</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <LanguageToggle />
+            <button
+              type="button"
+              onClick={() => setMobileOpen(true)}
+              aria-label={t('common.openMenu')}
+              className="btn-secondary min-h-10 min-w-10 flex items-center justify-center rounded-lg p-2"
+            >
+              <span className="material-symbols-outlined">menu</span>
+            </button>
+          </div>
         </header>
 
-        {/* Desktop sidebar */}
-        <aside className="bg-surface-container-low h-screen w-[240px] sticky left-0 top-0 border-r border-white/5 shadow-md flex-col p-md space-y-sm flex-shrink-0 z-40 hidden md:flex">
-          <div className="mb-xl flex items-center gap-md px-2 pt-4">
-            <div className="w-10 h-10 rounded-full bg-primary-container overflow-hidden flex-shrink-0 flex items-center justify-center text-on-primary-container">
-              <span className="material-symbols-outlined">person</span>
-            </div>
-            <div className="min-w-0">
-              <h1 className="font-headline-md text-headline-md text-primary truncate leading-none">
-                Admin Console
-              </h1>
-              <p className="font-label-caps text-label-caps text-on-surface-variant mt-1">
-                System Overview
-              </p>
-            </div>
-          </div>
-          {sidebarContent()}
+        <aside className="admin-sidebar">
+          <SidebarBrand />
+          {sidebarNav()}
+          {sidebarFooter()}
         </aside>
 
-        {/* Mobile drawer */}
         {mobileOpen && (
           <div className="fixed inset-0 z-[70] md:hidden">
-            <div
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-              onClick={() => setMobileOpen(false)}
-            />
-            <aside className="absolute top-0 left-0 h-full w-[min(280px,85vw)] bg-surface-container-low border-r border-white/5 p-md flex flex-col">
+            <div className="admin-drawer-backdrop" onClick={() => setMobileOpen(false)} />
+            <aside className="admin-drawer">
               <div className="flex items-center justify-between mb-4">
-                <p className="font-headline-md text-primary">Menu</p>
+                <p className="admin-sidebar__title">{t('admin.menu')}</p>
                 <button
                   type="button"
                   onClick={() => setMobileOpen(false)}
                   aria-label="Close menu"
-                  className="p-1 text-on-surface-variant"
+                  className="btn-ghost p-1 rounded-lg"
                 >
                   <span className="material-symbols-outlined">close</span>
                 </button>
               </div>
-              {sidebarContent(() => setMobileOpen(false))}
+              {sidebarNav(() => setMobileOpen(false))}
+              {sidebarFooter(() => setMobileOpen(false))}
             </aside>
           </div>
         )}
 
-        <main className="flex-1 overflow-y-auto min-w-0">{children}</main>
+        <main className="admin-main">{children}</main>
       </div>
     </ToastProvider>
   );

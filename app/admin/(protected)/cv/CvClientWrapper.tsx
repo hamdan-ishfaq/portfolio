@@ -23,19 +23,17 @@ export function CvClientWrapper({ settings }: CvClientWrapperProps) {
   };
 
   return (
-    <div className="max-w-[720px] mx-auto p-md md:p-xl space-y-xl">
+    <div className="admin-page admin-page--narrow space-y-xl">
       <div>
-        <h2 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface tracking-tight">
-          CV Upload
-        </h2>
-        <p className="text-on-surface-variant font-body-base mt-2">
+        <h2 className="type-section">CV upload</h2>
+        <p className="type-lead mt-2 text-sm">
           Upload your resume PDF. The navbar download button uses this file.
         </p>
       </div>
 
       <div className="glass-card rounded-xl p-lg space-y-6">
         {settings.cv_file_url ? (
-          <div className="rounded-lg border border-white/10 p-4 bg-surface-container/50">
+          <div className="rounded-lg border border-white/10 p-4 surface-inset">
             <p className="text-sm text-on-surface-variant mb-2">Current CV</p>
             <a
               href={settings.cv_file_url}

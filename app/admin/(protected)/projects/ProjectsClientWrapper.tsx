@@ -70,20 +70,15 @@ export function ProjectsClientWrapper({ initialProjects }: ProjectsClientWrapper
   };
 
   return (
-    <div className="max-w-[1440px] w-full mx-auto p-md md:p-xl flex-1 flex flex-col h-full">
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-lg md:mb-xl mt-4 md:mt-0">
+    <div className="admin-page admin-page--wide flex-1 flex flex-col h-full">
+      <div className="admin-page-header mt-4 md:mt-0">
         <div>
-          <h2 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface tracking-tight">
-            Projects
-          </h2>
-          <p className="text-on-surface-variant font-body-base mt-2">
-            Manage portfolio entries and technical case studies.
-          </p>
+          <h2 className="type-section">Projects</h2>
+          <p className="type-lead mt-2 text-sm">Manage portfolio entries and case studies.</p>
         </div>
         <Link
           href="/admin/projects/new"
-          className="flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-primary-container to-secondary-container text-on-primary-container font-semibold hover:scale-[1.02] transition-transform duration-200 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]"
+          className="btn-primary flex items-center gap-2 px-6 py-3 rounded-lg font-semibold shrink-0"
         >
           <span className="material-symbols-outlined text-[20px]">add</span>
           New Project
@@ -93,7 +88,7 @@ export function ProjectsClientWrapper({ initialProjects }: ProjectsClientWrapper
       {/* Data Table Container (Glassmorphism Card) */}
       <div className="glass-card rounded-xl overflow-hidden flex-1 flex flex-col relative z-10">
         {/* Table Controls / Filters */}
-        <div className="p-4 border-b border-white/5 flex flex-wrap gap-4 items-center justify-between bg-surface-container/30">
+        <div className="admin-toolbar flex flex-wrap gap-4 items-center justify-between">
           <div className="relative flex-1 max-w-[28rem]">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">
               search
@@ -120,7 +115,7 @@ export function ProjectsClientWrapper({ initialProjects }: ProjectsClientWrapper
         <div className="overflow-x-auto flex-1">
           <table className="w-full text-left border-collapse min-w-[800px]">
             <thead>
-              <tr className="border-b border-white/5 bg-surface-container-low/50 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">
+              <tr className="admin-table-head font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">
                 <th className="p-4 font-semibold w-12">
                   <input
                     className="rounded border-outline-variant bg-surface-container-highest text-primary focus:ring-primary/50 focus:ring-offset-0"
@@ -254,7 +249,7 @@ export function ProjectsClientWrapper({ initialProjects }: ProjectsClientWrapper
       {deleteModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div
-            className="absolute inset-0 bg-background/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setDeleteModalOpen(false)}
           ></div>
           <div className="relative glass-card w-full max-w-[28rem] rounded-xl p-lg shadow-2xl m-4 transform transition-all border border-white/10">

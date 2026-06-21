@@ -5,7 +5,6 @@ import { adminSupabase } from '@/lib/supabase/admin';
 import { Footer } from '@/components/public/Footer';
 import { ProjectClientWrapper } from './ProjectClientWrapper';
 import type { Project, DevlogEntry, ProjectComment, GlobalSettings } from '@/types';
-import { ToastProvider } from '@/components/ui/Toast';
 
 export const revalidate = 300;
 
@@ -111,7 +110,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
   const jsonLd = buildProjectJsonLd(project as Project, siteUrl);
 
   return (
-    <ToastProvider>
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -122,7 +121,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         comments={(comments as ProjectComment[]) ?? []}
       />
       <Footer settings={settings as GlobalSettings | null} />
-    </ToastProvider>
+    </>
   );
 }
 

@@ -297,12 +297,10 @@ export function ProjectFormClient({
   return (
     <div className="flex-grow flex flex-col min-h-0 relative">
       <div className="flex-grow overflow-y-auto pb-[100px]">
-        <div className="max-w-[1200px] mx-auto px-md md:px-xl py-xl space-y-xl">
+        <div className="admin-page space-y-xl pb-24">
           <div>
-            <h2 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface">
-              {isNew ? 'New Project' : 'Edit Project'}
-            </h2>
-            <p className="font-body-base text-body-base text-on-surface-variant mt-sm">
+            <h2 className="type-section">{isNew ? 'New project' : 'Edit project'}</h2>
+            <p className="type-lead mt-2 text-sm">
               {isNew
                 ? 'Create a portfolio entry, then add devlog entries.'
                 : 'Update project details and devlog.'}
@@ -329,18 +327,18 @@ export function ProjectFormClient({
         </div>
       </div>
 
-      <div className="sticky bottom-0 bg-surface-container-highest/90 backdrop-blur-xl border-t border-white/5 p-md px-xl flex justify-end gap-md z-50">
+      <div className="sticky bottom-0 glass-panel border-t border-white/8 p-md px-xl flex justify-end gap-md z-50">
         <button
           type="button"
           onClick={() => handleSave(false)}
-          className="bg-transparent border border-outline-variant/30 text-on-surface hover:bg-surface-container-high rounded-lg px-lg py-sm font-label-caps text-label-caps"
+          className="btn-secondary rounded-lg px-lg py-sm font-label-caps text-label-caps"
         >
           Save Draft
         </button>
         <button
           type="button"
           onClick={() => handleSave(true)}
-          className="bg-gradient-to-r from-primary to-secondary text-on-primary rounded-lg px-lg py-sm font-label-caps text-label-caps hover:scale-[1.02] transition-transform"
+          className="btn-primary rounded-lg px-lg py-sm font-label-caps text-label-caps"
         >
           Save &amp; Publish
         </button>

@@ -2,21 +2,26 @@
 
 import type { TimelineEvent } from '@/types';
 import { FadeIn } from '@/components/ui/FadeIn';
+import { StaggerItem } from '@/components/ui/StaggerItem';
+import { useLocale } from '@/components/providers/LocaleProvider';
 
 type TimelineProps = {
   events: TimelineEvent[];
 };
 
 export function Timeline({ events }: TimelineProps) {
+  const { t } = useLocale();
   if (!events || events.length === 0) return null;
 
   return (
     /* Stitch: max-w-container-max mx-auto px-lg py-2xl relative */
-    <section className="page-container py-12 sm:py-2xl relative">
-      {/* Stitch: font-headline-md text-headline-md text-on-surface mb-xl flex items-center gap-3 */}
-      <h2 className="font-headline-md text-headline-md text-on-surface mb-xl flex items-center gap-3">
-        <span className="material-symbols-outlined text-primary">timeline</span> Experience
-      </h2>
+    <section className="page-container section-block relative" id="experience">
+      <FadeIn>
+        <div className="mb-10 sm:mb-14 max-w-2xl">
+          <p className="type-label mb-4">{t('experience.label')}</p>
+          <h2 className="type-section">{t('experience.title')}</h2>
+        </div>
+      </FadeIn>
 
       {/* Stitch: relative pl-8 md:pl-0 */}
       <div className="relative pl-8 md:pl-0">
@@ -34,7 +39,7 @@ export function Timeline({ events }: TimelineProps) {
             const nodeShadow = isAcademic ? '' : 'shadow-[0_0_10px_rgba(137,206,255,0.5)]';
 
             return (
-              <FadeIn key={event.id} delay={index * 0.08}>
+              <StaggerItem key={event.id} index={index}>
                 <div
                   /* Corporate: relative flex flex-col md:flex-row items-center md:justify-between group */
                   /* Academic: adds md:flex-row-reverse */
@@ -113,7 +118,7 @@ export function Timeline({ events }: TimelineProps) {
                     </div>
                   </div>
                 </div>
-              </FadeIn>
+              </StaggerItem>
             );
           })}
         </div>

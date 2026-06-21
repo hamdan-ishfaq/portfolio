@@ -3,8 +3,11 @@
 import { useState, useEffect, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { loginAction } from '@/lib/actions/auth';
+import { useLocale } from '@/components/providers/LocaleProvider';
+import { LanguageToggle } from '@/components/ui/LanguageToggle';
 
 export function LoginClient() {
+  const { t } = useLocale();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -43,7 +46,6 @@ export function LoginClient() {
           return;
         }
       } catch (err) {
-        // redirect() throws — successful login ends here
         if (err && typeof err === 'object' && 'digest' in err) {
           router.replace('/admin/dashboard');
           router.refresh();
@@ -55,127 +57,97 @@ export function LoginClient() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-md md:p-lg text-on-surface antialiased overflow-hidden">
-      {/* Atmospheric Mesh Background Elements */}
-      <div className="fixed inset-0 pointer-events-none z-[-1] opacity-30">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary rounded-full mix-blend-screen filter blur-[128px]"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary rounded-full mix-blend-screen filter blur-[128px]"></div>
-      </div>
+    <div className="admin-login">
+      <main className="admin-login__card glass-card rounded-2xl p-8 flex flex-col gap-6">
+        <div className="admin-login__accent" aria-hidden="true" />
+        <div className="flex justify-center">
+          <LanguageToggle />
+        </div>
 
-      <main className="w-full max-w-[420px] relative z-10">
-        {/* Login Card */}
-        <div className="bg-surface-container-high/70 backdrop-blur-[16px] border border-white/10 rounded-xl shadow-2xl p-xl flex flex-col gap-lg relative overflow-hidden">
-          {/* Glow Accent */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-secondary to-primary opacity-50"></div>
+        <div className="text-center">
+          <div className="admin-login__icon">
+            <span
+              className="material-symbols-outlined text-2xl"
+              style={{ fontVariationSettings: "'FILL' 1" }}
+            >
+              shield_lock
+            </span>
+          </div>
+          <h1 className="type-section text-on-surface">{t('admin.loginTitle')}</h1>
+          <p className="type-lead mx-auto mt-2 text-sm">{t('admin.loginLead')}</p>
+        </div>
 
-          {/* Header */}
-          <div className="text-center space-y-sm mb-md">
-            <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-surface-container-high border border-white/5 mb-sm">
-              <span
-                className="material-symbols-outlined text-primary text-2xl"
-                style={{ fontVariationSettings: "'FILL' 1" }}
-              >
-                shield_lock
-              </span>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="admin-form-field">
+            <label className="type-label" htmlFor="email">
+              {t('contact.email')}
+            </label>
+            <div className="admin-form-field__input-wrap">
+              <span className="material-symbols-outlined">mail</span>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="admin@example.com"
+                required
+                autoComplete="email"
+              />
             </div>
-            <h1 className="font-headline-md text-headline-md text-on-surface">Admin Access</h1>
-            <p className="font-body-sm text-body-sm text-on-surface-variant">
-              Secure authentication required.
-            </p>
           </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-md">
-            {/* Email Input */}
-            <div className="space-y-xs">
-              <label
-                className="font-label-caps text-label-caps text-on-surface-variant block"
-                htmlFor="email"
-              >
-                Email Address
-              </label>
-              <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">
-                  mail
-                </span>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@example.com"
-                  required
-                  className="w-full bg-surface-container/60 border border-white/5 focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all rounded-lg py-3 pl-10 pr-4 text-on-surface font-body-base text-body-base placeholder:text-outline-variant"
-                />
-              </div>
+          <div className="admin-form-field">
+            <label className="type-label" htmlFor="password">
+              {t('admin.password')}
+            </label>
+            <div className="admin-form-field__input-wrap">
+              <span className="material-symbols-outlined">key</span>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                autoComplete="current-password"
+              />
             </div>
+          </div>
 
-            {/* Password Input */}
-            <div className="space-y-xs">
-              <div className="flex justify-between items-center">
-                <label
-                  className="font-label-caps text-label-caps text-on-surface-variant block"
-                  htmlFor="password"
-                >
-                  Password
-                </label>
-              </div>
-              <div className="relative">
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">
-                  key
-                </span>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                  className="w-full bg-surface-container/60 border border-white/5 focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all rounded-lg py-3 pl-10 pr-4 text-on-surface font-body-base text-body-base placeholder:text-outline-variant"
-                />
-              </div>
-            </div>
+          <button
+            type="submit"
+            disabled={timeLeft > 0 || isPending}
+            className="btn-primary w-full rounded-lg py-3 px-4 font-semibold flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+          >
+            <span>{isPending ? t('admin.signingIn') : t('admin.signIn')}</span>
+            <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
+          </button>
+        </form>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={timeLeft > 0 || isPending}
-              className="bg-gradient-to-r from-secondary to-primary border-t border-white/40 hover:scale-[1.02] transition-transform w-full rounded-lg py-3 px-4 font-body-base text-body-base text-on-primary font-semibold mt-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+        {error && (
+          <div className="p-3 rounded-lg border border-error/20 bg-error/10 flex items-start gap-3">
+            <span
+              className="material-symbols-outlined text-error text-[20px] mt-0.5 shrink-0"
+              style={{ fontVariationSettings: "'FILL' 1" }}
             >
-              <span>{isPending ? 'Signing In...' : 'Sign In'}</span>
-              <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
-            </button>
-          </form>
-
-          {/* Error state */}
-          {error && (
-            <div className="mt-4 p-3 rounded-lg border border-error/20 bg-error-container/10 flex items-start gap-3">
-              <span
-                className="material-symbols-outlined text-error text-[20px] mt-0.5"
-                style={{ fontVariationSettings: "'FILL' 1" }}
-              >
-                warning
-              </span>
-              <div>
-                <p className="font-body-sm text-body-sm text-error font-medium">{error}</p>
-                {timeLeft > 0 && (
-                  <p className="font-label-caps text-label-caps text-error/80 mt-1">
-                    Try again in <span>{timeLeft}</span>s.
-                  </p>
-                )}
-              </div>
+              warning
+            </span>
+            <div>
+              <p className="text-sm text-error font-medium">{error}</p>
+              {timeLeft > 0 && (
+                <p className="type-label text-error/80 mt-1 normal-case tracking-normal">
+                  Try again in {timeLeft}s.
+                </p>
+              )}
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
-        {/* Footer Note */}
-        <div className="mt-lg text-center">
-          <p className="font-code-base text-code-base text-on-surface-variant opacity-60">
-            System v2.4.1 · Session ID: <span className="text-primary">a8f9-2c</span>
-          </p>
-        </div>
+        <p className="text-center font-mono text-[11px] text-on-surface-variant/60">
+          {t('admin.secureNote')}
+        </p>
       </main>
     </div>
   );

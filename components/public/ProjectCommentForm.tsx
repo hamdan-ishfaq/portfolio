@@ -3,12 +3,14 @@
 import { useState } from 'react';
 import { useToast } from '@/components/ui/Toast';
 import { submitComment } from '@/lib/actions/comments';
+import { useLocale } from '@/components/providers/LocaleProvider';
 
 type ProjectCommentFormProps = {
   projectId: string;
 };
 
 export function ProjectCommentForm({ projectId }: ProjectCommentFormProps) {
+  const { t } = useLocale();
   const toast = useToast();
   const [authorName, setAuthorName] = useState('');
   const [content, setContent] = useState('');
@@ -16,11 +18,11 @@ export function ProjectCommentForm({ projectId }: ProjectCommentFormProps) {
 
   const handleSubmit = async () => {
     if (!authorName.trim()) {
-      toast.show('Please enter your name', 'error');
+      toast.show(t('comments.nameRequired'), 'error');
       return;
     }
     if (content.trim().length < 20) {
-      toast.show('Comment must be at least 20 characters', 'error');
+      toast.show(t('comments.contentMin'), 'error');
       return;
     }
 
@@ -32,16 +34,16 @@ export function ProjectCommentForm({ projectId }: ProjectCommentFormProps) {
       });
 
       if (res.success) {
-        toast.show('Comment submitted for moderation. Thank you!', 'success');
+        toast.show(t('comments.success'), 'success');
         setAuthorName('');
         setContent('');
       } else if (res.error === 'rate_limited') {
-        toast.show('Too many comments. Please try again later.', 'error');
+        toast.show(t('comments.rateLimited'), 'error');
       } else {
-        toast.show('Failed to submit comment. Please try again.', 'error');
+        toast.show(t('comments.failed'), 'error');
       }
     } catch {
-      toast.show('An unexpected error occurred.', 'error');
+      toast.show(t('comments.unexpected'), 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -57,7 +59,7 @@ export function ProjectCommentForm({ projectId }: ProjectCommentFormProps) {
           type="text"
           value={authorName}
           onChange={(e) => setAuthorName(e.target.value)}
-          placeholder="Your name"
+          placeholder={t('comments.namePlaceholder')}
           maxLength={100}
           className="w-full bg-surface-container border border-outline-variant rounded-lg px-sm py-2 font-body-sm text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-on-surface-variant/50"
         />
@@ -65,7 +67,7 @@ export function ProjectCommentForm({ projectId }: ProjectCommentFormProps) {
           value={content}
           onChange={(e) => setContent(e.target.value)}
           className="w-full bg-surface-container border border-outline-variant rounded-lg p-sm font-body-sm text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-y min-h-[100px] placeholder:text-on-surface-variant/50"
-          placeholder="Ask a question or leave a comment..."
+          placeholder={t('comments.contentPlaceholder')}
           maxLength={1000}
         />
         <div className="flex justify-end">
@@ -75,7 +77,7 @@ export function ProjectCommentForm({ projectId }: ProjectCommentFormProps) {
             disabled={isSubmitting}
             className="px-md py-sm bg-primary-container text-on-primary-container rounded-lg font-label-caps text-label-caps hover:bg-primary transition-colors disabled:opacity-50"
           >
-            {isSubmitting ? 'Submitting…' : 'Post Comment'}
+            {isSubmitting ? t('comments.submitting') : t('comments.post')}
           </button>
         </div>
       </div>

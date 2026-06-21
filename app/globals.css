@@ -5,35 +5,34 @@
 /* Visual source of truth: styles/design-system.css + lib/design-system.ts */
 
 @theme {
-  /* Surfaces */
-  --color-background: #09090b;
-  --color-surface: #0c0c0e;
-  --color-surface-dim: #09090b;
-  --color-surface-bright: #27272a;
-  --color-surface-container-lowest: #050506;
-  --color-surface-container-low: #0f0f12;
-  --color-surface-container: #18181b;
-  --color-surface-container-high: #27272a;
-  --color-surface-container-highest: #3f3f46;
-  --color-surface-variant: #27272a;
-  --color-surface-tint: #3b82f6;
+  /* Surfaces — warm obsidian */
+  --color-background: #070605;
+  --color-surface: #0f0e0c;
+  --color-surface-dim: #070605;
+  --color-surface-bright: #1a1816;
+  --color-surface-container-lowest: #070605;
+  --color-surface-container-low: #0c0b0a;
+  --color-surface-container: #141210;
+  --color-surface-container-high: #1c1a17;
+  --color-surface-container-highest: #2a2724;
+  --color-surface-variant: #1c1a17;
+  --color-surface-tint: #e8a55a;
 
-  --color-on-surface: #fafafa;
-  --color-on-surface-variant: #a1a1aa;
-  --color-on-background: #fafafa;
+  --color-on-surface: #f4efe6;
+  --color-on-surface-variant: #9c958a;
+  --color-on-background: #f4efe6;
 
-  /* Accent */
-  --color-primary: #3b82f6;
-  --color-primary-container: #1d4ed8;
-  --color-primary-fixed: #dbeafe;
-  --color-primary-fixed-dim: #93c5fd;
-  --color-on-primary: #ffffff;
-  --color-on-primary-container: #eff6ff;
-  --color-on-primary-fixed: #1e3a8a;
-  --color-on-primary-fixed-variant: #1d4ed8;
+  --color-primary: #e8a55a;
+  --color-primary-container: #c47d32;
+  --color-primary-fixed: #fce8d0;
+  --color-primary-fixed-dim: #f0c078;
+  --color-on-primary: #1a1208;
+  --color-on-primary-container: #fce8d0;
+  --color-on-primary-fixed: #2a1c0a;
+  --color-on-primary-fixed-variant: #c47d32;
 
-  --color-secondary: #6366f1;
-  --color-secondary-container: #4338ca;
+  --color-secondary: #5eb8b0;
+  --color-secondary-container: #3d8a84;
   --color-secondary-fixed: #e0e7ff;
   --color-secondary-fixed-dim: #a5b4fc;
   --color-on-secondary: #ffffff;
@@ -73,10 +72,11 @@
   /* Typography */
   --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
-  --font-display: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-instrument-serif: 'Instrument Serif', Georgia, serif;
 
   --font-size-display-lg: 48px;
-  --font-size-display-lg--line-height: 1.08;
+  --font-size-display-lg--line-height: 1.18;
   --font-size-display-lg--letter-spacing: -0.035em;
   --font-size-display-lg--font-weight: 700;
 
