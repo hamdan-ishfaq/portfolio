@@ -9,9 +9,15 @@ type ModalProps = {
   title: string;
   children: ReactNode;
   id?: string;
+  size?: 'md' | 'xl';
 };
 
-export function Modal({ isOpen, onClose, title, children, id }: ModalProps) {
+const SIZE_CLASS: Record<'md' | 'xl', string> = {
+  md: 'w-[min(100vw,32rem)] max-h-[90vh]',
+  xl: 'w-[min(100vw,76rem)] h-[92vh] sm:h-[88vh]',
+};
+
+export function Modal({ isOpen, onClose, title, children, id, size = 'md' }: ModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const openedAtRef = useRef(0);
 
@@ -65,12 +71,12 @@ export function Modal({ isOpen, onClose, title, children, id }: ModalProps) {
           role="dialog"
           aria-modal="true"
           aria-labelledby={`${id ?? 'modal'}-title`}
-          className="pointer-events-auto w-[min(100vw,32rem)] max-h-[90vh] overflow-y-auto glass-card rounded-t-2xl sm:rounded-xl shadow-2xl"
+          className={`pointer-events-auto flex flex-col ${SIZE_CLASS[size]} glass-card rounded-t-2xl sm:rounded-xl shadow-2xl`}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="h-0.5 bg-gradient-to-r from-primary to-secondary" />
+          <div className="h-0.5 shrink-0 bg-gradient-to-r from-primary to-secondary" />
 
-          <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-white/5">
+          <div className="flex shrink-0 items-center justify-between px-4 sm:px-6 py-4 border-b border-white/5">
             <h2
               id={`${id ?? 'modal'}-title`}
               className="text-base font-semibold text-on-surface pr-4"
@@ -95,7 +101,15 @@ export function Modal({ isOpen, onClose, title, children, id }: ModalProps) {
             </button>
           </div>
 
-          <div className="px-4 sm:px-6 py-5">{children}</div>
+          <div
+            className={
+              size === 'xl'
+                ? 'flex-1 min-h-0 overflow-hidden'
+                : 'flex-1 min-h-0 overflow-y-auto px-4 sm:px-6 py-5'
+            }
+          >
+            {children}
+          </div>
         </div>
       </div>
     </div>,

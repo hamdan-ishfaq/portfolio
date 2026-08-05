@@ -27,21 +27,34 @@ export function Navbar({ settings }: NavbarProps) {
   }, []);
 
   useEffect(() => {
-    const handler = () => {
-      const sections = ['home', 'projects', 'experience', 'contact'];
-      for (const id of sections) {
-        const el = document.getElementById(id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 100 && rect.bottom > 100) {
-            setActiveSection(id);
-            break;
+    const ids = ['home', 'about', 'experience', 'skills', 'projects', 'contact'];
+    const els = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+    if (els.length === 0) return;
+
+    const visible = new Map<string, number>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          visible.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
+        }
+        let topId = activeSection;
+        let topRatio = 0;
+        for (const [id, ratio] of visible) {
+          if (ratio > topRatio) {
+            topRatio = ratio;
+            topId = id;
           }
         }
-      }
-    };
-    window.addEventListener('scroll', handler, { passive: true });
-    return () => window.removeEventListener('scroll', handler);
+        if (topRatio > 0) setActiveSection(topId);
+      },
+      { rootMargin: '-20% 0px -70% 0px', threshold: [0, 0.1, 0.5, 1] }
+    );
+
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -60,8 +73,10 @@ export function Navbar({ settings }: NavbarProps) {
   }
 
   const navLinks = [
-    { label: t('nav.work'), href: '#projects', id: 'projects' },
+    { label: t('nav.about'), href: '#about', id: 'about' },
     { label: t('nav.experience'), href: '#experience', id: 'experience' },
+    { label: t('nav.skills'), href: '#skills', id: 'skills' },
+    { label: t('nav.work'), href: '#projects', id: 'projects' },
     { label: t('nav.contact'), href: '#contact', id: 'contact' },
   ];
 
@@ -83,19 +98,28 @@ export function Navbar({ settings }: NavbarProps) {
           </a>
 
           <div className="hidden md:flex items-center gap-8 font-body-sm text-body-sm">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className={
-                  activeSection === link.id
-                    ? 'text-on-surface font-medium'
-                    : 'text-on-surface-variant hover:text-on-surface transition-colors'
-                }
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = activeSection === link.id;
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className={
+                    isActive
+                      ? 'relative text-on-surface font-medium'
+                      : 'relative text-on-surface-variant hover:text-on-surface transition-colors'
+                  }
+                >
+                  {link.label}
+                  <span
+                    aria-hidden="true"
+                    className={`absolute -bottom-1 left-0 h-px bg-primary transition-[width,opacity] duration-300 ${
+                      isActive ? 'w-full opacity-100' : 'w-0 opacity-0'
+                    }`}
+                  />
+                </a>
+              );
+            })}
           </div>
 
           <div className="flex items-center gap-1 sm:gap-2 shrink-0">
@@ -135,6 +159,7 @@ export function Navbar({ settings }: NavbarProps) {
             </button>
           </div>
         </nav>
+        <div className="nav-scroll-progress" aria-hidden="true" />
       </header>
 
       {mobileOpen && (

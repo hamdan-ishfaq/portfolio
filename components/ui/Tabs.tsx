@@ -48,7 +48,7 @@ export function Tabs({ tabs, defaultTab, className = '' }: TabsProps) {
             tabIndex={activeId === tab.id ? 0 : -1}
             onClick={() => setActiveId(tab.id)}
             onKeyDown={(e) => handleKeyDown(e, i)}
-            className={`shrink-0 px-3 sm:px-4 py-3 text-sm font-medium transition-all duration-200 border-b-2 -mb-px focus-ring rounded-t-lg whitespace-nowrap ${
+            className={`shrink-0 px-3 sm:px-4 py-3 text-sm font-medium transition-[color,border-color] duration-200 border-b-2 -mb-px focus-ring rounded-t-lg whitespace-nowrap ${
               activeId === tab.id
                 ? 'border-primary text-primary'
                 : 'border-transparent text-on-surface-variant hover:text-on-surface hover:border-white/20'

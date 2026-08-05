@@ -2,100 +2,159 @@
 
 import Link from 'next/link';
 import type { Project } from '@/types';
+import type { PortfolioCaseStudy } from '@/lib/content/portfolio';
 import { TechBadge } from '@/components/ui/Badge';
 import { useLocale } from '@/components/providers/LocaleProvider';
 
 type ProjectCardProps = {
-  project: Project;
+  project: Project | PortfolioCaseStudy;
   tier: 0 | 1 | 2 | 3;
+  index?: number;
 };
 
-export function ProjectCard({ project, tier }: ProjectCardProps) {
+function getMetrics(project: Project | PortfolioCaseStudy): string[] {
+  if ('metrics' in project && Array.isArray(project.metrics)) return project.metrics;
+  return [];
+}
+
+function getCredit(project: Project | PortfolioCaseStudy): string | undefined {
+  if ('credit' in project && typeof project.credit === 'string') return project.credit;
+  return undefined;
+}
+
+export function ProjectCard({ project, tier, index = 0 }: ProjectCardProps) {
   const { t } = useLocale();
-  // Flagship / Tier 1 (Large Featured Card)
+  const metrics = getMetrics(project);
+  const credit = getCredit(project);
+  const href = `/projects/${project.slug}`;
+
   if (tier === 0 || tier === 1) {
+    const hasImage = Boolean(project.cover_image_url);
     return (
-      <div className="glass-card rounded-2xl overflow-x-clip card-interactive hover-glow transition-all duration-300 group flex flex-col md:flex-row border border-white/10">
-        {project.cover_image_url && (
-          <div className="md:w-1/2 relative overflow-x-clip aspect-video md:aspect-auto">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={project.cover_image_url}
-              alt={project.title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent md:bg-gradient-to-r md:from-transparent md:to-background"></div>
-          </div>
-        )}
-        <div
-          className={`p-8 md:p-10 flex flex-col justify-center ${project.cover_image_url ? 'md:w-1/2' : 'w-full'}`}
-        >
-          <div className="flex items-center gap-3 mb-4">
-            {project.is_ongoing && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                {t('common.ongoing')}
-              </span>
-            )}
-            <span className="type-label text-primary">
-              {tier === 0 ? t('projects.featured') : t('projects.caseStudy')}
+      <article className="lab-frame rounded-lg overflow-hidden group relative">
+        <div className="grid md:grid-cols-[auto_1fr] relative">
+          <div className="flex items-center md:items-start gap-4 px-6 pt-6 md:py-10 md:pl-8 md:pr-0">
+            <span
+              className="leading-none text-on-surface-variant/40 tabular-nums text-[2.5rem] md:text-[3.25rem] font-semibold"
+              aria-hidden="true"
+            >
+              {String(index + 1).padStart(2, '0')}
             </span>
           </div>
-          <h3 className="type-card-title mb-3 group-hover:text-primary transition-colors">
-            {project.title}
-          </h3>
-          <p className="text-on-surface-variant mb-6 line-clamp-3">{project.short_description}</p>
-          <div className="flex flex-wrap gap-2 mb-8">
-            {(project.tech_stack || []).slice(0, 4).map((tech) => (
-              <TechBadge key={tech.tag} tag={tech.tag} category={tech.category} />
-            ))}
-            {(project.tech_stack || []).length > 4 && (
-              <span className="text-xs text-on-surface-variant px-2 py-1 flex items-center">
-                +{(project.tech_stack || []).length - 4} {t('common.more')}
+
+          <div className="p-6 md:p-10 md:pl-8 flex flex-col">
+            <div className="flex flex-wrap items-center gap-3 mb-4">
+              <span className="type-label text-primary">
+                {tier === 0 ? t('projects.featured') : t('projects.caseStudy')}
               </span>
-            )}
-          </div>
-          <div className="mt-auto">
-            <Link
-              href={`/projects/${project.slug}`}
-              className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-secondary transition-colors"
-            >
-              {t('projects.viewCaseStudy')}
-              <svg
-                className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
+              {project.is_ongoing ? (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary/15 text-secondary border border-secondary/25">
+                  <span className="w-1.5 h-1.5 rounded-full bg-secondary" />
+                  {t('common.ongoing')}
+                </span>
+              ) : null}
+            </div>
+
+            <h3 className="type-card-title mb-3">
+              <Link href={href} className="hover:text-primary transition-colors">
+                {project.title}
+              </Link>
+            </h3>
+
+            <p className="text-on-surface-variant mb-5 max-w-[68ch] leading-relaxed">
+              {project.short_description}
+            </p>
+
+            {credit ? (
+              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-on-surface-variant mb-5">
+                {credit}
+              </p>
+            ) : null}
+
+            {metrics.length > 0 ? (
+              <ul className="mb-6 grid gap-2 sm:grid-cols-2">
+                {metrics.map((metric) => (
+                  <li
+                    key={metric}
+                    className="flex items-start gap-2 rounded-md border border-secondary/25 bg-secondary/10 px-3 py-2.5 text-sm text-on-surface"
+                  >
+                    <span className="material-symbols-outlined text-[16px] text-secondary mt-0.5">
+                      verified
+                    </span>
+                    <span>{metric}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+
+            {hasImage ? (
+              <div className="relative mb-6 rounded-md overflow-hidden border border-white/10 aspect-[16/7]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={project.cover_image_url ?? ''}
+                  alt={project.title}
+                  className="w-full h-full object-cover"
                 />
-              </svg>
-            </Link>
+              </div>
+            ) : null}
+
+            <div className="flex flex-wrap gap-2 mb-6">
+              {(project.tech_stack || []).slice(0, 6).map((tech) => (
+                <TechBadge key={tech.tag} tag={tech.tag} category={tech.category} />
+              ))}
+            </div>
+
+            <div className="mt-auto pt-4 border-t border-white/10 flex flex-wrap gap-4">
+              <Link
+                href={href}
+                className="inline-flex items-center gap-2 text-sm font-semibold text-on-surface hover:text-primary transition-colors"
+              >
+                {t('projects.viewCaseStudy')}
+                <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+              </Link>
+              {project.live_demo_url ? (
+                <a
+                  href={project.live_demo_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-on-surface-variant hover:text-on-surface transition-colors"
+                >
+                  {t('projectPage.liveDemo')}
+                  <span className="material-symbols-outlined text-[16px]">open_in_new</span>
+                </a>
+              ) : null}
+              {project.github_repo ? (
+                <a
+                  href={project.github_repo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-on-surface-variant hover:text-on-surface transition-colors"
+                >
+                  {t('common.github')}
+                  <span className="material-symbols-outlined text-[16px]">code</span>
+                </a>
+              ) : null}
+            </div>
           </div>
         </div>
-      </div>
+      </article>
     );
   }
 
-  // Tier 2 (Standard Grid Card)
   if (tier === 2) {
     return (
       <Link
-        href={`/projects/${project.slug}`}
-        className="glass-card rounded-xl p-6 card-interactive hover-glow transition-all duration-300 group flex flex-col h-full border border-white/10"
+        href={href}
+        className="lab-frame rounded-lg p-5 card-interactive group flex flex-col h-full"
       >
-        <h3 className="type-card-title mb-2 group-hover:text-primary transition-colors">
+        <h3 className="type-card-title mb-2 group-hover:text-primary transition-colors text-xl">
           {project.title}
         </h3>
-        <p className="text-sm text-on-surface-variant mb-6 line-clamp-2 flex-grow">
+        <p className="text-sm text-on-surface-variant mb-5 line-clamp-3 flex-grow">
           {project.short_description}
         </p>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {(project.tech_stack || []).slice(0, 3).map((tech) => (
+        <div className="flex flex-wrap gap-2">
+          {(project.tech_stack || []).slice(0, 4).map((tech) => (
             <TechBadge key={tech.tag} tag={tech.tag} category={tech.category} />
           ))}
         </div>
@@ -103,29 +162,22 @@ export function ProjectCard({ project, tier }: ProjectCardProps) {
     );
   }
 
-  // Tier 3 (Compact List Item)
   return (
     <Link
-      href={`/projects/${project.slug}`}
-      className="flex items-center justify-between py-4 border-b border-white/5 hover:bg-white/5 px-4 -mx-4 rounded-lg transition-colors group"
+      href={href}
+      className="flex items-center justify-between py-4 border-b border-white/8 hover:bg-white/[0.03] px-3 -mx-3 rounded-md transition-colors group"
     >
       <div>
-        <h4 className="text-base font-semibold text-on-surface group-hover:text-primary transition-colors leading-snug pb-0.5">
+        <h4 className="text-base font-semibold text-on-surface group-hover:text-primary transition-colors leading-snug">
           {project.title}
         </h4>
         <p className="text-xs text-on-surface-variant line-clamp-1 mt-1">
           {project.short_description}
         </p>
       </div>
-      <svg
-        className="w-5 h-5 text-on-surface-variant group-hover:text-primary opacity-0 group-hover:opacity-100 transition-all transform group-hover:translate-x-1"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={2}
-        stroke="currentColor"
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-      </svg>
+      <span className="material-symbols-outlined text-[18px] text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">
+        chevron_right
+      </span>
     </Link>
   );
 }

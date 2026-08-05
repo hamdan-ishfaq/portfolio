@@ -50,16 +50,14 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
       </nav>
 
       <main id="main-content" className="flex-grow pt-6 sm:pt-xl pb-12 sm:pb-2xl w-full">
-        <header className="page-container mb-10 sm:mb-2xl space-y-4 sm:space-y-lg">
+        <header className="page-container mb-10 sm:mb-2xl space-y-4 sm:space-y-lg relative">
           <div className="flex flex-wrap items-center gap-2 text-sm">
             <StatusBadge status={project.project_status} />
             <TierBadge tier={project.tier} />
           </div>
 
           <div className="space-y-3 sm:space-y-md">
-            <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface">
-              {project.title}
-            </h1>
+            <h1 className="type-section max-w-[20ch] text-on-surface">{project.title}</h1>
             <p className="font-body-base text-body-base text-on-surface-variant max-w-2xl">
               {project.short_description}
             </p>
@@ -75,7 +73,7 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
             <button
               type="button"
               onClick={() => setDemoModalOpen(true)}
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-sm px-lg py-3 sm:py-sm rounded-lg bg-gradient-to-r from-primary-container to-secondary-container shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] text-on-primary-container font-label-caps text-label-caps hover:scale-[1.02] transition-transform duration-200 ease-out"
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-sm px-lg py-3 sm:py-sm rounded-lg btn-primary font-label-caps text-label-caps"
             >
               <span className="material-symbols-outlined text-[18px]">play_circle</span>
               {t('projectPage.requestDemo')}
@@ -85,7 +83,7 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
                 href={ensureExternalUrl(project.github_repo)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex w-full sm:w-auto items-center justify-center gap-xs px-md py-3 sm:py-sm rounded-lg bg-transparent border border-outline-variant text-on-surface-variant hover:text-on-surface hover:bg-surface-container hover:border-outline transition-all duration-200 font-label-caps text-label-caps"
+                className="inline-flex w-full sm:w-auto items-center justify-center gap-xs px-md py-3 sm:py-sm rounded-lg bg-transparent border border-outline-variant text-on-surface-variant hover:text-on-surface hover:bg-surface-container hover:border-outline transition-[color,background-color,border-color] duration-200 font-label-caps text-label-caps"
               >
                 <span className="material-symbols-outlined text-[18px]">code</span>
                 {t('common.github')}
@@ -96,7 +94,7 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
                 href={ensureExternalUrl(project.live_demo_url)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex w-full sm:w-auto items-center justify-center gap-xs px-md py-3 sm:py-sm rounded-lg bg-transparent border border-outline-variant text-on-surface-variant hover:text-on-surface hover:bg-surface-container hover:border-outline transition-all duration-200 font-label-caps text-label-caps"
+                className="inline-flex w-full sm:w-auto items-center justify-center gap-xs px-md py-3 sm:py-sm rounded-lg bg-transparent border border-outline-variant text-on-surface-variant hover:text-on-surface hover:bg-surface-container hover:border-outline transition-[color,background-color,border-color] duration-200 font-label-caps text-label-caps"
               >
                 <span className="material-symbols-outlined text-[18px]">open_in_new</span>
                 {t('projectPage.liveDemo')}
@@ -107,7 +105,7 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
                 href={ensureExternalUrl(project.linkedin_url)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex w-full sm:w-auto items-center justify-center gap-xs px-md py-3 sm:py-sm rounded-lg bg-transparent border border-outline-variant text-on-surface-variant hover:text-on-surface hover:bg-surface-container hover:border-outline transition-all duration-200 font-label-caps text-label-caps"
+                className="inline-flex w-full sm:w-auto items-center justify-center gap-xs px-md py-3 sm:py-sm rounded-lg bg-transparent border border-outline-variant text-on-surface-variant hover:text-on-surface hover:bg-surface-container hover:border-outline transition-[color,background-color,border-color] duration-200 font-label-caps text-label-caps"
               >
                 <span className="material-symbols-outlined text-[18px]">link</span>
                 LinkedIn
@@ -120,7 +118,7 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
           {loomVideoId ? (
             <LoomVideo videoId={loomVideoId} title={`${project.title} demo`} />
           ) : (
-            <div className="aspect-video glass-panel rounded-xl relative overflow-hidden flex items-center justify-center bg-gradient-to-br from-surface-container-low to-surface-container-lowest">
+            <div className="aspect-video glass-panel rounded-xl relative overflow-hidden flex items-center justify-center bg-surface-container-low">
               <div className="text-center px-6 space-y-3">
                 <span className="material-symbols-outlined text-4xl text-on-surface-variant">
                   videocam_off
@@ -195,7 +193,7 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
                           className="relative pl-10 sm:pl-xl md:pl-2xl flex gap-3 sm:gap-md"
                         >
                           <div
-                            className={`absolute left-[9px] md:left-[17px] top-1 w-[14px] h-[14px] rounded-full bg-surface border-2 z-10 ${index === 0 ? 'border-primary shadow-[0_0_8px_rgba(14,165,233,0.5)]' : 'border-tertiary'}`}
+                            className={`absolute left-[9px] md:left-[17px] top-1 w-[14px] h-[14px] rounded-full bg-surface border-2 z-10 ${index === 0 ? 'border-primary shadow-[0_0_8px_var(--ds-accent-glow)]' : 'border-outline-variant'}`}
                           />
                           <div className="flex-grow space-y-sm min-w-0">
                             <div className="flex flex-wrap items-center gap-sm">

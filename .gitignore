@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# screenshots produced by the browser test scripts
+scripts/*.png
+
+# local agent tooling (skills are installed per-machine, not versioned here)
+.agents/
+.impeccable/
+skills-lock.json

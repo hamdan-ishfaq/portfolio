@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
-import { Geist, Geist_Mono, Instrument_Serif } from 'next/font/google';
+import { Inter, Geist_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import { SiteBackdrop } from '@/components/public/SiteBackdrop';
 import { ClientProviders } from '@/components/providers/ClientProviders';
@@ -8,9 +8,10 @@ import { SkipLink } from '@/components/ui/SkipLink';
 import { LOCALE_COOKIE, parseLocale, parseTheme, THEME_COOKIE } from '@/lib/preferences';
 import './globals.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const inter = Inter({
+  variable: '--font-inter',
   subsets: ['latin'],
+  display: 'swap',
 });
 
 const geistMono = Geist_Mono({
@@ -18,25 +19,18 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-const instrumentSerif = Instrument_Serif({
-  variable: '--font-instrument-serif',
-  subsets: ['latin'],
-  weight: '400',
-  style: ['normal', 'italic'],
-});
-
 export const metadata: Metadata = {
   title: {
-    default: 'Hamdan Ishfaq | AI Engineer & ML Practitioner',
+    default: 'Hamdan Ishfaq | SAP S/4HANA Techno-Functional Specialist',
     template: '%s | Hamdan Ishfaq',
   },
   description:
-    'AI Engineer building production-grade machine learning systems. Specializing in LLMs, Computer Vision, and high-performance inference.',
+    'SAP S/4HANA Materials Management (MM) · Supply Chain Data Analyst · Applied AI. Bridging enterprise ERP workflows with automation and data engineering.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://localhost:3000'),
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    siteName: 'Hamdan Ishfaq — AI Engineer',
+    siteName: 'Hamdan Ishfaq — SAP S/4HANA & Supply Chain',
   },
   twitter: {
     card: 'summary_large_image',
@@ -72,8 +66,8 @@ export default async function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ds-body mesh-bg min-h-screen flex flex-col selection:bg-primary/25 selection:text-on-surface`}
-        style={{ fontFamily: 'var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif' }}
+        className={`${inter.variable} ${geistMono.variable} ds-body mesh-bg min-h-screen flex flex-col selection:bg-primary/25 selection:text-on-surface`}
+        style={{ fontFamily: 'var(--font-inter), Inter, ui-sans-serif, system-ui, sans-serif' }}
         suppressHydrationWarning
       >
         <ClientProviders initialLocale={locale}>

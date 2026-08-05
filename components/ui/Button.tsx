@@ -46,7 +46,7 @@ export function Button({
       type={type}
       disabled={disabled}
       onClick={onClick}
-      className={`inline-flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-ring ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-ring ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
     >
       {children}
     </button>
@@ -75,7 +75,7 @@ export function LinkButton({
       href={href}
       target={target}
       rel={rel}
-      className={`inline-flex items-center justify-center gap-2 transition-all duration-200 focus-ring ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 focus-ring ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
     >
       {children}
     </a>

@@ -4,6 +4,7 @@ import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { adminSupabase } from '@/lib/supabase/admin';
 import { Footer } from '@/components/public/Footer';
 import { ProjectClientWrapper } from './ProjectClientWrapper';
+import { PORTFOLIO_CASE_STUDIES } from '@/lib/content/portfolio';
 import type { Project, DevlogEntry, ProjectComment, GlobalSettings } from '@/types';
 
 export const revalidate = 300;
@@ -14,6 +15,11 @@ type PageProps = {
 
 function getSiteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+}
+
+function getStaticCase(slug: string): Project | null {
+  const match = PORTFOLIO_CASE_STUDIES.find((p) => p.slug === slug && p.published);
+  return match ? (match as Project) : null;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -27,7 +33,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     .eq('published', true)
     .single();
 
-  if (!project) {
+  const fallback = getStaticCase(slug);
+  const resolved = project ?? fallback;
+
+  if (!resolved) {
     return { title: 'Project Not Found' };
   }
 
@@ -35,12 +44,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const pageUrl = `${siteUrl}/projects/${slug}`;
 
   return {
-    title: project.title,
-    description: project.short_description,
+    title: resolved.title,
+    description: resolved.short_description,
     alternates: { canonical: pageUrl },
     openGraph: {
-      title: project.title,
-      description: project.short_description,
+      title: resolved.title,
+      description: resolved.short_description,
       url: pageUrl,
       type: 'article',
       images: [
@@ -48,15 +57,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           url: `${pageUrl}/opengraph-image`,
           width: 1200,
           height: 630,
-          alt: project.title,
+          alt: resolved.title,
         },
-        ...(project.cover_image_url ? [{ url: project.cover_image_url }] : []),
+        ...(resolved.cover_image_url ? [{ url: resolved.cover_image_url }] : []),
       ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: project.title,
-      description: project.short_description,
+      title: resolved.title,
+      description: resolved.short_description,
     },
   };
 }
@@ -68,7 +77,7 @@ function buildProjectJsonLd(project: Project, siteUrl: string) {
     name: project.title,
     description: project.short_description,
     url: `${siteUrl}/projects/${project.slug}`,
-    applicationCategory: 'DeveloperApplication',
+    applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web',
     ...(project.github_repo ? { codeRepository: project.github_repo } : {}),
     ...(project.cover_image_url ? { image: project.cover_image_url } : {}),
@@ -87,27 +96,33 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
   const { data: settings } = await supabase.from('settings').select('*').single();
 
-  const { data: project } = await supabase.from('projects').select('*').eq('slug', slug).single();
+  const { data: dbProject } = await supabase.from('projects').select('*').eq('slug', slug).single();
 
-  if (!project || !project.published) {
+  const project = dbProject && dbProject.published ? (dbProject as Project) : getStaticCase(slug);
+
+  if (!project) {
     notFound();
   }
 
-  const { data: devlogs } = await supabase
-    .from('devlog_entries')
-    .select('*')
-    .eq('project_id', project.id)
-    .eq('published', true)
-    .order('entry_date', { ascending: false });
+  const { data: devlogs } = dbProject?.id
+    ? await supabase
+        .from('devlog_entries')
+        .select('*')
+        .eq('project_id', dbProject.id)
+        .eq('published', true)
+        .order('entry_date', { ascending: false })
+    : { data: [] };
 
-  const { data: comments } = await supabase
-    .from('project_comments')
-    .select('*')
-    .eq('project_id', project.id)
-    .eq('status', 'approved')
-    .order('created_at', { ascending: true });
+  const { data: comments } = dbProject?.id
+    ? await supabase
+        .from('project_comments')
+        .select('*')
+        .eq('project_id', dbProject.id)
+        .eq('status', 'approved')
+        .order('created_at', { ascending: true })
+    : { data: [] };
 
-  const jsonLd = buildProjectJsonLd(project as Project, siteUrl);
+  const jsonLd = buildProjectJsonLd(project, siteUrl);
 
   return (
     <>
@@ -116,7 +131,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <ProjectClientWrapper
-        project={project as Project}
+        project={project}
         devlogs={(devlogs as DevlogEntry[]) ?? []}
         comments={(comments as ProjectComment[]) ?? []}
       />
@@ -131,7 +146,12 @@ export async function generateStaticParams() {
     .select('slug')
     .eq('published', true);
 
-  return (projects || []).map((project) => ({
-    slug: project.slug,
-  }));
+  const dbSlugs = (projects || []).map((project) => ({ slug: project.slug }));
+  const staticSlugs = PORTFOLIO_CASE_STUDIES.map((p) => ({ slug: p.slug }));
+  const seen = new Set<string>();
+  return [...dbSlugs, ...staticSlugs].filter(({ slug }) => {
+    if (seen.has(slug)) return false;
+    seen.add(slug);
+    return true;
+  });
 }

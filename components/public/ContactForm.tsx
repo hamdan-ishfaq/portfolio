@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { SectionHeader } from '@/components/public/SectionHeader';
 import { Button } from '@/components/ui/Button';
 import { FadeIn } from '@/components/ui/FadeIn';
 import { useToast } from '@/components/ui/Toast';
@@ -22,7 +23,6 @@ export function ContactForm() {
   const { t } = useLocale();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const toast = useToast();
-
   const contactSchema = useMemo(
     () =>
       z.object({
@@ -80,18 +80,24 @@ export function ContactForm() {
 
       <FadeIn>
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-10 lg:gap-16 items-start">
-          <div className="space-y-5">
-            <p className="type-label">{t('contact.label')}</p>
-            <h2 className="type-section">
-              {t('contact.titleBefore')}{' '}
-              <span className="type-accent-serif">{t('contact.titleAccent')}</span>
-              {t('contact.titleAfter')}
-            </h2>
-            <p className="type-lead">{t('contact.lead')}</p>
-            <p className="font-mono text-xs text-on-surface-variant">{t('contact.replyTime')}</p>
+          <div className="space-y-5 lg:sticky lg:top-28">
+            <SectionHeader
+              title={
+                <>
+                  {t('contact.titleBefore')}{' '}
+                  <span className="type-accent-serif">{t('contact.titleAccent')}</span>
+                  {t('contact.titleAfter')}
+                </>
+              }
+              lead={t('contact.lead')}
+            />
+            <p className="inline-flex items-center gap-2 font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-on-surface-variant">
+              <span className="inline-block size-1.5 rounded-full bg-primary" />
+              {t('contact.replyTime')}
+            </p>
           </div>
 
-          <div className="glass-card rounded-2xl p-5 sm:p-8 border border-white/10 card-interactive">
+          <div className="lab-frame rounded-2xl p-5 sm:p-8 card-interactive relative">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2 text-left">
@@ -104,7 +110,7 @@ export function ContactForm() {
                   <input
                     id="name"
                     {...register('name')}
-                    className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary focus:shadow-[0_0_0_2px_rgba(14,165,233,0.2)] transition-all font-body-sm"
+                    className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/30 transition-[border-color,box-shadow,background-color] font-body-sm"
                     placeholder={t('contact.namePlaceholder')}
                   />
                   {errors.name && <p className="text-xs text-error">{errors.name.message}</p>}
@@ -121,7 +127,7 @@ export function ContactForm() {
                     id="email"
                     type="email"
                     {...register('email')}
-                    className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary focus:shadow-[0_0_0_2px_rgba(14,165,233,0.2)] transition-all font-body-sm"
+                    className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/30 transition-[border-color,box-shadow,background-color] font-body-sm"
                     placeholder={t('contact.emailPlaceholder')}
                   />
                   {errors.email && <p className="text-xs text-error">{errors.email.message}</p>}
@@ -138,7 +144,7 @@ export function ContactForm() {
                 <input
                   id="company"
                   {...register('company')}
-                  className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary focus:shadow-[0_0_0_2px_rgba(14,165,233,0.2)] transition-all font-body-sm"
+                  className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/30 transition-[border-color,box-shadow,background-color] font-body-sm"
                   placeholder={t('contact.companyPlaceholder')}
                 />
               </div>
@@ -154,7 +160,7 @@ export function ContactForm() {
                   id="message"
                   {...register('message')}
                   rows={5}
-                  className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary focus:shadow-[0_0_0_2px_rgba(14,165,233,0.2)] transition-all font-body-sm resize-y"
+                  className="w-full bg-surface border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:border-primary focus:ring-2 focus:ring-primary/30 transition-[border-color,box-shadow,background-color] font-body-sm resize-y"
                   placeholder={t('contact.messagePlaceholder')}
                 />
                 {errors.message && <p className="text-xs text-error">{errors.message.message}</p>}

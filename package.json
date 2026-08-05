@@ -10,6 +10,7 @@
     "type-check": "tsc --noEmit",
     "verify:supabase": "node scripts/verify-supabase.mjs",
     "test:smoke": "node scripts/smoke-test.mjs",
+    "test:simulator": "node scripts/test-simulator.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky"
@@ -47,6 +48,7 @@
     "lint-staged": "^17.0.5",
     "playwright": "^1.60.0",
     "prettier": "^3.8.3",
+    "puppeteer-core": "^25.2.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   },

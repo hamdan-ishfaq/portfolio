@@ -18,7 +18,7 @@ export function FadeIn({ children, className, delay = 0, immediate = false }: Fa
     return <div className={className}>{children}</div>;
   }
 
-  const transition = { duration: 0.5, delay, ease: 'easeOut' as const };
+  const transition = { duration: 0.5, delay, ease: [0.22, 1, 0.36, 1] as const };
 
   if (immediate) {
     return (

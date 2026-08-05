@@ -1,9 +1,8 @@
 'use client';
 
 import type { GlobalSettings } from '@/types';
-import { DEFAULT_HERO_TECH_STACK } from '@/lib/defaults/hero-tech-stack';
 import { FadeIn } from '@/components/ui/FadeIn';
-import { HeroVisual } from '@/components/public/HeroVisual';
+import { SupplyChainNetwork } from '@/components/public/SupplyChainNetwork';
 import { useLocale } from '@/components/providers/LocaleProvider';
 
 type HeroProps = {
@@ -16,50 +15,47 @@ export function Hero({ settings }: HeroProps) {
   const cvUrl = settings?.cv_file_url?.trim();
   const contactEmail = settings?.email?.trim();
 
-  const storedStack = settings?.hero_tech_stack?.filter((item) => item.label?.trim());
-  const techStack = storedStack && storedStack.length > 0 ? storedStack : DEFAULT_HERO_TECH_STACK;
-  const techLabels = techStack.map((item) => item.label);
-
   return (
     <section
-      className="page-container min-h-[80vh] lg:min-h-[90vh] flex flex-col justify-center relative py-16 sm:py-24"
+      className="page-container relative flex flex-col justify-center min-h-[calc(100vh-8rem)] py-6 sm:py-8"
       id="home"
     >
-      <div className="z-10 relative grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-center">
-        <FadeIn immediate>
-          <div className="space-y-6 sm:space-y-8">
-            <p className="type-label">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-primary mr-2 align-middle animate-pulse" />
-              {t('hero.openTo')}
-            </p>
+      <FadeIn immediate>
+        <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-5">
+          <span className="type-label">{t('hero.metaRole')}</span>
+          <span className="type-label inline-flex items-center gap-2">
+            <span className="inline-flex h-1.5 w-1.5 rounded-full bg-secondary" />
+            {t('hero.openTo')}
+          </span>
+        </div>
+      </FadeIn>
 
-            <h1 className="type-hero max-w-[14ch]">
-              {t('hero.headlinePrefix', { name: displayName })}{' '}
-              <span className="type-accent-serif">{t('hero.headlineAccent')}</span>{' '}
-              {t('hero.headlineSuffix')}
-            </h1>
+      <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-14 items-center py-10 lg:py-14">
+        <div className="space-y-6">
+          <FadeIn immediate delay={0.05}>
+            <p className="type-label text-primary">{displayName}</p>
+            <h1 className="type-hero max-w-[20ch] mt-3">{t('hero.headline')}</h1>
+          </FadeIn>
 
-            <p className="font-mono text-sm text-on-surface-variant tracking-wide border-l-2 border-primary/40 pl-4">
-              {settings?.tagline?.trim() || t('hero.defaultTagline')}
-            </p>
+          <FadeIn immediate delay={0.1}>
+            <p className="type-lead max-w-[56ch]">{t('hero.defaultSubhead')}</p>
+          </FadeIn>
 
-            <p className="type-lead">
-              {settings?.sub_headline?.trim() || t('hero.defaultSubhead')}
-            </p>
-
-            <div className="flex flex-col sm:flex-row flex-wrap gap-3 pt-2">
+          <FadeIn immediate delay={0.15}>
+            <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 pt-1">
               {cvUrl ? (
                 <a
-                  className="btn-primary min-h-11 px-6 py-3 rounded-lg font-body-base font-semibold flex items-center justify-center gap-2 w-full sm:w-auto"
+                  className="btn-primary min-h-11 px-6 py-3 rounded-md font-body-base font-semibold flex items-center justify-center gap-2 w-full sm:w-auto"
                   href={cvUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
+                  <span className="material-symbols-outlined text-[18px]">download</span>
                   {t('common.downloadCv')}
                 </a>
               ) : contactEmail ? (
                 <a
-                  className="btn-primary min-h-11 px-6 py-3 rounded-lg font-body-base font-semibold flex items-center justify-center gap-2 w-full sm:w-auto"
+                  className="btn-primary min-h-11 px-6 py-3 rounded-md font-body-base font-semibold flex items-center justify-center gap-2 w-full sm:w-auto"
                   href={`mailto:${contactEmail}`}
                 >
                   {t('common.emailMe')}
@@ -67,17 +63,18 @@ export function Hero({ settings }: HeroProps) {
               ) : null}
 
               <a
-                className="btn-secondary min-h-11 px-6 py-3 rounded-lg font-body-base font-semibold flex items-center justify-center gap-2 w-full sm:w-auto"
+                className="btn-secondary min-h-11 px-5 py-3 rounded-md font-body-base font-semibold inline-flex items-center justify-center gap-2 w-full sm:w-auto"
                 href="#projects"
               >
                 {t('hero.seeWork')}
+                <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
               </a>
             </div>
-          </div>
-        </FadeIn>
+          </FadeIn>
+        </div>
 
-        <FadeIn immediate delay={0.15}>
-          <HeroVisual items={techLabels} />
+        <FadeIn immediate delay={0.12}>
+          <SupplyChainNetwork />
         </FadeIn>
       </div>
     </section>
