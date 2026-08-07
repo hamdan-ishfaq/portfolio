@@ -82,6 +82,8 @@ export function ContactForm() {
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-10 lg:gap-16 items-start">
           <div className="space-y-5 lg:sticky lg:top-28">
             <SectionHeader
+              index="06 — Contact"
+              className="mb-0"
               title={
                 <>
                   {t('contact.titleBefore')}{' '}

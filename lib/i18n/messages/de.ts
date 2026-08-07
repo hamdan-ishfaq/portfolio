@@ -36,11 +36,12 @@ export const de: Messages = {
   },
   hero: {
     openTo: 'Offen für Festanstellung und Projekte',
-    headline:
-      'SAP S/4HANA MM | Supply Chain Data Analyst | Ex-SAP Intern @ FFC & AI Intern @ Nexpred | BS Data Science NUST',
+    headline: 'Ich übersetze physische Logistik in digitale Audit-Trails in live SAP S/4HANA.',
+    credentialLine:
+      'SAP S/4HANA MM · Supply Chain Data Analyst · Ex-SAP Intern @ FFC & AI Intern @ Nexpred · BS Data Science NUST',
     defaultTagline: 'SAP S/4HANA MM · Supply Chain · FFC · Nexpred · NUST',
     defaultSubhead:
-      'Ich arbeite an der Schnittstelle von Geschäftsprozessausführung und Data Science — mit Fokus auf Enterprise Supply Chains und ERP-Automatisierung.',
+      'An der Schnittstelle von Materials Management, Procure-to-Pay und Applied Data Engineering — für Enterprise-Recruiter, die Dokumentenfluss lesen, keine Buzzwords.',
     seeWork: 'Fallstudien ansehen',
     stackCaption: 'MM · P2P · O2C · Analytics',
     domainValue: 'Enterprise Supply Chain & ERP',
@@ -48,7 +49,7 @@ export const de: Messages = {
     capabilities: 'Kompetenzen',
     metaRole: 'SAP Techno-Functional · Supply Chain Data Analyst',
     metaFocus: 'Fokus',
-    metaDomain: 'Domäne',
+    metaDomain: 'Enterprise Supply Chain & ERP',
     metaStatus: 'Status',
   },
   about: {
@@ -96,10 +97,10 @@ export const de: Messages = {
   },
   contact: {
     label: 'Kontakt',
-    titleBefore: 'Erzählen Sie mir, was Sie',
-    titleAccent: 'bauen',
+    titleBefore: 'Erzählen Sie mir vom',
+    titleAccent: 'Prozess',
     titleAfter: '.',
-    lead: 'Eine kurze Notiz zu Prozess, ERP-Landschaft und Zeitplan reicht. Ich antworte auf jede Nachricht, die kein Spam ist.',
+    lead: 'Eine kurze Notiz zu ERP-Landschaft, Modul-Scope und Zeitplan reicht. Ich antworte auf jede Nachricht, die kein Spam ist.',
     replyTime: 'In der Regel innerhalb von 48 Stunden.',
     name: 'Name',
     namePlaceholder: 'Max Mustermann',

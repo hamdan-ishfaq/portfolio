@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
-import { Inter, Geist_Mono } from 'next/font/google';
+import { IBM_Plex_Sans, IBM_Plex_Serif, Geist_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import { SiteBackdrop } from '@/components/public/SiteBackdrop';
 import { ClientProviders } from '@/components/providers/ClientProviders';
@@ -8,9 +8,18 @@ import { SkipLink } from '@/components/ui/SkipLink';
 import { LOCALE_COOKIE, parseLocale, parseTheme, THEME_COOKIE } from '@/lib/preferences';
 import './globals.css';
 
-const inter = Inter({
-  variable: '--font-inter',
+const plexSans = IBM_Plex_Sans({
+  variable: '--font-plex-sans',
   subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+});
+
+const plexSerif = IBM_Plex_Serif({
+  variable: '--font-plex-serif',
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  style: ['normal', 'italic'],
   display: 'swap',
 });
 
@@ -66,8 +75,11 @@ export default async function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} ${geistMono.variable} ds-body mesh-bg min-h-screen flex flex-col selection:bg-primary/25 selection:text-on-surface`}
-        style={{ fontFamily: 'var(--font-inter), Inter, ui-sans-serif, system-ui, sans-serif' }}
+        className={`${plexSans.variable} ${plexSerif.variable} ${geistMono.variable} ds-body mesh-bg min-h-screen flex flex-col selection:bg-primary/25 selection:text-on-surface`}
+        style={{
+          fontFamily:
+            'var(--font-plex-sans), "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif',
+        }}
         suppressHydrationWarning
       >
         <ClientProviders initialLocale={locale}>

@@ -9,93 +9,86 @@ type TimelineProps = {
   events: TimelineEvent[];
 };
 
+/** Vertical posting log — audit-trail layout, not a zig-zag timeline template. */
 export function Timeline({ events }: TimelineProps) {
   const { t } = useLocale();
   if (!events || events.length === 0) return null;
 
   return (
     <section className="page-container section-block relative" id="experience">
-      <SectionHeader title={t('experience.title')} lead={t('experience.lead')} />
+      <SectionHeader
+        index="02 — Experience"
+        title={t('experience.title')}
+        lead={t('experience.lead')}
+      />
 
-      <div className="relative pl-8 md:pl-0">
-        <div className="absolute left-[39px] md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-primary/40 via-white/10 to-transparent transform md:-translate-x-1/2" />
+      <div className="relative">
+        <div
+          className="absolute left-[7px] sm:left-[9px] top-2 bottom-2 w-px bg-gradient-to-b from-primary/50 via-white/12 to-transparent timeline-spine"
+          aria-hidden="true"
+        />
 
-        <div className="space-y-xl">
+        <ol className="space-y-8 sm:space-y-10">
           {events.map((event, index) => {
-            const isEven = index % 2 === 0;
             const isAcademic = event.type === 'academic';
-            const accentText = isAcademic ? 'text-on-surface-variant' : 'text-primary';
-            const accentBorder = isAcademic ? 'border-white/30' : 'border-primary';
 
             return (
-              <StaggerItem key={event.id} index={index}>
-                <div
+              <StaggerItem key={event.id} index={index} variant="wipe">
+                <li
                   id={`experience-${event.id}`}
-                  className={`relative flex flex-col md:flex-row items-center md:justify-between group scroll-mt-28 ${
-                    !isEven ? 'md:flex-row-reverse' : ''
-                  }`}
+                  className="relative grid gap-4 sm:grid-cols-[minmax(0,11rem)_1fr] sm:gap-10 pl-8 sm:pl-10 scroll-mt-28"
                 >
                   <div
-                    className={`md:w-[45%] ${isEven ? 'md:text-right pr-lg' : 'md:text-left pl-lg'} mb-sm md:mb-0 hidden md:block`}
-                  >
-                    <h3 className="font-body-base text-body-base text-on-surface font-semibold">
-                      {event.title}
-                    </h3>
-                    <p className={`font-body-sm text-body-sm ${accentText}`}>
-                      {event.organization}
-                    </p>
-                    <p className="font-code-base text-[12px] text-on-surface-variant mt-1">
-                      {event.date_range}
-                    </p>
-                    {event.location ? (
-                      <p className="font-code-base text-[11px] text-on-surface-variant/80 mt-0.5">
-                        {event.location}
-                      </p>
-                    ) : null}
-                  </div>
-
-                  <div
-                    className={`absolute left-0 md:left-1/2 w-6 h-6 rounded-full bg-surface border-2 ${accentBorder} z-10 transform md:-translate-x-1/2 flex items-center justify-center`}
+                    className={`absolute left-0 top-1.5 w-[15px] h-[15px] sm:w-[19px] sm:h-[19px] rounded-full border-2 bg-surface z-10 flex items-center justify-center ${
+                      isAcademic ? 'border-white/35' : 'border-primary'
+                    }`}
                   >
                     {!isAcademic ? (
-                      <div className="w-2 h-2 rounded-full bg-primary" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary" />
                     ) : (
-                      <span className="material-symbols-outlined text-[10px] text-on-surface-variant">
+                      <span className="material-symbols-outlined text-[9px] text-on-surface-variant">
                         school
                       </span>
                     )}
                   </div>
 
-                  <div
-                    className={`md:w-[45%] w-full pl-lg md:pl-0 ${isEven ? 'md:pr-0' : 'md:pr-lg text-left md:text-right'}`}
-                  >
-                    <div className="md:hidden mb-2">
-                      <h3 className="font-body-base text-body-base text-on-surface font-semibold">
-                        {event.title}
-                      </h3>
-                      <p className={`font-body-sm text-body-sm ${accentText}`}>
-                        {event.organization} · {event.date_range}
+                  <div className="sm:pt-0.5">
+                    <p className="font-mono text-[11px] tabular-nums text-primary tracking-wide">
+                      {event.date_range}
+                    </p>
+                    {event.location ? (
+                      <p className="mt-1.5 text-[11px] leading-snug text-on-surface-variant">
+                        {event.location}
                       </p>
-                      {event.location ? (
-                        <p className="font-code-base text-[11px] text-on-surface-variant mt-0.5">
-                          {event.location}
-                        </p>
-                      ) : null}
-                    </div>
-
-                    <div className="lab-frame p-md rounded-lg relative overflow-hidden">
-                      <div className="font-body-sm text-body-sm text-on-surface-variant space-y-xs">
-                        {event.description.map((desc, i) => (
-                          <p key={i}>{desc}</p>
-                        ))}
-                      </div>
-                    </div>
+                    ) : null}
                   </div>
-                </div>
+
+                  <div className="min-w-0">
+                    <h3 className="font-display text-[1.05rem] sm:text-lg font-semibold tracking-tight text-on-surface">
+                      {event.title}
+                    </h3>
+                    <p
+                      className={`mt-1 text-sm ${isAcademic ? 'text-on-surface-variant' : 'text-primary'}`}
+                    >
+                      {event.organization}
+                    </p>
+
+                    <ul className="mt-4 space-y-2.5">
+                      {event.description.map((desc, i) => (
+                        <li
+                          key={i}
+                          className="text-sm leading-relaxed text-on-surface-variant pl-3 border-l border-white/12"
+                        >
+                          {desc}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </li>
               </StaggerItem>
             );
           })}
-        </div>
+        </ol>
       </div>
     </section>
   );

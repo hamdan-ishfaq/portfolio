@@ -16,7 +16,6 @@ import {
   type SimNodeId,
 } from '@/lib/content/p2p-simulation';
 
-/** Loaded only after the visitor opts in, so the landing view stays instant. */
 const P2PSimulator = dynamic(
   () => import('@/components/public/P2PSimulator').then((m) => m.P2PSimulator),
   { ssr: false }
@@ -24,14 +23,14 @@ const P2PSimulator = dynamic(
 
 function makeLabelTexture(text: string, hex: string): THREE.CanvasTexture {
   const dpr = Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 2);
-  const fontSize = 40;
-  const padX = 16;
+  const fontSize = 36;
+  const padX = 14;
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d')!;
-  const font = `600 ${fontSize}px Inter, ui-sans-serif, system-ui, sans-serif`;
+  const font = `500 ${fontSize}px "IBM Plex Mono", "Geist Mono", ui-monospace, monospace`;
   ctx.font = font;
   const width = Math.ceil(ctx.measureText(text).width + padX * 2);
-  const height = Math.ceil(fontSize * 1.6);
+  const height = Math.ceil(fontSize * 1.55);
   canvas.width = width * dpr;
   canvas.height = height * dpr;
   ctx.scale(dpr, dpr);
@@ -51,8 +50,8 @@ function makeLabelTexture(text: string, hex: string): THREE.CanvasTexture {
 }
 
 /**
- * Hero teaser for the document network. Shares node positions and labels with
- * the simulator so the still picture and the interactive one are the same object.
+ * Hero document-flow figure — thin document tiles + travelling postings.
+ * No spinning cubes; pointer tilt only. Shares topology with the P2P simulator.
  */
 export function SupplyChainNetwork() {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -68,8 +67,22 @@ export function SupplyChainNetwork() {
     if (!mount) return;
 
     const palette = isDark
-      ? { node: 0xe2e8f0, edge: 0x3b82a8, packet: 0x4ec2a6, label: '#cbd5e1' }
-      : { node: 0x1f4e79, edge: 0x1f4e79, packet: 0x2f7d6d, label: '#334155' };
+      ? {
+          node: 0xdbe7f3,
+          nodeFill: 0x1a2f4a,
+          edge: 0x3b82a8,
+          edgeRef: 0x475569,
+          packet: 0x4ec2a6,
+          label: '#e2e8f0',
+        }
+      : {
+          node: 0x1f4e79,
+          nodeFill: 0xe8eef5,
+          edge: 0x1f4e79,
+          edgeRef: 0x94a3b8,
+          packet: 0x2f7d6d,
+          label: '#1e293b',
+        };
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
@@ -84,7 +97,7 @@ export function SupplyChainNetwork() {
     mount.appendChild(renderer.domElement);
 
     const group = new THREE.Group();
-    group.rotation.x = -0.32;
+    group.rotation.x = -0.28;
     scene.add(group);
 
     const disposables: Array<{ dispose: () => void }> = [];
@@ -93,62 +106,84 @@ export function SupplyChainNetwork() {
       positions.set(node.id, new THREE.Vector3(...node.position));
     }
 
-    // Material units.
-    const cubeGeo = new THREE.BoxGeometry(0.26, 0.26, 0.26);
-    const cubeEdges = new THREE.EdgesGeometry(cubeGeo);
-    const cubeMat = new THREE.LineBasicMaterial({
+    // Document tiles — thin slabs, not spinning cubes.
+    const docGeo = new THREE.BoxGeometry(0.38, 0.5, 0.045);
+    const docEdges = new THREE.EdgesGeometry(docGeo);
+    const fillMat = new THREE.MeshBasicMaterial({
+      color: palette.nodeFill,
+      transparent: true,
+      opacity: isDark ? 0.55 : 0.85,
+    });
+    const edgeMat = new THREE.LineBasicMaterial({
       color: palette.node,
       transparent: true,
-      opacity: isDark ? 0.85 : 0.7,
+      opacity: isDark ? 0.9 : 0.75,
     });
-    disposables.push(cubeGeo, cubeEdges, cubeMat);
+    disposables.push(docGeo, docEdges, fillMat, edgeMat);
 
-    const cubes = SIM_NODES.map((node) => {
-      const cube = new THREE.LineSegments(cubeEdges, cubeMat);
-      cube.position.copy(positions.get(node.id)!);
-      group.add(cube);
-      return cube;
-    });
+    for (const node of SIM_NODES) {
+      const tile = new THREE.Group();
+      const fill = new THREE.Mesh(docGeo, fillMat);
+      const frame = new THREE.LineSegments(docEdges, edgeMat);
+      tile.add(fill, frame);
+      tile.position.copy(positions.get(node.id)!);
+      group.add(tile);
+    }
 
-    // Labels.
     for (const node of SIM_NODES) {
       const texture = makeLabelTexture(copy.nodes[node.id].short, palette.label);
       const material = new THREE.SpriteMaterial({
         map: texture,
         transparent: true,
-        opacity: 0.9,
+        opacity: 0.92,
         depthWrite: false,
         depthTest: false,
       });
       const label = new THREE.Sprite(material);
       const aspect = (texture.userData.aspect as number) || 4;
-      const h = 0.24;
+      const h = 0.22;
       label.scale.set(h * aspect, h, 1);
       label.position.copy(positions.get(node.id)!);
-      label.position.y += 0.36;
+      label.position.y += 0.42;
       label.renderOrder = 5;
       group.add(label);
       disposables.push(texture, material);
     }
 
-    // Edges.
-    const linePoints: number[] = [];
+    // Flow edges solid; reference edges dashed via lower opacity.
+    const flowPoints: number[] = [];
+    const refPoints: number[] = [];
     for (const edge of SIM_EDGES) {
       const a = positions.get(edge.from)!;
       const b = positions.get(edge.to)!;
-      linePoints.push(a.x, a.y, a.z, b.x, b.y, b.z);
+      const bucket = edge.kind === 'flow' ? flowPoints : refPoints;
+      bucket.push(a.x, a.y, a.z, b.x, b.y, b.z);
     }
-    const lineGeo = new THREE.BufferGeometry();
-    lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePoints, 3));
-    const lineMat = new THREE.LineBasicMaterial({
+
+    const flowGeo = new THREE.BufferGeometry();
+    flowGeo.setAttribute('position', new THREE.Float32BufferAttribute(flowPoints, 3));
+    const flowMat = new THREE.LineBasicMaterial({
       color: palette.edge,
       transparent: true,
-      opacity: isDark ? 0.32 : 0.28,
+      opacity: isDark ? 0.4 : 0.35,
     });
-    group.add(new THREE.LineSegments(lineGeo, lineMat));
-    disposables.push(lineGeo, lineMat);
+    group.add(new THREE.LineSegments(flowGeo, flowMat));
+    disposables.push(flowGeo, flowMat);
 
-    // Postings in transit.
+    if (refPoints.length > 0) {
+      const refGeo = new THREE.BufferGeometry();
+      refGeo.setAttribute('position', new THREE.Float32BufferAttribute(refPoints, 3));
+      const refMat = new THREE.LineBasicMaterial({
+        color: palette.edgeRef,
+        transparent: true,
+        opacity: isDark ? 0.18 : 0.2,
+      });
+      group.add(new THREE.LineSegments(refGeo, refMat));
+      disposables.push(refGeo, refMat);
+    }
+
+    // One packet per flow edge — process, not particle candy.
+    const flowEdges = SIM_EDGES.filter((e) => e.kind === 'flow');
     const packetMat = new THREE.SpriteMaterial({
       map: getParticleTexture(),
       color: palette.packet,
@@ -159,16 +194,21 @@ export function SupplyChainNetwork() {
     });
     disposables.push(packetMat);
 
-    const packets = SIM_EDGES.slice(0, 8).map((edge, i) => {
+    const packets = flowEdges.slice(0, 5).map((edge, i) => {
       const mesh = new THREE.Sprite(packetMat);
-      mesh.scale.setScalar(0.3);
+      mesh.scale.setScalar(0.22);
       group.add(mesh);
-      return { edgeIndex: i, t: Math.random(), speed: 0.0024 + Math.random() * 0.0024, mesh };
+      return {
+        edgeIndex: i,
+        t: (i / Math.max(flowEdges.length, 1)) * 0.8,
+        speed: 0.0032 + (i % 3) * 0.0004,
+        mesh,
+      };
     });
 
     const renderFrame = () => {
       for (const packet of packets) {
-        const edge = SIM_EDGES[packet.edgeIndex];
+        const edge = flowEdges[packet.edgeIndex];
         packet.mesh.position
           .copy(positions.get(edge.from)!)
           .lerp(positions.get(edge.to)!, packet.t);
@@ -199,7 +239,7 @@ export function SupplyChainNetwork() {
     mount.addEventListener('pointermove', onPointerMove, { passive: true });
 
     let frameId = 0;
-    let tiltX = -0.32;
+    let tiltX = -0.28;
 
     if (prefersReducedMotion) {
       renderFrame();
@@ -207,31 +247,24 @@ export function SupplyChainNetwork() {
       const animate = () => {
         frameId = requestAnimationFrame(animate);
 
-        // No auto-rotation: a spinning ring overlaps its own labels. The
-        // travelling postings carry the motion instead.
-        const targetY = pointer.x * 0.16;
-        const targetX = -0.32 - pointer.y * 0.1;
+        const targetY = pointer.x * 0.14;
+        const targetX = -0.28 - pointer.y * 0.08;
         tiltX += (targetX - tiltX) * 0.05;
         group.rotation.y += (targetY - group.rotation.y) * 0.06;
         group.rotation.x = tiltX;
-
-        for (const cube of cubes) {
-          cube.rotation.x += 0.004;
-          cube.rotation.y += 0.005;
-        }
 
         for (const packet of packets) {
           packet.t += packet.speed;
           if (packet.t >= 1) {
             packet.t = 0;
-            const end = SIM_EDGES[packet.edgeIndex].to;
-            const onward = SIM_EDGES.map((e, index) => ({ e, index })).filter(
-              ({ e }) => e.from === end
-            );
+            const end = flowEdges[packet.edgeIndex].to;
+            const onward = flowEdges
+              .map((e, index) => ({ e, index }))
+              .filter(({ e }) => e.from === end);
             packet.edgeIndex =
               onward.length > 0
                 ? onward[Math.floor(Math.random() * onward.length)].index
-                : Math.floor(Math.random() * SIM_EDGES.length);
+                : (packet.edgeIndex + 1) % flowEdges.length;
           }
         }
 
@@ -262,7 +295,7 @@ export function SupplyChainNetwork() {
 
         <div
           ref={mountRef}
-          className="relative w-full aspect-[4/3] min-h-[280px]"
+          className="relative w-full aspect-[4/3] min-h-[280px] bg-[radial-gradient(ellipse_at_center,rgba(59,130,168,0.08),transparent_65%)]"
           role="img"
           aria-label="Diagram of a supply chain document flow linking purchase requisition, purchase order, goods receipt, invoice, payment, sales order, delivery, goods issue, and billing."
         />
@@ -271,7 +304,7 @@ export function SupplyChainNetwork() {
           <button
             type="button"
             onClick={() => setSimulatorOpen(true)}
-            className="inline-flex w-full items-center justify-center gap-2 rounded border border-white/12 px-4 py-2.5 text-sm font-medium text-on-surface transition-colors hover:border-primary/60 hover:bg-primary/[0.06]"
+            className="inline-flex w-full items-center justify-center gap-2 rounded border border-white/12 px-4 py-2.5 text-sm font-medium text-on-surface transition-colors hover:border-primary/60 hover:bg-primary/[0.06] active:scale-[0.99]"
           >
             <span className="material-symbols-outlined text-[18px] text-primary">open_in_full</span>
             {copy.ui.open}

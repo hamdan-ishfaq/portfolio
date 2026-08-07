@@ -19,6 +19,7 @@ export function ProjectSections() {
   return (
     <section className="page-container section-block relative" id="projects">
       <SectionHeader
+        index="05 — Case studies"
         title={
           <>
             {t('projects.titleBefore')}{' '}

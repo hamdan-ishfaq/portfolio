@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'Hamdan Ishfaq — AI Engineer Portfolio';
+export const alt = 'Muhammad Hamdan Ishfaq — SAP S/4HANA MM & Supply Chain';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -14,56 +14,69 @@ export default function Image() {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        padding: '80px',
-        background: 'linear-gradient(135deg, #0a0e17 0%, #121a2e 50%, #1a2744 100%)',
+        padding: '72px 80px',
+        background: 'linear-gradient(145deg, #0b1220 0%, #111827 55%, #1a2f4a 100%)',
         fontFamily: 'system-ui, sans-serif',
       }}
     >
       <div
         style={{
-          fontSize: 28,
+          fontSize: 22,
           fontWeight: 600,
-          color: '#89ceff',
-          letterSpacing: '0.1em',
+          color: '#3b82a8',
+          letterSpacing: '0.14em',
           textTransform: 'uppercase',
-          marginBottom: '24px',
+          marginBottom: '20px',
         }}
       >
-        AI Engineer Portfolio
+        SAP S/4HANA MM · Supply Chain
       </div>
       <div
         style={{
-          fontSize: 72,
+          fontSize: 64,
           fontWeight: 700,
-          color: '#f0f4ff',
+          color: '#f1f5f9',
           lineHeight: 1.05,
-          marginBottom: '32px',
-          letterSpacing: '-0.02em',
+          marginBottom: '24px',
+          letterSpacing: '-0.03em',
         }}
       >
-        Hamdan Ishfaq
+        Muhammad Hamdan Ishfaq
       </div>
       <div
         style={{
-          fontSize: 32,
+          fontSize: 28,
           color: '#94a3b8',
-          lineHeight: 1.4,
-          maxWidth: '800px',
+          lineHeight: 1.45,
+          maxWidth: '860px',
         }}
       >
-        Production-grade ML systems · LLMs · Computer Vision · High-performance inference
+        Ex-SAP Intern @ FFC · AI Intern @ Nexpred · BS Data Science NUST
       </div>
       <div
         style={{
           position: 'absolute',
           bottom: 64,
           left: 80,
-          width: 160,
-          height: 4,
-          borderRadius: 2,
-          background: 'linear-gradient(90deg, #89ceff, #b388ff)',
+          display: 'flex',
+          gap: 10,
+          alignItems: 'center',
+          color: '#64748b',
+          fontSize: 18,
+          letterSpacing: '0.08em',
+          fontFamily: 'ui-monospace, monospace',
         }}
-      />
+      >
+        <span>PR</span>
+        <span style={{ color: '#3b82a8' }}>—</span>
+        <span>PO</span>
+        <span style={{ color: '#3b82a8' }}>—</span>
+        <span>GR</span>
+        <span style={{ color: '#3b82a8' }}>—</span>
+        <span>IV</span>
+        <span style={{ color: '#3b82a8' }}>—</span>
+        <span>PAY</span>
+      </div>
     </div>,
     { ...size }
   );

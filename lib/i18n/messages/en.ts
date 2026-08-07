@@ -34,11 +34,12 @@ export const en = {
   },
   hero: {
     openTo: 'Open to full-time and contract',
-    headline:
-      'SAP S/4HANA MM | Supply Chain Data Analyst | Ex-SAP Intern @ FFC & AI Intern @ Nexpred | BS Data Science NUST',
+    headline: 'I map physical logistics to digital audit trails inside live SAP S/4HANA.',
+    credentialLine:
+      'SAP S/4HANA MM · Supply Chain Data Analyst · Ex-SAP Intern @ FFC & AI Intern @ Nexpred · BS Data Science NUST',
     defaultTagline: 'SAP S/4HANA MM · Supply Chain · FFC · Nexpred · NUST',
     defaultSubhead:
-      'I sit at the intersection of business process execution and data science, specializing in enterprise supply chains and ERP automation.',
+      'At the intersection of Materials Management, procure-to-pay execution, and applied data engineering — built for enterprise recruiters who read document flow, not buzzwords.',
     seeWork: 'View case studies',
     stackCaption: 'MM · P2P · O2C · Analytics',
     domainValue: 'Enterprise supply chain & ERP',
@@ -46,7 +47,7 @@ export const en = {
     capabilities: 'capabilities',
     metaRole: 'SAP Techno-Functional · Supply Chain Data Analyst',
     metaFocus: 'Focus',
-    metaDomain: 'Domain',
+    metaDomain: 'Enterprise supply chain & ERP',
     metaStatus: 'Status',
   },
   about: {
@@ -94,10 +95,10 @@ export const en = {
   },
   contact: {
     label: 'Contact',
-    titleBefore: "Tell me what you're",
-    titleAccent: 'building',
+    titleBefore: 'Tell me about the',
+    titleAccent: 'process',
     titleAfter: '.',
-    lead: 'A short note on the process, ERP landscape, and timeline is enough. I reply to every message that is not spam.',
+    lead: 'A short note on the ERP landscape, module scope, and timeline is enough. I reply to every message that is not spam.',
     replyTime: 'Usually within 48 hours.',
     name: 'Name',
     namePlaceholder: 'Jane Doe',

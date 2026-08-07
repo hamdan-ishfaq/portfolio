@@ -72,16 +72,14 @@ export function ProjectCard({ project, tier, index = 0 }: ProjectCardProps) {
             ) : null}
 
             {metrics.length > 0 ? (
-              <ul className="mb-6 grid gap-2 sm:grid-cols-2">
+              <ul className="mb-6 grid gap-2 border-y border-white/10 py-3">
                 {metrics.map((metric) => (
                   <li
                     key={metric}
-                    className="flex items-start gap-2 rounded-md border border-secondary/25 bg-secondary/10 px-3 py-2.5 text-sm text-on-surface"
+                    className="flex items-start gap-3 py-1.5 text-sm text-on-surface"
                   >
-                    <span className="material-symbols-outlined text-[16px] text-secondary mt-0.5">
-                      verified
-                    </span>
-                    <span>{metric}</span>
+                    <span className="mt-2 h-px w-4 shrink-0 bg-primary/60" aria-hidden="true" />
+                    <span className="leading-relaxed">{metric}</span>
                   </li>
                 ))}
               </ul>

@@ -1,9 +1,9 @@
 'use client';
 
-import { useReducedMotion } from 'framer-motion';
 import { CERTIFICATIONS, type Certification } from '@/lib/content/portfolio';
 import { SectionHeader } from '@/components/public/SectionHeader';
 import { FadeIn } from '@/components/ui/FadeIn';
+import { StaggerItem } from '@/components/ui/StaggerItem';
 import { useLocale } from '@/components/providers/LocaleProvider';
 
 function FeaturedCard({ cert, index }: { cert: Certification; index: number }) {
@@ -15,40 +15,42 @@ function FeaturedCard({ cert, index }: { cert: Certification; index: number }) {
       href={cert.verifyUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className={`group lab-frame rounded-lg p-5 sm:p-6 flex flex-col gap-4 transition-colors hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 ${
-        isPrimary ? 'md:col-span-2 border-primary/35 bg-primary/[0.04]' : ''
+      className={`group relative flex flex-col gap-4 rounded-md border p-5 sm:p-6 transition-[border-color,background-color,transform] duration-300 hover:border-primary/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 active:scale-[0.995] ${
+        isPrimary
+          ? 'md:col-span-2 border-primary/40 bg-primary/[0.05]'
+          : 'border-white/10 bg-transparent hover:bg-white/[0.02]'
       }`}
       aria-label={`${cert.title} — ${t('certifications.verify')}`}
     >
       <div className="flex items-start justify-between gap-3">
-        <div
-          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-md border ${
-            isPrimary
-              ? 'border-primary/40 bg-primary/15 text-primary'
-              : 'border-white/12 bg-white/[0.04] text-on-surface-variant'
-          }`}
-        >
-          <span className="material-symbols-outlined text-[22px]">{cert.icon}</span>
+        <div className="flex items-center gap-3 min-w-0">
+          <span
+            className={`material-symbols-outlined text-[22px] ${
+              isPrimary ? 'text-primary' : 'text-on-surface-variant'
+            }`}
+          >
+            {cert.icon}
+          </span>
+          <div className="min-w-0">
+            <p className="type-process">{cert.credentialType}</p>
+            <p className="mt-1 text-sm text-on-surface-variant">{cert.issuer}</p>
+          </div>
         </div>
-        <span className="type-label text-on-surface-variant tabular-nums">{cert.issued}</span>
+        <span className="font-mono text-[11px] text-on-surface-variant tabular-nums shrink-0">
+          {cert.issued}
+        </span>
       </div>
 
-      <div className="space-y-1.5 min-w-0">
-        <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-primary">
-          {cert.credentialType}
-        </p>
-        <h3 className="text-[0.95rem] sm:text-base font-semibold tracking-tight text-on-surface text-balance leading-snug">
-          {cert.title}
-        </h3>
-        <p className="text-sm text-on-surface-variant">{cert.issuer}</p>
-      </div>
+      <h3 className="font-display text-[1rem] sm:text-[1.05rem] font-semibold tracking-tight text-on-surface text-balance leading-snug">
+        {cert.title}
+      </h3>
 
       {cert.skills.length > 0 ? (
-        <ul className="flex flex-wrap gap-1.5 mt-auto">
+        <ul className="flex flex-wrap gap-x-3 gap-y-1 mt-auto">
           {cert.skills.map((skill) => (
             <li
               key={skill}
-              className="rounded border border-white/12 bg-white/[0.03] px-2 py-1 text-[0.75rem] text-on-surface"
+              className="font-mono text-[10px] uppercase tracking-[0.12em] text-on-surface-variant"
             >
               {skill}
             </li>
@@ -58,7 +60,7 @@ function FeaturedCard({ cert, index }: { cert: Certification; index: number }) {
 
       <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary">
         {t('certifications.verify')}
-        <span className="material-symbols-outlined text-[16px] transition-transform group-hover:translate-x-0.5">
+        <span className="material-symbols-outlined text-[16px] transition-transform duration-300 group-hover:translate-x-0.5">
           open_in_new
         </span>
       </span>
@@ -66,58 +68,46 @@ function FeaturedCard({ cert, index }: { cert: Certification; index: number }) {
   );
 }
 
-function CourseworkMarquee({ items }: { items: Certification[] }) {
-  const prefersReducedMotion = useReducedMotion();
+function CourseworkLedger({ items }: { items: Certification[] }) {
   const { t } = useLocale();
-
   if (items.length === 0) return null;
-
-  const track = prefersReducedMotion ? items : [...items, ...items, ...items];
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between gap-3 px-1">
+      <div className="flex items-center justify-between gap-3">
         <p className="type-label">{t('certifications.tier2')}</p>
         <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-on-surface-variant">
           {t('certifications.tier2Hint')}
         </p>
       </div>
 
-      <div
-        className={`lab-frame rounded-lg overflow-hidden ${
-          prefersReducedMotion ? '' : 'cert-marquee-mask'
-        }`}
-      >
-        <ul
-          className={
-            prefersReducedMotion
-              ? 'flex flex-wrap gap-2 p-4'
-              : 'cert-marquee-track flex w-max gap-3 py-4 pl-4'
-          }
-          aria-label={t('certifications.tier2')}
-        >
-          {track.map((cert, i) => (
-            <li key={`${cert.id}-${i}`} className="shrink-0" aria-hidden={i >= items.length}>
+      <ul className="border-y border-white/10 divide-y divide-white/8">
+        {items.map((cert, index) => (
+          <StaggerItem key={cert.id} index={index} variant="wipe">
+            <li>
               <a
                 href={cert.verifyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                tabIndex={i >= items.length ? -1 : undefined}
-                className="inline-flex items-center gap-2.5 rounded-md border border-white/12 bg-white/[0.03] px-3.5 py-2.5 text-sm text-on-surface transition-colors hover:border-primary/45 hover:bg-primary/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 py-3.5 px-1 transition-colors hover:bg-white/[0.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
               >
-                <span className="material-symbols-outlined text-[16px] text-on-surface-variant">
-                  {cert.icon}
+                <span className="inline-flex items-center gap-3 min-w-0">
+                  <span className="material-symbols-outlined text-[18px] text-on-surface-variant">
+                    {cert.icon}
+                  </span>
+                  <span className="text-sm font-medium text-on-surface truncate">{cert.title}</span>
                 </span>
-                <span className="font-medium whitespace-nowrap">{cert.title}</span>
-                <span className="text-on-surface-variant whitespace-nowrap">· {cert.issuer}</span>
-                <span className="material-symbols-outlined text-[14px] text-primary">
-                  open_in_new
+                <span className="inline-flex items-center gap-2 text-xs text-on-surface-variant sm:pl-0 pl-9">
+                  {cert.issuer}
+                  <span className="material-symbols-outlined text-[14px] text-primary">
+                    open_in_new
+                  </span>
                 </span>
               </a>
             </li>
-          ))}
-        </ul>
-      </div>
+          </StaggerItem>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -133,12 +123,16 @@ export function Certifications() {
       id="certifications"
       aria-label={t('certifications.aria')}
     >
-      <SectionHeader title={t('certifications.title')} lead={t('certifications.lead')} />
+      <SectionHeader
+        index="04 — Credentials"
+        title={t('certifications.title')}
+        lead={t('certifications.lead')}
+      />
 
-      <FadeIn>
-        <div className="space-y-8">
+      <FadeIn variant="fade">
+        <div className="space-y-10">
           <div>
-            <p className="type-label mb-3 px-1">{t('certifications.tier1')}</p>
+            <p className="type-label mb-4">{t('certifications.tier1')}</p>
             <div className="grid gap-3 sm:gap-4 md:grid-cols-2">
               {featured.map((cert, index) => (
                 <FeaturedCard key={cert.id} cert={cert} index={index} />
@@ -146,7 +140,7 @@ export function Certifications() {
             </div>
           </div>
 
-          <CourseworkMarquee items={coursework} />
+          <CourseworkLedger items={coursework} />
         </div>
       </FadeIn>
     </section>
