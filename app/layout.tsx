@@ -21,16 +21,16 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Hamdan Ishfaq | SAP S/4HANA Techno-Functional Specialist',
-    template: '%s | Hamdan Ishfaq',
+    default: 'Muhammad Hamdan Ishfaq | SAP S/4HANA MM & Supply Chain',
+    template: '%s | Muhammad Hamdan Ishfaq',
   },
   description:
-    'SAP S/4HANA Materials Management (MM) · Supply Chain Data Analyst · Applied AI. Bridging enterprise ERP workflows with automation and data engineering.',
+    'SAP S/4HANA MM · Supply Chain Data Analyst · Ex-SAP Intern @ FFC & AI Intern @ Nexpred · BS Data Science NUST.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://localhost:3000'),
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    siteName: 'Hamdan Ishfaq — SAP S/4HANA & Supply Chain',
+    siteName: 'Muhammad Hamdan Ishfaq — SAP S/4HANA & Supply Chain',
   },
   twitter: {
     card: 'summary_large_image',

@@ -236,24 +236,123 @@ export const PORTFOLIO_CASE_STUDIES: PortfolioCaseStudy[] = [
   },
 ];
 
+/**
+ * Public experience source of truth for the rebrand (same pattern as case studies).
+ * Ordered reverse-chronologically: FFC, then Nexpred.
+ */
 export const DEFAULT_TIMELINE = [
   {
     id: 'ffc-ict',
     type: 'corporate' as const,
-    title: 'ICT Intern — SAP Functional Support',
+    title: 'ICT Intern — SAP Functional',
     organization: 'Fauji Fertilizer Company Limited (FFC)',
-    location: 'Port Qasim / Distribution',
-    date_range: 'Jun 2026 – Jul 2026',
+    location: 'Lahore, Punjab, Pakistan · On-site',
+    date_range: 'Jun 2026 – Jul 2026 · 2 mos',
     start_date: '2026-06-01',
     end_date: '2026-07-31',
     description: [
-      "Supported live SAP S/4HANA operations for Pakistan's largest fertilizer distribution network.",
-      'Traced Procure-to-Pay and Order-to-Cash document flows across MM, SD, LE, and FI.',
-      'Authored structured SAP operational documentation to convert tribal knowledge into auditable process manuals.',
+      "Supported live SAP S/4HANA operations at FFC's Port Qasim distribution hub — the logistics center for Pakistan's largest fertilizer enterprise. Operated at the intersection of ICT and physical supply-chain execution, providing baseline current-state documentation for FFC's \"RISE with SAP\" transformation.",
+      'SAP Functional Operations (MM/SD): Traced end-to-end document flows across Procure-to-Pay (P2P) and Order-to-Cash (O2C). Navigated standard and custom Z-transactions for purchase orders, haulage allocations (ZHCP), goods receipts, and financial clearance verification (ZFIST).',
+      'Enterprise Knowledge Engineering: Authored a comprehensive SAP Operational Knowledge Base of 14+ structured process manuals covering shipping, receiving, and procurement — converting undocumented institutional knowledge into an auditable onboarding pathway.',
+      'Integrations & Troubleshooting: Supported weighbridge and FBR fiscal integration workflows at Port Qasim. Assisted in diagnosing allocation failures, delivery blocks, and master-data gaps to maintain distribution health and three-way match discipline.',
     ],
     logo_url: null,
     order: 0,
     created_at: '',
     updated_at: '',
+  },
+  {
+    id: 'nexpred-ai',
+    type: 'corporate' as const,
+    title: 'Applied AI Engineer',
+    organization: 'Nexpred Solutions',
+    location: 'Lahore, Punjab, Pakistan · Remote',
+    date_range: 'Apr 2026 – May 2026 · 2 mos',
+    start_date: '2026-04-01',
+    end_date: '2026-05-31',
+    description: [
+      'Built and deployed on-premise, air-gapped AI systems for enterprise environments under strict data-sovereignty constraints. Navigating zero-trust security and infrastructure requirements laid the technical foundation for subsequent work in regulated SAP and ERP environments.',
+      'On-Premise RAG Pipelines: Engineered locally hosted Retrieval-Augmented Generation (RAG) pipelines to process unstructured enterprise data securely — keeping all processing inside the corporate firewall.',
+      'Local LLM Optimization: Evaluated and deployed open-source LLMs on constrained enterprise hardware, eliminating cloud API dependencies and mitigating data-leakage risk.',
+      'Containerized Deployment: Packaged AI applications and data pipelines with Docker for isolated client servers, establishing containerization patterns for hybrid enterprise infrastructure.',
+    ],
+    logo_url: null,
+    order: 1,
+    created_at: '',
+    updated_at: '',
+  },
+];
+
+export type CertificationTier = 'featured' | 'coursework';
+
+export type Certification = {
+  id: string;
+  tier: CertificationTier;
+  title: string;
+  issuer: string;
+  credentialType: string;
+  issued: string;
+  verifyUrl: string;
+  skills: string[];
+  /** Material Symbols icon name */
+  icon: string;
+};
+
+/** Tier 1 = official vendor credentials; Tier 2 = compact coursework strip. */
+export const CERTIFICATIONS: Certification[] = [
+  {
+    id: 'sap-s4-sourcing-procurement',
+    tier: 'featured',
+    title: 'Business Processes in SAP S/4HANA Sourcing and Procurement',
+    issuer: 'SAP',
+    credentialType: 'Official SAP Badge',
+    issued: 'Aug 2026',
+    verifyUrl: 'https://badger.learning.sap.com/verify/xivim-sacul-nopig-tilyt-vycaf',
+    skills: ['SAP MM', 'SAP ERP', 'Procurement'],
+    icon: 'verified',
+  },
+  {
+    id: 'deeplearning-ml',
+    tier: 'featured',
+    title: 'Machine Learning',
+    issuer: 'DeepLearning.AI',
+    credentialType: 'Specialization',
+    issued: 'Sep 2024',
+    verifyUrl: 'https://www.coursera.org/account/accomplishments/specialization/F6TL2KKA0WDH',
+    skills: ['Machine Learning', 'Python'],
+    icon: 'model_training',
+  },
+  {
+    id: 'google-data-analytics',
+    tier: 'featured',
+    title: 'Google Data Analytics',
+    issuer: 'Coursera',
+    credentialType: 'Professional Certificate',
+    issued: 'Apr 2024',
+    verifyUrl: 'https://www.coursera.org/account/accomplishments/professional-cert/QBW3MRQWDYFH',
+    skills: ['R', 'Data Analysis'],
+    icon: 'analytics',
+  },
+  {
+    id: 'alison-scm-intro',
+    tier: 'coursework',
+    title: 'An Introduction to Supply Chain Management',
+    issuer: 'Alison',
+    credentialType: 'Course',
+    issued: '',
+    verifyUrl: 'https://alison.com/verify/9b04ff8818',
+    skills: ['Supply Chain'],
+    icon: 'local_shipping',
+  },
+  {
+    id: 'alison-sourcing-procurement',
+    tier: 'coursework',
+    title: 'Effective Practices for Sourcing, Purchasing & Procurement',
+    issuer: 'Alison',
+    credentialType: 'Course',
+    issued: '',
+    verifyUrl: 'https://alison.com/verify/2a0316a211',
+    skills: ['Procurement'],
+    icon: 'shopping_cart',
   },
 ];

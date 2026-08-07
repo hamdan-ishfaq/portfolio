@@ -11,7 +11,7 @@ type HeroProps = {
 
 export function Hero({ settings }: HeroProps) {
   const { t } = useLocale();
-  const displayName = settings?.display_name?.trim() || 'Hamdan Ishfaq';
+  const displayName = settings?.display_name?.trim() || 'Muhammad Hamdan Ishfaq';
   const cvUrl = settings?.cv_file_url?.trim();
   const contactEmail = settings?.email?.trim();
 
@@ -34,7 +34,7 @@ export function Hero({ settings }: HeroProps) {
         <div className="space-y-6">
           <FadeIn immediate delay={0.05}>
             <p className="type-label text-primary">{displayName}</p>
-            <h1 className="type-hero max-w-[20ch] mt-3">{t('hero.headline')}</h1>
+            <h1 className="type-hero max-w-[28ch] mt-3">{t('hero.headline')}</h1>
           </FadeIn>
 
           <FadeIn immediate delay={0.1}>

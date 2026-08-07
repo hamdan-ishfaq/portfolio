@@ -29,12 +29,14 @@ export const en = {
     skills: 'Capabilities',
     work: 'Work',
     experience: 'Experience',
+    certifications: 'Credentials',
     contact: 'Contact',
   },
   hero: {
     openTo: 'Open to full-time and contract',
-    headline: 'SAP S/4HANA Materials Management (MM) | Supply Chain Data Analyst | Applied AI',
-    defaultTagline: 'SAP S/4HANA · Supply Chain · Applied AI',
+    headline:
+      'SAP S/4HANA MM | Supply Chain Data Analyst | Ex-SAP Intern @ FFC & AI Intern @ Nexpred | BS Data Science NUST',
+    defaultTagline: 'SAP S/4HANA MM · Supply Chain · FFC · Nexpred · NUST',
     defaultSubhead:
       'I sit at the intersection of business process execution and data science, specializing in enterprise supply chains and ERP automation.',
     seeWork: 'View case studies',
@@ -55,6 +57,15 @@ export const en = {
     aria: 'Enterprise capabilities',
     title: 'Capabilities',
     lead: 'Structured around how enterprise supply-chain work actually gets done.',
+  },
+  certifications: {
+    aria: 'Certifications and professional development',
+    title: 'Certifications & Professional Development',
+    lead: 'Official vendor credentials first — verified coursework beneath.',
+    tier1: 'Official credentials',
+    tier2: 'Professional development',
+    tier2Hint: 'Verified coursework',
+    verify: 'Show credential',
   },
   projects: {
     label: 'Selected work',
@@ -78,7 +89,7 @@ export const en = {
   experience: {
     label: 'Background',
     title: 'Experience',
-    lead: 'Live SAP S/4HANA operations and the roles that shaped how I ship enterprise systems.',
+    lead: 'Live SAP S/4HANA operations at FFC, preceded by air-gapped AI systems work at Nexpred.',
     focus: 'Focus',
   },
   contact: {

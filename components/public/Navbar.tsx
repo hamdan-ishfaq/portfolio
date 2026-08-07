@@ -27,7 +27,7 @@ export function Navbar({ settings }: NavbarProps) {
   }, []);
 
   useEffect(() => {
-    const ids = ['home', 'about', 'experience', 'skills', 'projects', 'contact'];
+    const ids = ['home', 'about', 'experience', 'skills', 'certifications', 'projects', 'contact'];
     const els = ids
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
@@ -76,11 +76,12 @@ export function Navbar({ settings }: NavbarProps) {
     { label: t('nav.about'), href: '#about', id: 'about' },
     { label: t('nav.experience'), href: '#experience', id: 'experience' },
     { label: t('nav.skills'), href: '#skills', id: 'skills' },
+    { label: t('nav.certifications'), href: '#certifications', id: 'certifications' },
     { label: t('nav.work'), href: '#projects', id: 'projects' },
     { label: t('nav.contact'), href: '#contact', id: 'contact' },
   ];
 
-  const brandName = settings?.display_name?.trim() || 'Hamdan Ishfaq';
+  const brandName = settings?.display_name?.trim() || 'Muhammad Hamdan Ishfaq';
   const cvUrl = settings?.cv_file_url?.trim();
 
   return (
@@ -97,7 +98,7 @@ export function Navbar({ settings }: NavbarProps) {
             {brandName}
           </a>
 
-          <div className="hidden md:flex items-center gap-8 font-body-sm text-body-sm">
+          <div className="hidden md:flex items-center gap-5 lg:gap-7 font-body-sm text-body-sm">
             {navLinks.map((link) => {
               const isActive = activeSection === link.id;
               return (

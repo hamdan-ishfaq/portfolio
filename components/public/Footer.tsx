@@ -10,7 +10,7 @@ type FooterProps = {
 export function Footer({ settings }: FooterProps) {
   const { t } = useLocale();
   const year = new Date().getFullYear();
-  const brandName = settings?.display_name?.trim() || 'Hamdan Ishfaq';
+  const brandName = settings?.display_name?.trim() || 'Muhammad Hamdan Ishfaq';
 
   return (
     <footer className="border-t border-white/8 mt-16 sm:mt-24 py-10 sm:py-12">

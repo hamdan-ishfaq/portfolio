@@ -210,6 +210,36 @@ html:not(.dark) {
   box-shadow: none;
 }
 
+/* Certifications coursework strip — infinite slide with edge fade */
+.cert-marquee-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent);
+}
+
+.cert-marquee-track {
+  animation: cert-marquee 36s linear infinite;
+}
+
+.cert-marquee-mask:hover .cert-marquee-track,
+.cert-marquee-mask:focus-within .cert-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes cert-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-33.333%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cert-marquee-track {
+    animation: none;
+  }
+}
+
 .glass-panel {
   background: var(--ds-glass-panel-bg);
   backdrop-filter: blur(8px);

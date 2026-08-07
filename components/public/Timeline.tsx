@@ -47,6 +47,11 @@ export function Timeline({ events }: TimelineProps) {
                     <p className="font-code-base text-[12px] text-on-surface-variant mt-1">
                       {event.date_range}
                     </p>
+                    {event.location ? (
+                      <p className="font-code-base text-[11px] text-on-surface-variant/80 mt-0.5">
+                        {event.location}
+                      </p>
+                    ) : null}
                   </div>
 
                   <div
@@ -71,6 +76,11 @@ export function Timeline({ events }: TimelineProps) {
                       <p className={`font-body-sm text-body-sm ${accentText}`}>
                         {event.organization} · {event.date_range}
                       </p>
+                      {event.location ? (
+                        <p className="font-code-base text-[11px] text-on-surface-variant mt-0.5">
+                          {event.location}
+                        </p>
+                      ) : null}
                     </div>
 
                     <div className="lab-frame p-md rounded-lg relative overflow-hidden">

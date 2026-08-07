@@ -31,12 +31,14 @@ export const de: Messages = {
     skills: 'Kompetenzen',
     work: 'Arbeit',
     experience: 'Erfahrung',
+    certifications: 'Nachweise',
     contact: 'Kontakt',
   },
   hero: {
     openTo: 'Offen für Festanstellung und Projekte',
-    headline: 'SAP S/4HANA Materials Management (MM) | Supply Chain Data Analyst | Applied AI',
-    defaultTagline: 'SAP S/4HANA · Supply Chain · Applied AI',
+    headline:
+      'SAP S/4HANA MM | Supply Chain Data Analyst | Ex-SAP Intern @ FFC & AI Intern @ Nexpred | BS Data Science NUST',
+    defaultTagline: 'SAP S/4HANA MM · Supply Chain · FFC · Nexpred · NUST',
     defaultSubhead:
       'Ich arbeite an der Schnittstelle von Geschäftsprozessausführung und Data Science — mit Fokus auf Enterprise Supply Chains und ERP-Automatisierung.',
     seeWork: 'Fallstudien ansehen',
@@ -57,6 +59,15 @@ export const de: Messages = {
     aria: 'Enterprise-Kompetenzen',
     title: 'Kompetenzen',
     lead: 'Strukturiert danach, wie Enterprise-Supply-Chain-Arbeit tatsächlich erledigt wird.',
+  },
+  certifications: {
+    aria: 'Zertifizierungen und berufliche Weiterbildung',
+    title: 'Zertifizierungen & Professional Development',
+    lead: 'Offizielle Vendor-Nachweise zuerst — verifizierte Kursarbeit darunter.',
+    tier1: 'Offizielle Nachweise',
+    tier2: 'Professional Development',
+    tier2Hint: 'Verifizierte Kursarbeit',
+    verify: 'Nachweis anzeigen',
   },
   projects: {
     label: 'Ausgewählte Arbeit',
@@ -80,7 +91,7 @@ export const de: Messages = {
   experience: {
     label: 'Hintergrund',
     title: 'Erfahrung',
-    lead: 'Live-SAP-S/4HANA-Betrieb und die Rollen, die prägen, wie ich Enterprise-Systeme ausliefere.',
+    lead: 'Live-SAP-S/4HANA-Betrieb bei FFC, zuvor air-gapped AI-Systeme bei Nexpred.',
     focus: 'Fokus',
   },
   contact: {
