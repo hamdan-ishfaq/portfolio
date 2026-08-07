@@ -27,7 +27,7 @@ function makeLabelTexture(text: string, hex: string): THREE.CanvasTexture {
   const padX = 14;
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d')!;
-  const font = `500 ${fontSize}px "IBM Plex Mono", "Geist Mono", ui-monospace, monospace`;
+  const font = `500 ${fontSize}px "IBM Plex Mono", ui-monospace, monospace`;
   ctx.font = font;
   const width = Math.ceil(ctx.measureText(text).width + padX * 2);
   const height = Math.ceil(fontSize * 1.55);
@@ -49,11 +49,16 @@ function makeLabelTexture(text: string, hex: string): THREE.CanvasTexture {
   return texture;
 }
 
+type SupplyChainNetworkProps = {
+  /** When false, parent provides ops-shell chrome (hero). Default true for standalone use. */
+  framed?: boolean;
+};
+
 /**
  * Hero document-flow figure — thin document tiles + travelling postings.
  * No spinning cubes; pointer tilt only. Shares topology with the P2P simulator.
  */
-export function SupplyChainNetwork() {
+export function SupplyChainNetwork({ framed = true }: SupplyChainNetworkProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const isDark = useIsDark();
   const prefersReducedMotion = useReducedMotion();
@@ -283,34 +288,31 @@ export function SupplyChainNetwork() {
     };
   }, [isDark, prefersReducedMotion, copy]);
 
+  const body = (
+    <>
+      <div
+        ref={mountRef}
+        className="relative w-full aspect-[4/3] min-h-[280px] bg-[radial-gradient(ellipse_at_center,rgba(59,130,168,0.08),transparent_65%)]"
+        role="img"
+        aria-label="Diagram of a supply chain document flow linking purchase requisition, purchase order, goods receipt, invoice, payment, sales order, delivery, goods issue, and billing."
+      />
+
+      <div className="border-t border-white/10 px-5 py-3">
+        <button
+          type="button"
+          onClick={() => setSimulatorOpen(true)}
+          className="inline-flex w-full items-center justify-center gap-2 rounded border border-white/12 px-4 py-2.5 text-sm font-medium text-on-surface transition-colors hover:border-primary/60 hover:bg-primary/[0.06] active:scale-[0.99]"
+        >
+          <span className="material-symbols-outlined text-[18px] text-primary">open_in_full</span>
+          {copy.ui.open}
+        </button>
+      </div>
+    </>
+  );
+
   return (
     <>
-      <div className="lab-frame rounded-lg overflow-hidden">
-        <div className="flex items-center justify-between gap-3 px-5 py-3 border-b border-white/10">
-          <p className="type-label">Document flow</p>
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-on-surface-variant">
-            P2P · O2C
-          </p>
-        </div>
-
-        <div
-          ref={mountRef}
-          className="relative w-full aspect-[4/3] min-h-[280px] bg-[radial-gradient(ellipse_at_center,rgba(59,130,168,0.08),transparent_65%)]"
-          role="img"
-          aria-label="Diagram of a supply chain document flow linking purchase requisition, purchase order, goods receipt, invoice, payment, sales order, delivery, goods issue, and billing."
-        />
-
-        <div className="border-t border-white/10 px-5 py-3">
-          <button
-            type="button"
-            onClick={() => setSimulatorOpen(true)}
-            className="inline-flex w-full items-center justify-center gap-2 rounded border border-white/12 px-4 py-2.5 text-sm font-medium text-on-surface transition-colors hover:border-primary/60 hover:bg-primary/[0.06] active:scale-[0.99]"
-          >
-            <span className="material-symbols-outlined text-[18px] text-primary">open_in_full</span>
-            {copy.ui.open}
-          </button>
-        </div>
-      </div>
+      {framed ? <div className="lab-frame rounded-lg overflow-hidden">{body}</div> : body}
 
       {simulatorOpen ? <P2PSimulator isOpen onClose={() => setSimulatorOpen(false)} /> : null}
     </>

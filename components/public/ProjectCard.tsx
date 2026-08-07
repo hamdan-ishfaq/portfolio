@@ -12,6 +12,13 @@ type ProjectCardProps = {
   index?: number;
 };
 
+const MODULE_BY_SLUG: Record<string, string> = {
+  haulrank: 'MM · OR-TOOLS',
+  talash: 'HR · NLP',
+  nexus: 'AGENTS · MCP',
+  hermes: 'RAG · RRF',
+};
+
 function getMetrics(project: Project | PortfolioCaseStudy): string[] {
   if ('metrics' in project && Array.isArray(project.metrics)) return project.metrics;
   return [];
@@ -27,112 +34,123 @@ export function ProjectCard({ project, tier, index = 0 }: ProjectCardProps) {
   const metrics = getMetrics(project);
   const credit = getCredit(project);
   const href = `/projects/${project.slug}`;
+  const moduleCode = MODULE_BY_SLUG[project.slug] ?? 'CASE';
+  const docId = `DOC-${String(index + 1).padStart(2, '0')}`;
 
   if (tier === 0 || tier === 1) {
     const hasImage = Boolean(project.cover_image_url);
     return (
-      <article className="lab-frame rounded-lg overflow-hidden group relative">
-        <div className="grid md:grid-cols-[auto_1fr] relative">
-          <div className="flex items-center md:items-start gap-4 px-6 pt-6 md:py-10 md:pl-8 md:pr-0">
-            <span
-              className="leading-none text-on-surface-variant/40 tabular-nums text-[2.5rem] md:text-[3.25rem] font-semibold"
-              aria-hidden="true"
-            >
-              {String(index + 1).padStart(2, '0')}
+      <article className="ops-shell group relative transition-[border-color,transform] duration-300 hover:border-primary/40">
+        <div className="ops-shell__bar">
+          <div className="flex flex-wrap items-center gap-2 min-w-0">
+            <span className="case-stamp">
+              {docId} · {moduleCode}
+            </span>
+            <span className="type-label text-on-surface-variant hidden sm:inline">
+              {tier === 0 ? t('projects.featured') : t('projects.caseStudy')}
             </span>
           </div>
+          <span className="font-mono text-[11px] tabular-nums text-on-surface-variant shrink-0">
+            {String(index + 1).padStart(2, '0')}
+          </span>
+        </div>
 
-          <div className="p-6 md:p-10 md:pl-8 flex flex-col">
-            <div className="flex flex-wrap items-center gap-3 mb-4">
-              <span className="type-label text-primary">
-                {tier === 0 ? t('projects.featured') : t('projects.caseStudy')}
+        <div className="p-5 sm:p-8 md:p-10 flex flex-col">
+          <div className="flex flex-wrap items-center gap-3 mb-3">
+            {project.is_ongoing ? (
+              <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-secondary">
+                <span className="w-1.5 h-1.5 rounded-full bg-secondary" />
+                {t('common.ongoing')}
               </span>
-              {project.is_ongoing ? (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary/15 text-secondary border border-secondary/25">
-                  <span className="w-1.5 h-1.5 rounded-full bg-secondary" />
-                  {t('common.ongoing')}
-                </span>
-              ) : null}
-            </div>
+            ) : (
+              <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-on-surface-variant">
+                Closed · Verified
+              </span>
+            )}
+          </div>
 
-            <h3 className="type-card-title mb-3">
-              <Link href={href} className="hover:text-primary transition-colors">
-                {project.title}
-              </Link>
-            </h3>
+          <h3 className="type-card-title mb-3">
+            <Link href={href} className="hover:text-primary transition-colors">
+              {project.title}
+            </Link>
+          </h3>
 
-            <p className="text-on-surface-variant mb-5 max-w-[68ch] leading-relaxed">
-              {project.short_description}
+          <p className="text-on-surface-variant mb-5 max-w-[68ch] leading-relaxed">
+            {project.short_description}
+          </p>
+
+          {credit ? (
+            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-on-surface-variant mb-5">
+              {credit}
             </p>
+          ) : null}
 
-            {credit ? (
-              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-on-surface-variant mb-5">
-                {credit}
-              </p>
-            ) : null}
-
-            {metrics.length > 0 ? (
-              <ul className="mb-6 grid gap-2 border-y border-white/10 py-3">
-                {metrics.map((metric) => (
-                  <li
-                    key={metric}
-                    className="flex items-start gap-3 py-1.5 text-sm text-on-surface"
-                  >
-                    <span className="mt-2 h-px w-4 shrink-0 bg-primary/60" aria-hidden="true" />
-                    <span className="leading-relaxed">{metric}</span>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-
-            {hasImage ? (
-              <div className="relative mb-6 rounded-md overflow-hidden border border-white/10 aspect-[16/7]">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={project.cover_image_url ?? ''}
-                  alt={project.title}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ) : null}
-
-            <div className="flex flex-wrap gap-2 mb-6">
-              {(project.tech_stack || []).slice(0, 6).map((tech) => (
-                <TechBadge key={tech.tag} tag={tech.tag} category={tech.category} />
+          {metrics.length > 0 ? (
+            <ul className="mb-6 grid gap-0 border border-white/10 divide-y divide-white/8 rounded-md overflow-hidden">
+              {metrics.map((metric) => (
+                <li
+                  key={metric}
+                  className="flex items-start gap-3 px-3.5 py-2.5 text-sm text-on-surface bg-white/[0.015]"
+                >
+                  <span
+                    className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary"
+                    aria-hidden="true"
+                  />
+                  <span className="leading-relaxed font-mono text-[12px] sm:text-[13px]">
+                    {metric}
+                  </span>
+                </li>
               ))}
-            </div>
+            </ul>
+          ) : null}
 
-            <div className="mt-auto pt-4 border-t border-white/10 flex flex-wrap gap-4">
-              <Link
-                href={href}
-                className="inline-flex items-center gap-2 text-sm font-semibold text-on-surface hover:text-primary transition-colors"
-              >
-                {t('projects.viewCaseStudy')}
-                <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-              </Link>
-              {project.live_demo_url ? (
-                <a
-                  href={project.live_demo_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-on-surface-variant hover:text-on-surface transition-colors"
-                >
-                  {t('projectPage.liveDemo')}
-                  <span className="material-symbols-outlined text-[16px]">open_in_new</span>
-                </a>
-              ) : null}
-              {project.github_repo ? (
-                <a
-                  href={project.github_repo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-on-surface-variant hover:text-on-surface transition-colors"
-                >
-                  {t('common.github')}
-                  <span className="material-symbols-outlined text-[16px]">code</span>
-                </a>
-              ) : null}
+          {hasImage ? (
+            <div className="relative mb-6 overflow-hidden border border-white/10 aspect-[16/7]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={project.cover_image_url ?? ''}
+                alt={project.title}
+                className="w-full h-full object-cover"
+              />
             </div>
+          ) : null}
+
+          <div className="flex flex-wrap gap-2 mb-6">
+            {(project.tech_stack || []).slice(0, 6).map((tech) => (
+              <TechBadge key={tech.tag} tag={tech.tag} category={tech.category} />
+            ))}
+          </div>
+
+          <div className="mt-auto pt-4 border-t border-white/10 flex flex-wrap gap-4">
+            <Link
+              href={href}
+              className="inline-flex items-center gap-2 text-sm font-semibold text-on-surface hover:text-primary transition-colors"
+            >
+              {t('projects.viewCaseStudy')}
+              <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+            </Link>
+            {project.live_demo_url ? (
+              <a
+                href={project.live_demo_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-on-surface-variant hover:text-on-surface transition-colors"
+              >
+                {t('projectPage.liveDemo')}
+                <span className="material-symbols-outlined text-[16px]">open_in_new</span>
+              </a>
+            ) : null}
+            {project.github_repo ? (
+              <a
+                href={project.github_repo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-on-surface-variant hover:text-on-surface transition-colors"
+              >
+                {t('common.github')}
+                <span className="material-symbols-outlined text-[16px]">code</span>
+              </a>
+            ) : null}
           </div>
         </div>
       </article>
@@ -141,10 +159,8 @@ export function ProjectCard({ project, tier, index = 0 }: ProjectCardProps) {
 
   if (tier === 2) {
     return (
-      <Link
-        href={href}
-        className="lab-frame rounded-lg p-5 card-interactive group flex flex-col h-full"
-      >
+      <Link href={href} className="ops-shell p-5 card-interactive group flex flex-col h-full">
+        <span className="case-stamp mb-3 w-fit">{moduleCode}</span>
         <h3 className="type-card-title mb-2 group-hover:text-primary transition-colors text-xl">
           {project.title}
         </h3>

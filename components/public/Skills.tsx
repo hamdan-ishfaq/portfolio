@@ -10,7 +10,11 @@ export function Skills() {
   const { t } = useLocale();
 
   return (
-    <section className="page-container section-block" id="skills" aria-label={t('skills.aria')}>
+    <section
+      className="page-container section-block section-band"
+      id="skills"
+      aria-label={t('skills.aria')}
+    >
       <SectionHeader index="03 — Capabilities" title={t('skills.title')} lead={t('skills.lead')} />
 
       <FadeIn variant="fade">

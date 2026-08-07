@@ -270,21 +270,21 @@ html:not(.dark) {
 
 .type-hero {
   font-family: var(--font-display);
-  font-size: clamp(2.15rem, 5vw, 3.35rem);
-  font-weight: 600;
-  line-height: 1.12;
-  letter-spacing: -0.03em;
-  padding-block-end: 0.04em;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  padding-block-end: 0.06em;
   color: var(--color-on-surface);
   text-wrap: balance;
 }
 
 .type-section {
   font-family: var(--font-display);
-  font-size: clamp(1.55rem, 3.2vw, 2.15rem);
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.025em;
+  font-size: clamp(1.65rem, 3.4vw, 2.35rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
   padding-block-end: 0.04em;
   color: var(--color-on-surface);
   text-wrap: balance;
@@ -292,10 +292,10 @@ html:not(.dark) {
 
 .type-card-title {
   font-family: var(--font-display);
-  font-size: clamp(1.3rem, 2.5vw, 1.85rem);
-  font-weight: 600;
-  line-height: 1.25;
-  letter-spacing: -0.02em;
+  font-size: clamp(1.35rem, 2.6vw, 1.9rem);
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
   padding-block-end: 0.06em;
   color: var(--color-on-surface);
 }
@@ -310,10 +310,11 @@ html:not(.dark) {
   text-wrap: pretty;
 }
 
+/* Same-family emphasis only — never inject a random serif (taste skill). */
 .type-accent-serif {
   font-family: var(--font-display);
   font-style: italic;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--ds-accent-bright);
 }
 
@@ -324,6 +325,68 @@ html:not(.dark) {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-primary);
+}
+
+/* Ops console chrome — signature surface language */
+.ops-shell {
+  border: 1px solid var(--ds-hairline);
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.ops-shell__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--ds-hairline);
+  background: color-mix(in srgb, var(--ds-accent) 8%, transparent);
+}
+
+.ops-shell__title {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.case-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 45%, transparent);
+  padding: 0.3rem 0.55rem;
+  border-radius: 0.2rem;
+  background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+.section-band {
+  position: relative;
+}
+
+.section-band::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ds-accent) 5%, transparent) 0%,
+    transparent 40%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
 }
 
 .text-gradient-safe {
@@ -785,6 +848,14 @@ footer {
   background-size: 72px 72px;
   mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, transparent 72%);
   -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 0%, transparent 72%);
+}
+
+.site-backdrop__ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.85;
+  pointer-events: none;
 }
 
 .site-backdrop__rule {

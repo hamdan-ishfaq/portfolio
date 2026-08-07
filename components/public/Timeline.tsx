@@ -15,7 +15,7 @@ export function Timeline({ events }: TimelineProps) {
   if (!events || events.length === 0) return null;
 
   return (
-    <section className="page-container section-block relative" id="experience">
+    <section className="page-container section-block section-band relative" id="experience">
       <SectionHeader
         index="02 — Experience"
         title={t('experience.title')}

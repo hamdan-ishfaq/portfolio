@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
-import { IBM_Plex_Sans, IBM_Plex_Serif, Geist_Mono } from 'next/font/google';
+import { IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import { SiteBackdrop } from '@/components/public/SiteBackdrop';
 import { ClientProviders } from '@/components/providers/ClientProviders';
@@ -8,24 +8,20 @@ import { SkipLink } from '@/components/ui/SkipLink';
 import { LOCALE_COOKIE, parseLocale, parseTheme, THEME_COOKIE } from '@/lib/preferences';
 import './globals.css';
 
+/** Financial Trust pairing (ui-ux-pro-max) — same family for UI + display, mono for audit data. */
 const plexSans = IBM_Plex_Sans({
   variable: '--font-plex-sans',
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
-  display: 'swap',
-});
-
-const plexSerif = IBM_Plex_Serif({
-  variable: '--font-plex-serif',
-  subsets: ['latin'],
-  weight: ['400', '500', '600'],
   style: ['normal', 'italic'],
   display: 'swap',
 });
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const plexMono = IBM_Plex_Mono({
+  variable: '--font-plex-mono',
   subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -75,7 +71,7 @@ export default async function RootLayout({
         />
       </head>
       <body
-        className={`${plexSans.variable} ${plexSerif.variable} ${geistMono.variable} ds-body mesh-bg min-h-screen flex flex-col selection:bg-primary/25 selection:text-on-surface`}
+        className={`${plexSans.variable} ${plexMono.variable} ds-body mesh-bg min-h-screen flex flex-col selection:bg-primary/25 selection:text-on-surface`}
         style={{
           fontFamily:
             'var(--font-plex-sans), "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif',

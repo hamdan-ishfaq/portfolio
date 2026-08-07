@@ -93,7 +93,7 @@ export function Navbar({ settings }: NavbarProps) {
         >
           <a
             href="#home"
-            className="font-sans text-base sm:text-lg font-semibold text-on-surface hover:text-primary transition-colors truncate min-w-0 max-w-[55vw] sm:max-w-none tracking-tight"
+            className="font-sans text-sm sm:text-base font-semibold text-on-surface hover:text-primary transition-colors truncate min-w-0 max-w-[55vw] sm:max-w-none tracking-tight"
           >
             {brandName}
           </a>

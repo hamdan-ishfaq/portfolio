@@ -68,10 +68,11 @@
 
   --font-sans:
     var(--font-plex-sans), 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-mono: var(--font-geist-mono), 'Geist Mono', ui-monospace, monospace;
-  --font-display: var(--font-plex-serif), 'IBM Plex Serif', ui-serif, Georgia, serif;
-  --font-serif: var(--font-plex-serif), 'IBM Plex Serif', ui-serif, Georgia, serif;
-  --font-instrument-serif: var(--font-plex-serif), 'IBM Plex Serif', ui-serif, Georgia, serif;
+  --font-mono: var(--font-plex-mono), 'IBM Plex Mono', ui-monospace, monospace;
+  --font-display: var(--font-plex-sans), 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-plex-sans), 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-instrument-serif:
+    var(--font-plex-sans), 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
 
   --font-size-display-lg: 40px;
   --font-size-display-lg--line-height: 1.2;
