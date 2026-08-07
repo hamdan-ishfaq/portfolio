@@ -1,10 +1,36 @@
 import type { HeroTechItem, Project, TechStackItem } from '@/types';
 
-/** Curated homepage copy for the SAP / supply-chain rebrand. */
+/** Curated homepage About copy. */
 export const ABOUT_COPY = {
   title: 'About',
-  lead: 'Enterprise ERP operations meets applied data science.',
-  body: `During my time with Fauji Fertilizer Company (FFC)'s ICT team, I worked directly inside a live SAP S/4HANA environment supporting Pakistan's largest fertilizer distribution network. I learned firsthand how physical logistics translate into digital audit trails, tracing everything from purchase orders to goods receipts across the Procure-to-Pay (P2P) cycle. My goal is to maximize supply chain efficiency by bridging traditional ERP workflows with modern automation and data engineering. I don't just build tech demos; I solve real operational bottlenecks—from converting tribal enterprise knowledge into structured manuals to building deterministic freight dispatch systems.`,
+  lead: 'I sit at the intersection of business process execution and data science, specializing in SAP S/4HANA Materials Management (MM) and enterprise supply chains.',
+  paragraphs: [
+    "During my time with Fauji Fertilizer Company (FFC)'s ICT team, I didn't just study ERP systems. I worked directly inside a live SAP S/4HANA environment supporting Pakistan's largest fertilizer distribution network. I learned firsthand how physical logistics translate into digital audit trails, tracing everything from haulage allocations to financial postings.",
+    'Through hands-on training in SAP S/4HANA Sourcing and Procurement, I built a deep functional understanding of the full Procure-to-Pay (P2P) lifecycle: master data for business partners and materials, purchase requisitions and POs, source determination, goods receipts, and invoice verification.',
+    'At Nexpred Solutions I was an Applied AI Engineering Intern, implementing AI solutions for air-gapped enterprise environments where GDPR-style data protection and sensitive-data controls are mandatory. That work taught me how to keep models, retrieval, and pipelines inside the corporate boundary so automation does not break compliance.',
+    'Modern competition is no longer only company versus company. It is supply chain versus supply chain. My goal is to maximize that efficiency by bridging traditional ERP workflows with modern automation and analytics.',
+    'Instead of flashy AI demos, I focus on real operational bottlenecks: converting tribal enterprise knowledge into structured, auditable process manuals at FFC, and building deterministic freight dispatch systems like HaulRank for the people who run the business.',
+  ],
+  competenciesTitle: 'Core competencies',
+  competencies: [
+    {
+      title: 'SAP S/4HANA Functional Operations',
+      detail:
+        'End-to-end Procure-to-Pay (P2P) and Order-to-Cash (O2C), Z-transaction landscapes, and three-way match discipline.',
+    },
+    {
+      title: 'Sourcing and Procurement',
+      detail:
+        'Source determination, inventory deployment planning, demand forecasting, and strategic purchasing.',
+    },
+    {
+      title: 'Applied Tech and Data Engineering',
+      detail:
+        'Python, PostgreSQL, and agentic workflows for supply-chain optimization engines that can extend enterprise ERPs on a BTP pathway.',
+    },
+  ],
+  close:
+    'I thrive in fast-paced teams where technical decisions support operational readiness. Always open to connecting with supply chain professionals, SAP consultants, and people building serious enterprise architecture.',
 } as const;
 
 export type SkillCategory = {

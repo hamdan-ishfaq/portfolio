@@ -1,118 +1,157 @@
 'use client';
 
+import { useState } from 'react';
+import dynamic from 'next/dynamic';
+import { motion, useReducedMotion } from 'framer-motion';
 import type { GlobalSettings } from '@/types';
-import { FadeIn } from '@/components/ui/FadeIn';
-import { SupplyChainNetwork } from '@/components/public/SupplyChainNetwork';
-import { DocumentFlowTicker } from '@/components/public/DocumentFlowTicker';
+import { BridgeGraph } from '@/components/public/BridgeGraph';
 import { useLocale } from '@/components/providers/LocaleProvider';
+
+const P2PSimulator = dynamic(
+  () => import('@/components/public/P2PSimulator').then((m) => m.P2PSimulator),
+  { ssr: false }
+);
 
 type HeroProps = {
   settings: GlobalSettings | null;
 };
 
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+/**
+ * Brand-first hero for MM/SD/BTP roles.
+ * Name is the display signal; role line is loud; thesis is clear; BridgeGraph is the life.
+ */
 export function Hero({ settings }: HeroProps) {
   const { t } = useLocale();
+  const prefersReducedMotion = useReducedMotion();
+  const reduced = Boolean(prefersReducedMotion);
+  const [simulatorOpen, setSimulatorOpen] = useState(false);
+
   const displayName = settings?.display_name?.trim() || 'Muhammad Hamdan Ishfaq';
   const cvUrl = settings?.cv_file_url?.trim();
   const contactEmail = settings?.email?.trim();
-  const firstName = displayName.split(' ')[0] ?? displayName;
+  const parts = displayName.split(/\s+/);
+  const first = parts[0] ?? displayName;
+  const rest = parts.slice(1).join(' ');
+
+  const enter = (delay: number, y = 18) =>
+    reduced
+      ? { initial: false as const }
+      : {
+          initial: { opacity: 0, y },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.55, delay, ease: EASE },
+        };
 
   return (
     <section
-      className="page-container relative flex flex-col justify-center min-h-[100dvh] py-8 sm:py-10"
+      className="page-container relative flex flex-col justify-center min-h-[100dvh] py-10 sm:py-14"
       id="home"
     >
-      <FadeIn immediate variant="fade">
-        <div className="ops-shell__bar rounded-md border border-white/10 mb-8 sm:mb-10">
-          <span className="ops-shell__title">{t('hero.metaRole')}</span>
-          <span className="type-label inline-flex items-center gap-2">
-            <span className="inline-flex h-1.5 w-1.5 rounded-full bg-secondary" />
-            {t('hero.openTo')}
-          </span>
-        </div>
-      </FadeIn>
-
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] gap-10 lg:gap-12 xl:gap-16 items-end lg:items-center">
-        <div className="space-y-7 lg:pb-4">
-          <FadeIn immediate variant="clip" delay={0.04}>
-            <p className="type-process mb-4">{t('hero.metaDomain')}</p>
-            <h1 className="type-hero max-w-[14ch]">
-              {displayName.includes(' ') ? (
-                <>
-                  <span className="block text-on-surface">{firstName}</span>
-                  <span className="block text-on-surface/85">
-                    {displayName.slice(firstName.length).trim()}
-                  </span>
-                </>
-              ) : (
-                displayName
-              )}
-            </h1>
-          </FadeIn>
-
-          <FadeIn immediate variant="wipe" delay={0.08}>
-            <p className="font-mono text-[11px] sm:text-[12px] leading-relaxed tracking-[0.05em] text-primary/90 max-w-[48ch] border-l-2 border-primary/50 pl-4">
-              {t('hero.credentialLine')}
-            </p>
-          </FadeIn>
-
-          <FadeIn immediate variant="fade" delay={0.12}>
-            <p className="text-[1.15rem] sm:text-[1.3rem] font-medium leading-snug tracking-tight text-on-surface max-w-[28ch]">
-              {t('hero.headline')}
-            </p>
-            <p className="mt-3 text-sm sm:text-[0.95rem] leading-relaxed text-on-surface-variant max-w-[46ch]">
-              {t('hero.defaultSubhead')}
-            </p>
-          </FadeIn>
-
-          <FadeIn immediate variant="rise" delay={0.16}>
-            <DocumentFlowTicker />
-          </FadeIn>
-
-          <FadeIn immediate variant="rise" delay={0.2}>
-            <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 pt-1">
-              {cvUrl ? (
-                <a
-                  className="btn-primary min-h-11 px-6 py-3 rounded-md font-semibold inline-flex items-center justify-center gap-2 w-full sm:w-auto transition-transform duration-150 active:scale-[0.97]"
-                  href={cvUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span className="material-symbols-outlined text-[18px]">download</span>
-                  {t('common.downloadCv')}
-                </a>
-              ) : contactEmail ? (
-                <a
-                  className="btn-primary min-h-11 px-6 py-3 rounded-md font-semibold inline-flex items-center justify-center gap-2 w-full sm:w-auto transition-transform duration-150 active:scale-[0.97]"
-                  href={`mailto:${contactEmail}`}
-                >
-                  {t('common.emailMe')}
-                </a>
-              ) : null}
-
-              <a
-                className="btn-secondary min-h-11 px-5 py-3 rounded-md font-semibold inline-flex items-center justify-center gap-2 w-full sm:w-auto transition-transform duration-150 active:scale-[0.97]"
-                href="#projects"
-              >
-                {t('hero.seeWork')}
-                <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-              </a>
-            </div>
-          </FadeIn>
-        </div>
-
-        <FadeIn immediate variant="fade" delay={0.1} className="lg:-mr-2 xl:-mr-4">
-          <div className="ops-shell shadow-[0_0_0_1px_rgba(59,130,168,0.12)]">
-            <div className="ops-shell__bar">
-              <span className="ops-shell__title">TXN · Document flow</span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-on-surface-variant">
-                P2P · O2C · LIVE
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-12 lg:gap-16 items-center">
+        <div className="space-y-8">
+          <motion.div {...enter(0.02, 10)}>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-on-surface-variant">
+              <span className="inline-flex items-center gap-2 font-medium text-secondary">
+                <span className="h-2 w-2 rounded-full bg-secondary" aria-hidden="true" />
+                {t('hero.openTo')}
               </span>
+              <span className="hidden sm:inline text-white/20" aria-hidden="true">
+                /
+              </span>
+              <span className="font-medium text-on-surface/80">{t('hero.metaRole')}</span>
             </div>
-            <SupplyChainNetwork framed={false} />
-          </div>
-        </FadeIn>
+          </motion.div>
+
+          <motion.h1 className="type-hero max-w-[12ch]" {...enter(0.08)}>
+            <span className="block">{first}</span>
+            {rest ? <span className="block text-on-surface/90">{rest}</span> : null}
+          </motion.h1>
+
+          <motion.p
+            className="text-[1.2rem] sm:text-[1.45rem] md:text-[1.6rem] font-semibold tracking-tight leading-snug text-primary max-w-[28ch]"
+            {...enter(0.16, 14)}
+          >
+            {t('hero.credentialLine')}
+          </motion.p>
+
+          <motion.p
+            className="text-[1.05rem] sm:text-[1.15rem] leading-relaxed text-on-surface max-w-[36ch] font-medium"
+            {...enter(0.22, 12)}
+          >
+            {t('hero.headline')}
+          </motion.p>
+
+          <motion.p
+            className="text-[0.95rem] sm:text-base leading-relaxed text-on-surface-variant max-w-[42ch]"
+            {...enter(0.28, 10)}
+          >
+            {t('hero.defaultSubhead')}
+          </motion.p>
+
+          <motion.ul
+            className="grid gap-2 max-w-md"
+            {...enter(0.34, 10)}
+            aria-label={t('hero.metricsAria')}
+          >
+            {(['metricTests', 'metricSap', 'metricBadge'] as const).map((key) => (
+              <li
+                key={key}
+                className="flex gap-3 text-[0.9rem] sm:text-[0.95rem] text-on-surface border-l-2 border-primary/50 pl-3"
+              >
+                {t(`hero.${key}`)}
+              </li>
+            ))}
+          </motion.ul>
+
+          <motion.div
+            className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 pt-2"
+            {...enter(0.4, 10)}
+          >
+            {cvUrl ? (
+              <a
+                className="btn-primary min-h-12 px-7 py-3.5 rounded-md text-base font-semibold inline-flex items-center justify-center gap-2 w-full sm:w-auto transition-transform duration-150 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                href={cvUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className="material-symbols-outlined text-[20px]">download</span>
+                {t('common.downloadCv')}
+              </a>
+            ) : contactEmail ? (
+              <a
+                className="btn-primary min-h-12 px-7 py-3.5 rounded-md text-base font-semibold inline-flex items-center justify-center gap-2 w-full sm:w-auto transition-transform duration-150 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                href={`mailto:${contactEmail}`}
+              >
+                {t('common.emailMe')}
+              </a>
+            ) : null}
+
+            <a
+              className="btn-secondary min-h-12 px-6 py-3.5 rounded-md text-base font-semibold inline-flex items-center justify-center gap-2 w-full sm:w-auto transition-transform duration-150 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+              href="#projects"
+            >
+              {t('hero.seeWork')}
+              <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
+            </a>
+          </motion.div>
+        </div>
+
+        <motion.div className="space-y-3 lg:pt-4" {...enter(0.18, 22)}>
+          <BridgeGraph />
+          <button
+            type="button"
+            onClick={() => setSimulatorOpen(true)}
+            className="w-full inline-flex items-center justify-center gap-2 rounded-md border border-white/12 px-4 py-3 text-sm font-medium text-on-surface transition-colors hover:border-primary/50 hover:bg-primary/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+          >
+            <span className="material-symbols-outlined text-[18px] text-primary">open_in_full</span>
+            {t('hero.openLab')}
+          </button>
+        </motion.div>
       </div>
+
+      {simulatorOpen ? <P2PSimulator isOpen onClose={() => setSimulatorOpen(false)} /> : null}
     </section>
   );
 }

@@ -20,7 +20,7 @@ function FeaturedCard({ cert, index }: { cert: Certification; index: number }) {
           ? 'md:col-span-2 border-primary/40 bg-primary/[0.05]'
           : 'border-white/10 bg-transparent hover:bg-white/[0.02]'
       }`}
-      aria-label={`${cert.title} — ${t('certifications.verify')}`}
+      aria-label={`${cert.title}. ${t('certifications.verify')}`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
@@ -123,11 +123,7 @@ export function Certifications() {
       id="certifications"
       aria-label={t('certifications.aria')}
     >
-      <SectionHeader
-        index="04 — Credentials"
-        title={t('certifications.title')}
-        lead={t('certifications.lead')}
-      />
+      <SectionHeader title={t('certifications.title')} lead={t('certifications.lead')} />
 
       <FadeIn variant="fade">
         <div className="space-y-10">

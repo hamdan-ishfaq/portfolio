@@ -16,11 +16,7 @@ export function Timeline({ events }: TimelineProps) {
 
   return (
     <section className="page-container section-block section-band relative" id="experience">
-      <SectionHeader
-        index="02 — Experience"
-        title={t('experience.title')}
-        lead={t('experience.lead')}
-      />
+      <SectionHeader title={t('experience.title')} lead={t('experience.lead')} />
 
       <div className="relative">
         <div

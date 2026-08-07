@@ -15,7 +15,7 @@ export function Skills() {
       id="skills"
       aria-label={t('skills.aria')}
     >
-      <SectionHeader index="03 — Capabilities" title={t('skills.title')} lead={t('skills.lead')} />
+      <SectionHeader title={t('skills.title')} lead={t('skills.lead')} />
 
       <FadeIn variant="fade">
         <div className="overflow-hidden border-y border-white/10">

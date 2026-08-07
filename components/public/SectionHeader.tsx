@@ -6,13 +6,11 @@ type SectionHeaderProps = {
   title: React.ReactNode;
   lead?: string;
   aside?: React.ReactNode;
-  /** Mono process code, e.g. 02 — EXPERIENCE */
-  index?: string;
   className?: string;
 };
 
-/** Section header with optional process index — breaks identical resume-block rhythm. */
-export function SectionHeader({ title, lead, aside, index, className = '' }: SectionHeaderProps) {
+/** Clean section title + lead. No decorative numbering. */
+export function SectionHeader({ title, lead, aside, className = '' }: SectionHeaderProps) {
   return (
     <FadeIn variant="wipe">
       <div
@@ -21,9 +19,8 @@ export function SectionHeader({ title, lead, aside, index, className = '' }: Sec
         } ${className}`}
       >
         <div className="max-w-2xl">
-          {index ? <p className="type-process mb-3">{index}</p> : null}
-          <h2 className="type-section mb-3 sm:mb-4 border-l-2 border-primary/50 pl-4">{title}</h2>
-          {lead ? <p className="type-lead pl-4">{lead}</p> : null}
+          <h2 className="type-section mb-3 sm:mb-4">{title}</h2>
+          {lead ? <p className="type-lead">{lead}</p> : null}
         </div>
         {aside ? (
           <div className="lg:justify-self-end lg:text-right text-on-surface-variant">{aside}</div>

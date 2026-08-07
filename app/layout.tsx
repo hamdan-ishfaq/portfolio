@@ -26,16 +26,16 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Muhammad Hamdan Ishfaq | SAP S/4HANA MM & Supply Chain',
+    default: 'Muhammad Hamdan Ishfaq | SAP S/4HANA MM · SD · BTP',
     template: '%s | Muhammad Hamdan Ishfaq',
   },
   description:
-    'SAP S/4HANA MM · Supply Chain Data Analyst · Ex-SAP Intern @ FFC & AI Intern @ Nexpred · BS Data Science NUST.',
+    'SAP techno-functional consultant — S/4HANA Materials Management, Sales & Distribution, and BTP. Ex-SAP Intern @ FFC · BS Data Science NUST.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://localhost:3000'),
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    siteName: 'Muhammad Hamdan Ishfaq — SAP S/4HANA & Supply Chain',
+    siteName: 'Muhammad Hamdan Ishfaq — SAP S/4HANA MM · SD · BTP',
   },
   twitter: {
     card: 'summary_large_image',
