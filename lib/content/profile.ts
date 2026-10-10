@@ -287,6 +287,7 @@ export const PROFILE = {
     tier1: { en: 'Official credentials', de: 'Offizielle Nachweise' },
     tier2: { en: 'Professional development', de: 'Berufliche Weiterbildung' }, // TODO(review DE)
     tier2Hint: { en: 'Verified coursework', de: 'Verifizierte Kursarbeit' }, // TODO(review DE)
+    tier3: { en: 'Coursework', de: 'Kursarbeit' }, // TODO(review DE)
     items: [
       {
         id: 'sap-s4-sourcing-procurement',
