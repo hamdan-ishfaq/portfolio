@@ -7,6 +7,7 @@ import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
 import { useState } from 'react';
+import { useLocale } from '@/components/providers/LocaleProvider';
 
 type MarkdownRendererProps = {
   content: string;
@@ -61,6 +62,7 @@ export function MarkdownRenderer({ content, className = '' }: MarkdownRendererPr
 
 // Code block with a copy button
 function CodeBlock({ children, ...props }: React.HTMLAttributes<HTMLPreElement>) {
+  const { t } = useLocale();
   const [copied, setCopied] = useState(false);
 
   function getTextContent(node: React.ReactNode): string {
@@ -88,7 +90,7 @@ function CodeBlock({ children, ...props }: React.HTMLAttributes<HTMLPreElement>)
       <button
         type="button"
         onClick={handleCopy}
-        aria-label="Copy code"
+        aria-label={t('a11y.copyCode')}
         className="absolute top-3 right-3 px-2 py-1 rounded-md text-xs font-mono text-on-surface-variant bg-surface-container border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity hover:text-primary"
       >
         {copied ? '✓ Copied' : 'Copy'}

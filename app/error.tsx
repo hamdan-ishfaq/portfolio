@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useLocale } from '@/components/providers/LocaleProvider';
 
 type ErrorProps = {
   error: Error & { digest?: string };
@@ -8,6 +9,8 @@ type ErrorProps = {
 };
 
 export default function Error({ error, reset }: ErrorProps) {
+  const { t } = useLocale();
+
   return (
     <main
       id="main-content"
@@ -16,12 +19,8 @@ export default function Error({ error, reset }: ErrorProps) {
       <div className="glass-card rounded-2xl p-8 sm:p-10 max-w-md w-full space-y-6">
         <span className="material-symbols-outlined text-5xl text-error">error</span>
         <div className="space-y-2">
-          <h1 className="font-headline-md text-headline-md text-on-surface">
-            Something went wrong
-          </h1>
-          <p className="text-sm text-on-surface-variant">
-            An unexpected error occurred while loading this page.
-          </p>
+          <h1 className="font-headline-md text-headline-md text-on-surface">{t('error.title')}</h1>
+          <p className="text-sm text-on-surface-variant">{t('error.body')}</p>
           {process.env.NODE_ENV === 'development' && error.message && (
             <p className="text-xs font-mono text-error/80 break-all pt-2">{error.message}</p>
           )}
@@ -32,13 +31,13 @@ export default function Error({ error, reset }: ErrorProps) {
             onClick={() => reset()}
             className="btn-primary px-6 py-2.5 rounded-lg font-semibold text-sm"
           >
-            Try again
+            {t('error.retry')}
           </button>
           <Link
             href="/"
             className="btn-secondary px-6 py-2.5 rounded-lg font-semibold text-sm inline-flex items-center justify-center"
           >
-            Back to home
+            {t('error.home')}
           </Link>
         </div>
       </div>

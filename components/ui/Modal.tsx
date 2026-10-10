@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
+import { useLocale } from '@/components/providers/LocaleProvider';
 
 type ModalProps = {
   isOpen: boolean;
@@ -17,14 +18,41 @@ const SIZE_CLASS: Record<'md' | 'xl', string> = {
   xl: 'w-[min(100vw,76rem)] h-[92vh] sm:h-[88vh]',
 };
 
+function getFocusable(dialog: HTMLElement): HTMLElement[] {
+  return Array.from(
+    dialog.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    )
+  ).filter((el) => !el.hasAttribute('disabled') && el.getAttribute('aria-hidden') !== 'true');
+}
+
 export function Modal({ isOpen, onClose, title, children, id, size = 'md' }: ModalProps) {
+  const { t } = useLocale();
   const dialogRef = useRef<HTMLDivElement>(null);
   const openedAtRef = useRef(0);
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!isOpen) return;
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        onClose();
+        return;
+      }
+      if (e.key === 'Tab' && dialogRef.current) {
+        const focusable = getFocusable(dialogRef.current);
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        const active = document.activeElement;
+        if (e.shiftKey && (active === first || active === document.body)) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && (active === last || active === document.body)) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     };
     document.addEventListener('keydown', handler);
     return () => document.removeEventListener('keydown', handler);
@@ -33,9 +61,12 @@ export function Modal({ isOpen, onClose, title, children, id, size = 'md' }: Mod
   useEffect(() => {
     if (isOpen) {
       openedAtRef.current = Date.now();
+      previouslyFocusedRef.current = document.activeElement as HTMLElement | null;
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
+      previouslyFocusedRef.current?.focus?.();
+      previouslyFocusedRef.current = null;
     }
     return () => {
       document.body.style.overflow = '';
@@ -44,9 +75,7 @@ export function Modal({ isOpen, onClose, title, children, id, size = 'md' }: Mod
 
   useEffect(() => {
     if (!isOpen || !dialogRef.current) return;
-    const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
+    const focusable = getFocusable(dialogRef.current);
     focusable[0]?.focus();
   }, [isOpen]);
 
@@ -86,7 +115,7 @@ export function Modal({ isOpen, onClose, title, children, id, size = 'md' }: Mod
             <button
               type="button"
               onClick={onClose}
-              aria-label="Close dialog"
+              aria-label={t('a11y.closeDialog')}
               className="shrink-0 text-on-surface-variant hover:text-on-surface transition-colors p-1 rounded-lg hover:bg-white/5"
             >
               <svg

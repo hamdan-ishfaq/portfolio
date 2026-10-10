@@ -89,7 +89,7 @@ export function Navbar({ settings }: NavbarProps) {
       <header className="fixed top-0 w-full z-50 border-b border-white/8 backdrop-blur-xl supports-[padding:max(0px)]:pt-[env(safe-area-inset-top)] bg-[var(--ds-nav-bg)]">
         <nav
           className="page-container flex justify-between items-center gap-3 py-3 sm:py-4"
-          aria-label="Main navigation"
+          aria-label={t('a11y.mainNav')}
         >
           <a
             href="#home"
@@ -169,7 +169,7 @@ export function Navbar({ settings }: NavbarProps) {
           <nav
             className="absolute top-0 right-0 w-[min(100vw,18rem)] h-full glass-panel flex flex-col pt-20 px-6 gap-1 border-l border-white/10"
             onClick={(e) => e.stopPropagation()}
-            aria-label="Mobile navigation"
+            aria-label={t('a11y.mobileNav')}
           >
             <div className="mb-4 sm:hidden">
               <LanguageToggle />

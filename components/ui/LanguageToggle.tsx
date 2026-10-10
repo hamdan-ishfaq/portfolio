@@ -23,7 +23,7 @@ export function LanguageToggle({ className = '' }: { className?: string }) {
           type="button"
           onClick={() => setLocale(opt.id)}
           aria-pressed={locale === opt.id}
-          aria-label={opt.id === 'en' ? t('common.switchToEn') : t('common.switchToDe')}
+          aria-label={`${opt.id === 'en' ? t('common.switchToEn') : t('common.switchToDe')} (${opt.label})`}
           className={`min-h-9 min-w-9 px-2.5 rounded-md text-xs font-semibold tracking-wide transition-colors ${
             locale === opt.id
               ? 'bg-primary/20 text-primary border border-primary/30'

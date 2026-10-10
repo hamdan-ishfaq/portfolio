@@ -4,6 +4,7 @@
 // Success/error/info toasts that auto-dismiss after 4 seconds.
 // Usage: import useToast, wrap your app in <ToastProvider />, call toast.show()
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import { useLocale } from '@/components/providers/LocaleProvider';
 
 type ToastVariant = 'success' | 'error' | 'info';
 
@@ -77,13 +78,14 @@ const variantStyles: Record<ToastVariant, { container: string; icon: ReactNode }
 };
 
 export function ToastProvider({ children }: { children: ReactNode }) {
+  const { t } = useLocale();
   const [toasts, setToasts] = useState<ToastItem[]>([]);
 
   const show = useCallback((message: string, variant: ToastVariant = 'info') => {
     const id = Math.random().toString(36).slice(2);
     setToasts((prev) => [...prev, { id, message, variant }]);
     setTimeout(() => {
-      setToasts((prev) => prev.filter((t) => t.id !== id));
+      setToasts((prev) => prev.filter((item) => item.id !== id));
     }, 4000);
   }, []);
 
@@ -108,8 +110,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               <span className="flex-1">{toast.message}</span>
               <button
                 type="button"
-                onClick={() => setToasts((prev) => prev.filter((t) => t.id !== toast.id))}
-                aria-label="Dismiss notification"
+                onClick={() => setToasts((prev) => prev.filter((item) => item.id !== toast.id))}
+                aria-label={t('a11y.dismiss')}
                 className="text-on-surface-variant hover:text-on-surface ml-1 shrink-0"
               >
                 <svg

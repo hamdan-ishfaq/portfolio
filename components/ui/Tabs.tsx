@@ -3,6 +3,7 @@
 // components/ui/Tabs.tsx
 // Keyboard-navigable tab interface used on the project detail page.
 import { useState, type ReactNode } from 'react';
+import { useLocale } from '@/components/providers/LocaleProvider';
 
 type Tab = {
   id: string;
@@ -17,6 +18,7 @@ type TabsProps = {
 };
 
 export function Tabs({ tabs, defaultTab, className = '' }: TabsProps) {
+  const { t } = useLocale();
   const [activeId, setActiveId] = useState(defaultTab ?? tabs[0]?.id ?? '');
 
   function handleKeyDown(e: React.KeyboardEvent, index: number) {
@@ -26,6 +28,12 @@ export function Tabs({ tabs, defaultTab, className = '' }: TabsProps) {
     } else if (e.key === 'ArrowLeft') {
       const prev = tabs[(index - 1 + tabs.length) % tabs.length];
       setActiveId(prev.id);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      setActiveId(tabs[0].id);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      setActiveId(tabs[tabs.length - 1].id);
     }
   }
 
@@ -34,7 +42,7 @@ export function Tabs({ tabs, defaultTab, className = '' }: TabsProps) {
       {/* Tab list */}
       <div
         role="tablist"
-        aria-label="Content sections"
+        aria-label={t('a11y.tabs')}
         className="flex border-b border-white/5 gap-1 overflow-x-auto no-scrollbar -mx-1 px-1"
       >
         {tabs.map((tab, i) => (

@@ -55,15 +55,24 @@ export function ProjectCommentForm({ projectId }: ProjectCommentFormProps) {
         <span className="material-symbols-outlined">person</span>
       </div>
       <div className="flex-grow space-y-sm">
+        <label htmlFor="comment-author" className="sr-only">
+          {t('comments.nameLabel')}
+        </label>
         <input
+          id="comment-author"
           type="text"
           value={authorName}
           onChange={(e) => setAuthorName(e.target.value)}
           placeholder={t('comments.namePlaceholder')}
           maxLength={100}
+          autoComplete="name"
           className="w-full bg-surface-container border border-outline-variant rounded-lg px-sm py-2 font-body-sm text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-on-surface-variant/50"
         />
+        <label htmlFor="comment-content" className="sr-only">
+          {t('comments.contentLabel')}
+        </label>
         <textarea
+          id="comment-content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           className="w-full bg-surface-container border border-outline-variant rounded-lg p-sm font-body-sm text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-y min-h-[100px] placeholder:text-on-surface-variant/50"
