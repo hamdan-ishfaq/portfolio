@@ -84,12 +84,12 @@ export const PROFILE = {
   },
   hero: {
     subline: {
-      en: 'Supply chain analytics and AI engineering · SAP S/4HANA (MM/SD) exposure · AI Engineer @ AI Solutions Lab · Ex-FFC · Ex-NexPred',
-      de: 'Supply-Chain-Analytik und AI Engineering · SAP S/4HANA (MM/SD)-Erfahrung · AI Engineer @ AI Solutions Lab · Ex-FFC · Ex-NexPred', // TODO(review DE)
+      en: 'Supply chain analytics and AI engineering · SAP S/4HANA (MM/SD) exposure · AI Engineer @ AI Solutions Lab · Ex-FFC · Ex-MachVis · Ex-NexPred',
+      de: 'Supply-Chain-Analytik und AI Engineering · SAP S/4HANA (MM/SD)-Erfahrung · AI Engineer @ AI Solutions Lab · Ex-FFC · Ex-MachVis · Ex-NexPred', // TODO(review DE)
     },
     statement: {
-      en: 'I turn operational and sales data into forecasts, dashboards and working systems for supply chains.',
-      de: 'Ich verwandle operative und Vertriebsdaten in Prognosen, Dashboards und funktionierende Systeme für Lieferketten.', // TODO(review DE)
+      en: 'I turn operational and sales data into forecasts, dashboards and working systems for supply chains — and I build and test the AI systems that power them.',
+      de: 'Ich verwandle operative und Vertriebsdaten in Prognosen, Dashboards und funktionierende Systeme für Lieferketten — und baue und teste die KI-Systeme, die sie antreiben.', // TODO(review DE)
     },
     proof: {
       en: [
