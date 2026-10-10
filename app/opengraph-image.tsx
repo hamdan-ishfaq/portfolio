@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'Muhammad Hamdan Ishfaq — SAP S/4HANA MM & Supply Chain';
+export const alt = 'Muhammad Hamdan Ishfaq — Supply Chain Analytics & AI Engineering';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 

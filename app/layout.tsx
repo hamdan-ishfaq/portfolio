@@ -40,19 +40,22 @@ const plexMono = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Muhammad Hamdan Ishfaq | SAP S/4HANA MM · SD · BTP',
+    default: 'Muhammad Hamdan Ishfaq | Supply Chain Analytics & AI Engineering',
     template: '%s | Muhammad Hamdan Ishfaq',
   },
   description:
-    'SAP techno-functional consultant — S/4HANA Materials Management, Sales & Distribution, and BTP. Ex-SAP Intern @ FFC · BS Data Science NUST.',
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://localhost:3000'),
+    'Supply chain analytics and AI engineering — demand forecasting, SAP S/4HANA (MM/SD) exposure, and applied AI systems. Ex-FFC · AI Engineer @ AI Solutions Lab · BS Data Science NUST.',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    siteName: 'Muhammad Hamdan Ishfaq — SAP S/4HANA MM · SD · BTP',
+    alternateLocale: 'de_DE',
+    siteName: 'Muhammad Hamdan Ishfaq — Supply Chain Analytics & AI Engineering',
   },
   twitter: {
     card: 'summary_large_image',
+    description:
+      'Supply chain analytics and AI engineering — demand forecasting, SAP S/4HANA (MM/SD) exposure, and applied AI systems. Ex-FFC · AI Engineer @ AI Solutions Lab.',
   },
   robots: {
     index: true,

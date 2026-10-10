@@ -175,7 +175,7 @@ export const PROFILE = {
         },
         organization: 'Fauji Fertilizer Company Limited (FFC)',
         // TODO(confirm): Lahore vs Port Qasim vs other.
-        location: { en: 'TODO(confirm)', de: 'TODO(confirm)' },
+        location: null,
         dateRange: { en: 'Jun 2026 – Jul 2026', de: 'Jun. 2026 – Jul. 2026' },
         startDate: '2026-06-01',
         endDate: '2026-07-31',
