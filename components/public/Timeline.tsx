@@ -1,22 +1,22 @@
 'use client';
 
-import type { TimelineEvent } from '@/types';
 import { SectionHeader } from '@/components/public/SectionHeader';
 import { StaggerItem } from '@/components/ui/StaggerItem';
 import { useLocale } from '@/components/providers/LocaleProvider';
+import { getExperience, pick, PROFILE } from '@/lib/content/profile';
 
-type TimelineProps = {
-  events: TimelineEvent[];
-};
+/** Vertical posting log — audit-trail layout, not a zig-zig timeline template. */
+export function Timeline() {
+  const { locale } = useLocale();
+  const events = getExperience(locale);
+  if (events.length === 0) return null;
 
-/** Vertical posting log — audit-trail layout, not a zig-zag timeline template. */
-export function Timeline({ events }: TimelineProps) {
-  const { t } = useLocale();
-  if (!events || events.length === 0) return null;
+  const title = pick(PROFILE.experience.title, locale);
+  const lead = pick(PROFILE.experience.lead, locale);
 
   return (
     <section className="page-container section-block section-band relative" id="experience">
-      <SectionHeader title={t('experience.title')} lead={t('experience.lead')} />
+      <SectionHeader title={title} lead={lead} />
 
       <div className="relative">
         <div
