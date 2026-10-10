@@ -2,12 +2,12 @@
 
 import Link from 'next/link';
 import type { Project } from '@/types';
-import type { PortfolioCaseStudy } from '@/lib/content/portfolio';
+import type { ResolvedCaseStudy } from '@/lib/content/profile';
 import { TechBadge } from '@/components/ui/Badge';
 import { useLocale } from '@/components/providers/LocaleProvider';
 
 type ProjectCardProps = {
-  project: Project | PortfolioCaseStudy;
+  project: Project | ResolvedCaseStudy;
   tier: 0 | 1 | 2 | 3;
   index?: number;
 };
@@ -17,14 +17,17 @@ const MODULE_BY_SLUG: Record<string, string> = {
   talash: 'HR · NLP',
   nexus: 'AGENTS · MCP',
   hermes: 'RAG · RRF',
+  'ffc-demand-analysis': 'SC · ANALYTICS',
+  'jurisguard-v2': 'LEGAL · RAG',
+  'final-year-project': 'AI · GRAPHRAG',
 };
 
-function getMetrics(project: Project | PortfolioCaseStudy): string[] {
+function getMetrics(project: Project | ResolvedCaseStudy): string[] {
   if ('metrics' in project && Array.isArray(project.metrics)) return project.metrics;
   return [];
 }
 
-function getCredit(project: Project | PortfolioCaseStudy): string | undefined {
+function getCredit(project: Project | ResolvedCaseStudy): string | undefined {
   if ('credit' in project && typeof project.credit === 'string') return project.credit;
   return undefined;
 }

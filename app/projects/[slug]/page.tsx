@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
+import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { adminSupabase } from '@/lib/supabase/admin';
 import { Footer } from '@/components/public/Footer';
 import { ProjectClientWrapper } from './ProjectClientWrapper';
-import { PORTFOLIO_CASE_STUDIES } from '@/lib/content/portfolio';
+import { getStaticCaseStudy, resolveCaseStudy, PROFILE } from '@/lib/content/profile';
+import { LOCALE_COOKIE, parseLocale } from '@/lib/preferences';
+import type { Locale } from '@/lib/i18n';
 import type { Project, DevlogEntry, ProjectComment, GlobalSettings } from '@/types';
 
 export const revalidate = 300;
@@ -17,13 +20,19 @@ function getSiteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 }
 
-function getStaticCase(slug: string): Project | null {
-  const match = PORTFOLIO_CASE_STUDIES.find((p) => p.slug === slug && p.published);
-  return match ? (match as Project) : null;
+async function getLocale(): Promise<Locale> {
+  const store = await cookies();
+  return parseLocale(store.get(LOCALE_COOKIE)?.value);
+}
+
+function getStaticCase(slug: string, locale: Locale): Project | null {
+  const study = getStaticCaseStudy(slug);
+  return study && study.published ? resolveCaseStudy(study, locale) : null;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  const locale = await getLocale();
   const supabase = await createServerSupabaseClient();
 
   const { data: project } = await supabase
@@ -33,7 +42,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     .eq('published', true)
     .single();
 
-  const fallback = getStaticCase(slug);
+  const fallback = getStaticCase(slug, locale);
   const resolved = project ?? fallback;
 
   if (!resolved) {
@@ -46,7 +55,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: resolved.title,
     description: resolved.short_description,
-    alternates: { canonical: pageUrl },
+    alternates: {
+      canonical: pageUrl,
+      languages: {
+        'en-US': pageUrl,
+        'de-DE': pageUrl,
+      },
+    },
     openGraph: {
       title: resolved.title,
       description: resolved.short_description,
@@ -91,6 +106,7 @@ function buildProjectJsonLd(project: Project, siteUrl: string) {
 
 export default async function ProjectDetailPage({ params }: PageProps) {
   const { slug } = await params;
+  const locale = await getLocale();
   const supabase = await createServerSupabaseClient();
   const siteUrl = getSiteUrl();
 
@@ -98,13 +114,16 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
   const { data: dbProject } = await supabase.from('projects').select('*').eq('slug', slug).single();
 
-  const project = dbProject && dbProject.published ? (dbProject as Project) : getStaticCase(slug);
+  const project =
+    dbProject && dbProject.published ? (dbProject as Project) : getStaticCase(slug, locale);
 
   if (!project) {
     notFound();
   }
 
-  const { data: devlogs } = dbProject?.id
+  const canInteract = Boolean(dbProject?.id);
+
+  const { data: devlogs } = canInteract
     ? await supabase
         .from('devlog_entries')
         .select('*')
@@ -113,7 +132,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         .order('entry_date', { ascending: false })
     : { data: [] };
 
-  const { data: comments } = dbProject?.id
+  const { data: comments } = canInteract
     ? await supabase
         .from('project_comments')
         .select('*')
@@ -134,6 +153,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         project={project}
         devlogs={(devlogs as DevlogEntry[]) ?? []}
         comments={(comments as ProjectComment[]) ?? []}
+        canInteract={canInteract}
       />
       <Footer settings={settings as GlobalSettings | null} />
     </>
@@ -147,7 +167,9 @@ export async function generateStaticParams() {
     .eq('published', true);
 
   const dbSlugs = (projects || []).map((project) => ({ slug: project.slug }));
-  const staticSlugs = PORTFOLIO_CASE_STUDIES.map((p) => ({ slug: p.slug }));
+  const staticSlugs = PROFILE.caseStudies.items
+    .filter((item) => item.published)
+    .map((item) => ({ slug: item.slug }));
   const seen = new Set<string>();
   return [...dbSlugs, ...staticSlugs].filter(({ slug }) => {
     if (seen.has(slug)) return false;

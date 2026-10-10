@@ -19,9 +19,16 @@ type ProjectClientWrapperProps = {
   project: Project;
   comments: ProjectComment[];
   devlogs: DevlogEntry[];
+  /** False for static case studies that exist only as curated copy, not as CMS records. */
+  canInteract?: boolean;
 };
 
-export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClientWrapperProps) {
+export function ProjectClientWrapper({
+  project,
+  comments,
+  devlogs,
+  canInteract = false,
+}: ProjectClientWrapperProps) {
   const { t } = useLocale();
   const [demoModalOpen, setDemoModalOpen] = useState(false);
   const loomVideoId =
@@ -70,14 +77,21 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
           </div>
 
           <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-sm">
-            <button
-              type="button"
-              onClick={() => setDemoModalOpen(true)}
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-sm px-lg py-3 sm:py-sm rounded-lg btn-primary font-label-caps text-label-caps"
-            >
-              <span className="material-symbols-outlined text-[18px]">play_circle</span>
-              {t('projectPage.requestDemo')}
-            </button>
+            {canInteract ? (
+              <button
+                type="button"
+                onClick={() => setDemoModalOpen(true)}
+                className="inline-flex w-full sm:w-auto items-center justify-center gap-sm px-lg py-3 sm:py-sm rounded-lg btn-primary font-label-caps text-label-caps"
+              >
+                <span className="material-symbols-outlined text-[18px]">play_circle</span>
+                {t('projectPage.requestDemo')}
+              </button>
+            ) : (
+              <span className="inline-flex w-full sm:w-auto items-center justify-center gap-sm px-md py-3 sm:py-sm rounded-lg bg-surface-container-low border border-dashed border-outline-variant text-on-surface-variant font-label-caps text-label-caps">
+                <span className="material-symbols-outlined text-[18px]">visibility</span>
+                {t('projectPage.readOnly')}
+              </span>
+            )}
             {project.github_repo && (
               <a
                 href={ensureExternalUrl(project.github_repo)}
@@ -124,13 +138,17 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
                   videocam_off
                 </span>
                 <p className="text-sm text-on-surface-variant">{t('projectPage.demoSoon')}</p>
-                <button
-                  type="button"
-                  onClick={() => setDemoModalOpen(true)}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-container text-on-primary-container text-sm font-semibold hover:opacity-90 transition-opacity"
-                >
-                  {t('projectPage.requestWalkthrough')}
-                </button>
+                {canInteract ? (
+                  <button
+                    type="button"
+                    onClick={() => setDemoModalOpen(true)}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-container text-on-primary-container text-sm font-semibold hover:opacity-90 transition-opacity"
+                  >
+                    {t('projectPage.requestWalkthrough')}
+                  </button>
+                ) : (
+                  <p className="text-sm text-on-surface-variant/70">{t('projectPage.readOnly')}</p>
+                )}
               </div>
             </div>
           )}
@@ -218,56 +236,64 @@ export function ProjectClientWrapper({ project, comments, devlogs }: ProjectClie
                   </div>
                 ),
               },
-              {
-                id: 'discussion',
-                label: t('projectPage.discussion'),
-                content: (
-                  <div className="max-w-3xl space-y-6 sm:space-y-xl">
-                    <ProjectCommentForm projectId={project.id} />
-                    <div className="space-y-4 sm:space-y-md">
-                      {comments.length === 0 ? (
-                        <div className="text-on-surface-variant">{t('projectPage.noComments')}</div>
-                      ) : (
-                        comments.map((comment) => (
-                          <div key={comment.id} className="flex gap-3 sm:gap-md">
-                            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-surface-container-highest flex-shrink-0 border border-white/10 flex items-center justify-center text-on-surface-variant">
-                              <span className="material-symbols-outlined text-[20px]">
-                                account_circle
-                              </span>
-                            </div>
-                            <div className="flex-grow min-w-0">
-                              <div className="glass-card p-4 sm:p-md rounded-xl rounded-tl-none">
-                                <div className="flex flex-wrap justify-between items-center gap-2 mb-xs">
-                                  <span className="font-headline-md text-[14px] text-on-surface">
-                                    {comment.author_name}
-                                  </span>
-                                  <span className="font-label-caps text-[10px] text-on-surface-variant">
-                                    {formatDate(comment.created_at)}
-                                  </span>
-                                </div>
-                                <p className="font-body-sm text-body-sm text-on-surface-variant break-words">
-                                  {comment.content}
-                                </p>
+              ...(canInteract
+                ? [
+                    {
+                      id: 'discussion',
+                      label: t('projectPage.discussion'),
+                      content: (
+                        <div className="max-w-3xl space-y-6 sm:space-y-xl">
+                          <ProjectCommentForm projectId={project.id} />
+                          <div className="space-y-4 sm:space-y-md">
+                            {comments.length === 0 ? (
+                              <div className="text-on-surface-variant">
+                                {t('projectPage.noComments')}
                               </div>
-                            </div>
+                            ) : (
+                              comments.map((comment) => (
+                                <div key={comment.id} className="flex gap-3 sm:gap-md">
+                                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-surface-container-highest flex-shrink-0 border border-white/10 flex items-center justify-center text-on-surface-variant">
+                                    <span className="material-symbols-outlined text-[20px]">
+                                      account_circle
+                                    </span>
+                                  </div>
+                                  <div className="flex-grow min-w-0">
+                                    <div className="glass-card p-4 sm:p-md rounded-xl rounded-tl-none">
+                                      <div className="flex flex-wrap justify-between items-center gap-2 mb-xs">
+                                        <span className="font-headline-md text-[14px] text-on-surface">
+                                          {comment.author_name}
+                                        </span>
+                                        <span className="font-label-caps text-[10px] text-on-surface-variant">
+                                          {formatDate(comment.created_at)}
+                                        </span>
+                                      </div>
+                                      <p className="font-body-sm text-body-sm text-on-surface-variant break-words">
+                                        {comment.content}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))
+                            )}
                           </div>
-                        ))
-                      )}
-                    </div>
-                  </div>
-                ),
-              },
+                        </div>
+                      ),
+                    },
+                  ]
+                : []),
             ]}
           />
         </section>
       </main>
 
-      <DemoRequestModal
-        isOpen={demoModalOpen}
-        onClose={() => setDemoModalOpen(false)}
-        projectId={project.id}
-        projectTitle={project.title}
-      />
+      {canInteract && (
+        <DemoRequestModal
+          isOpen={demoModalOpen}
+          onClose={() => setDemoModalOpen(false)}
+          projectId={project.id}
+          projectTitle={project.title}
+        />
+      )}
     </div>
   );
 }
