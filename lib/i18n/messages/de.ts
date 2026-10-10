@@ -26,6 +26,17 @@ export const de: Messages = {
     more: 'weitere',
     ongoing: 'Laufend',
   },
+  a11y: {
+    mainNav: 'Hauptnavigation',
+    mobileNav: 'Mobile Navigation',
+    tabs: 'Abschnitts-Registerkarten',
+    closeDialog: 'Dialog schließen',
+    copyCode: 'Code kopieren',
+    dismiss: 'Benachrichtigung schließen',
+    experienceHighlights: 'Erfahrungspunkte',
+    capabilities: 'Kompetenzen',
+    credentials: 'Nachweise',
+  },
   nav: {
     about: 'Über mich',
     skills: 'Kompetenzen',
@@ -159,6 +170,8 @@ export const de: Messages = {
     timeline: 'Zeitraum',
     noDevlog: 'Noch keine Updates.',
     noComments: 'Noch keine Kommentare.',
+    readOnly:
+      'Diese Fallstudie ist eine statische Ausarbeitung; Live-Demo-Anfragen und Kommentare sind daher nicht verfügbar.',
   },
   comments: {
     namePlaceholder: 'Ihr Name',
@@ -196,6 +209,12 @@ export const de: Messages = {
     code: '404',
     title: 'Diese Seite existiert nicht.',
     lead: 'Die gesuchte Seite ist nicht verfügbar. Kehren Sie zum Portfolio zurück oder sehen Sie sich die Projekte an.',
+  },
+  error: {
+    title: 'Etwas ist schiefgelaufen.',
+    body: 'Beim Laden dieser Seite ist ein unerwarteter Fehler aufgetreten. Sie können es erneut versuchen oder zur Startseite zurückkehren.',
+    retry: 'Erneut versuchen',
+    home: 'Zur Startseite',
   },
   admin: {
     console: 'Admin-Konsole',

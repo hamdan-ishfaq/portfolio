@@ -24,6 +24,17 @@ export const en = {
     more: 'more',
     ongoing: 'Ongoing',
   },
+  a11y: {
+    mainNav: 'Main navigation',
+    mobileNav: 'Mobile navigation',
+    tabs: 'Section tabs',
+    closeDialog: 'Close dialog',
+    copyCode: 'Copy code',
+    dismiss: 'Dismiss notification',
+    experienceHighlights: 'Experience highlights',
+    capabilities: 'Capabilities',
+    credentials: 'Credentials',
+  },
   nav: {
     about: 'About',
     skills: 'Capabilities',
@@ -157,6 +168,8 @@ export const en = {
     timeline: 'Timeline',
     noDevlog: 'No updates yet.',
     noComments: 'No comments yet.',
+    readOnly:
+      'This case study is a static write-up, so live demo requests and comments are unavailable.',
   },
   comments: {
     namePlaceholder: 'Your name',
@@ -194,6 +207,12 @@ export const en = {
     code: '404',
     title: 'This route does not exist.',
     lead: 'The page you were looking for is unavailable. Return to the portfolio or browse the featured projects instead.',
+  },
+  error: {
+    title: 'Something went wrong.',
+    body: 'An unexpected error occurred while loading this page. You can try again, or head back home.',
+    retry: 'Try again',
+    home: 'Back Home',
   },
   admin: {
     console: 'Admin Console',
