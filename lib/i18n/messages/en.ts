@@ -67,7 +67,8 @@ export const en = {
     agentLane: 'SD · O2C',
     erpGloss: 'purchase request to order to receipt to invoice',
     agentGloss: 'sales order to delivery to goods issue to billing',
-    aiAside: 'Also builds ops automation tools when the process needs them.',
+    aiAside:
+      'Supporting evidence for the ERP side — the supply chain analytics and AI builds are detailed in the sections below.',
     metricsAria: 'Experience highlights',
     metricTests: 'Live S/4HANA support at FFC Port Qasim',
     metricSap: 'End-to-end P2P and O2C document tracing',

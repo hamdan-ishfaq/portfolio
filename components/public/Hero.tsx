@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import type { GlobalSettings } from '@/types';
 import { BridgeGraph } from '@/components/public/BridgeGraph';
 import { useLocale } from '@/components/providers/LocaleProvider';
+import { pick, PROFILE } from '@/lib/content/profile';
 
 const P2PSimulator = dynamic(
   () => import('@/components/public/P2PSimulator').then((m) => m.P2PSimulator),
@@ -19,21 +20,27 @@ type HeroProps = {
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 /**
- * Brand-first hero for MM/SD/BTP roles.
- * Name is the display signal; role line is loud; thesis is clear; BridgeGraph is the life.
+ * Two-lane hero: supply chain analytics + AI engineering, with SAP S/4HANA exposure.
+ * Badge states availability; subline states the two lanes; statement is the thesis;
+ * proof bullets carry the evidence; BridgeGraph stays as the supporting process figure.
  */
 export function Hero({ settings }: HeroProps) {
-  const { t } = useLocale();
+  const { locale, t } = useLocale();
   const prefersReducedMotion = useReducedMotion();
   const reduced = Boolean(prefersReducedMotion);
   const [simulatorOpen, setSimulatorOpen] = useState(false);
 
-  const displayName = settings?.display_name?.trim() || 'Muhammad Hamdan Ishfaq';
+  const displayName = settings?.display_name?.trim() || PROFILE.name;
   const cvUrl = settings?.cv_file_url?.trim();
   const contactEmail = settings?.email?.trim();
   const parts = displayName.split(/\s+/);
   const first = parts[0] ?? displayName;
   const rest = parts.slice(1).join(' ');
+
+  const badge = pick(PROFILE.badge, locale);
+  const subline = pick(PROFILE.hero.subline, locale);
+  const statement = pick(PROFILE.hero.statement, locale);
+  const proof = PROFILE.hero.proof[locale];
 
   const enter = (delay: number, y = 18) =>
     reduced
@@ -55,12 +62,8 @@ export function Hero({ settings }: HeroProps) {
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-on-surface-variant">
               <span className="inline-flex items-center gap-2 font-medium text-secondary">
                 <span className="h-2 w-2 rounded-full bg-secondary" aria-hidden="true" />
-                {t('hero.openTo')}
+                {badge}
               </span>
-              <span className="hidden sm:inline text-white/20" aria-hidden="true">
-                /
-              </span>
-              <span className="font-medium text-on-surface/80">{t('hero.metaRole')}</span>
             </div>
           </motion.div>
 
@@ -70,44 +73,37 @@ export function Hero({ settings }: HeroProps) {
           </motion.h1>
 
           <motion.p
-            className="text-[1.2rem] sm:text-[1.45rem] md:text-[1.6rem] font-semibold tracking-tight leading-snug text-primary max-w-[28ch]"
+            className="text-[1.2rem] sm:text-[1.45rem] md:text-[1.6rem] font-semibold tracking-tight leading-snug text-primary max-w-[30ch]"
             {...enter(0.16, 14)}
           >
-            {t('hero.credentialLine')}
+            {subline}
           </motion.p>
 
           <motion.p
-            className="text-[1.05rem] sm:text-[1.15rem] leading-relaxed text-on-surface max-w-[36ch] font-medium"
+            className="text-[1.05rem] sm:text-[1.15rem] leading-relaxed text-on-surface max-w-[40ch] font-medium"
             {...enter(0.22, 12)}
           >
-            {t('hero.headline')}
-          </motion.p>
-
-          <motion.p
-            className="text-[0.95rem] sm:text-base leading-relaxed text-on-surface-variant max-w-[42ch]"
-            {...enter(0.28, 10)}
-          >
-            {t('hero.defaultSubhead')}
+            {statement}
           </motion.p>
 
           <motion.ul
             className="grid gap-2 max-w-md"
-            {...enter(0.34, 10)}
-            aria-label={t('hero.metricsAria')}
+            {...enter(0.28, 10)}
+            aria-label={t('a11y.experienceHighlights')}
           >
-            {(['metricTests', 'metricSap', 'metricBadge'] as const).map((key) => (
+            {proof.map((item) => (
               <li
-                key={key}
+                key={item}
                 className="flex gap-3 text-[0.9rem] sm:text-[0.95rem] text-on-surface border-l-2 border-primary/50 pl-3"
               >
-                {t(`hero.${key}`)}
+                {item}
               </li>
             ))}
           </motion.ul>
 
           <motion.div
             className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 pt-2"
-            {...enter(0.4, 10)}
+            {...enter(0.34, 10)}
           >
             {cvUrl ? (
               <a

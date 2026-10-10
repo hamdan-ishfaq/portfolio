@@ -69,7 +69,8 @@ export const de: Messages = {
     agentLane: 'SD · O2C',
     erpGloss: 'Bestellanforderung zu Bestellung zu Wareneingang zu Rechnung',
     agentGloss: 'Kundenauftrag zu Lieferung zu Warenausgang zu Fakturierung',
-    aiAside: 'Baut bei Bedarf auch Ops-Automatisierungswerkzeuge.',
+    aiAside:
+      'Beleg für die ERP-Seite — die Supply-Chain-Analytik und KI-Builds sind in den Abschnitten darunter ausgeführt.', // TODO(review DE)
     metricsAria: 'Erfahrungspunkte',
     metricTests: 'Live-S/4HANA-Support bei FFC Port Qasim',
     metricSap: 'End-to-end P2P- und O2C-Dokumentenfluss',
