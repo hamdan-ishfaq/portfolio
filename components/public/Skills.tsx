@@ -1,54 +1,45 @@
 'use client';
 
-import { SKILL_CATEGORIES } from '@/lib/content/portfolio';
 import { SectionHeader } from '@/components/public/SectionHeader';
 import { FadeIn } from '@/components/ui/FadeIn';
 import { useLocale } from '@/components/providers/LocaleProvider';
+import { pick, PROFILE } from '@/lib/content/profile';
 
 /** Capability matrix — hairline definition rows, not chip clouds. */
 export function Skills() {
-  const { t } = useLocale();
+  const { locale } = useLocale();
+  const title = pick(PROFILE.capabilities.title, locale);
+  const lead = pick(PROFILE.capabilities.lead, locale);
+  const aria = pick(PROFILE.capabilities.aria, locale);
+  const groups = PROFILE.capabilities.groups;
 
   return (
-    <section
-      className="page-container section-block section-band"
-      id="skills"
-      aria-label={t('skills.aria')}
-    >
-      <SectionHeader title={t('skills.title')} lead={t('skills.lead')} />
+    <section className="page-container section-block section-band" id="skills" aria-label={aria}>
+      <SectionHeader title={title} lead={lead} />
 
       <FadeIn variant="fade">
         <div className="overflow-hidden border-y border-white/10">
-          {SKILL_CATEGORIES.map((category, index) => (
+          {groups.map((group) => (
             <div
-              key={category.id}
+              key={group.id}
               className="group grid gap-4 md:grid-cols-[minmax(0,17rem)_1fr] md:gap-12 px-1 py-5 sm:py-6 border-t border-white/8 first:border-t-0 transition-colors hover:bg-white/[0.02]"
             >
-              <div className="flex gap-3">
-                <span className="font-mono text-[11px] text-primary/80 pt-1 tabular-nums transition-colors group-hover:text-primary">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-                <div>
-                  <h3 className="text-[0.95rem] font-semibold tracking-tight text-on-surface font-display">
-                    {category.title}
-                  </h3>
-                  <p className="mt-1.5 text-xs leading-relaxed text-on-surface-variant">
-                    {category.context}
-                  </p>
-                </div>
+              <div>
+                <h3 className="text-[0.95rem] font-semibold tracking-tight text-on-surface font-display">
+                  {group.title[locale]}
+                </h3>
               </div>
 
-              <dl className="grid gap-x-8 gap-y-2 sm:grid-cols-2 content-start">
-                {category.items.map((item) => (
-                  <div
+              <ul className="grid gap-x-8 gap-y-2 sm:grid-cols-2 content-start">
+                {group.items.map((item) => (
+                  <li
                     key={item}
                     className="flex items-baseline gap-2 border-b border-white/6 pb-2 last:border-0 sm:last:border-b"
                   >
-                    <dt className="sr-only">{category.title}</dt>
-                    <dd className="text-[0.875rem] text-on-surface leading-snug">{item}</dd>
-                  </div>
+                    <span className="text-[0.875rem] text-on-surface leading-snug">{item}</span>
+                  </li>
                 ))}
-              </dl>
+              </ul>
             </div>
           ))}
         </div>
