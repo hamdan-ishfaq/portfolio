@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
-import { IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
+import localFont from 'next/font/local';
 import { Analytics } from '@vercel/analytics/react';
 import { SiteBackdrop } from '@/components/public/SiteBackdrop';
 import { ClientProviders } from '@/components/providers/ClientProviders';
@@ -8,19 +8,33 @@ import { SkipLink } from '@/components/ui/SkipLink';
 import { LOCALE_COOKIE, parseLocale, parseTheme, THEME_COOKIE } from '@/lib/preferences';
 import './globals.css';
 
-/** Financial Trust pairing (ui-ux-pro-max) — same family for UI + display, mono for audit data. */
-const plexSans = IBM_Plex_Sans({
+/**
+ * Financial Trust pairing (ui-ux-pro-max) — same family for UI + display, mono for audit data.
+ * Bundled locally (OFL-licensed IBM Plex) so builds never depend on Google Fonts serving
+ * flaky extensionless woff2 URLs (vercel/next.js#99114).
+ */
+const plexSans = localFont({
   variable: '--font-plex-sans',
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  style: ['normal', 'italic'],
+  src: [
+    { path: './fonts/ibm-plex-sans-latin-400-normal.woff2', weight: '400', style: 'normal' },
+    { path: './fonts/ibm-plex-sans-latin-400-italic.woff2', weight: '400', style: 'italic' },
+    { path: './fonts/ibm-plex-sans-latin-500-normal.woff2', weight: '500', style: 'normal' },
+    { path: './fonts/ibm-plex-sans-latin-500-italic.woff2', weight: '500', style: 'italic' },
+    { path: './fonts/ibm-plex-sans-latin-600-normal.woff2', weight: '600', style: 'normal' },
+    { path: './fonts/ibm-plex-sans-latin-600-italic.woff2', weight: '600', style: 'italic' },
+    { path: './fonts/ibm-plex-sans-latin-700-normal.woff2', weight: '700', style: 'normal' },
+    { path: './fonts/ibm-plex-sans-latin-700-italic.woff2', weight: '700', style: 'italic' },
+  ],
   display: 'swap',
 });
 
-const plexMono = IBM_Plex_Mono({
+const plexMono = localFont({
   variable: '--font-plex-mono',
-  subsets: ['latin'],
-  weight: ['400', '500', '600'],
+  src: [
+    { path: './fonts/ibm-plex-mono-latin-400-normal.woff2', weight: '400', style: 'normal' },
+    { path: './fonts/ibm-plex-mono-latin-500-normal.woff2', weight: '500', style: 'normal' },
+    { path: './fonts/ibm-plex-mono-latin-600-normal.woff2', weight: '600', style: 'normal' },
+  ],
   display: 'swap',
 });
 
