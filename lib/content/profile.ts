@@ -555,16 +555,16 @@ export const PROFILE = {
         slug: 'jurisguard-v2',
         title: 'JurisGuard V2',
         short: {
-          en: 'Air-gapped on-premise legal RAG with local inference and role-based access control, designed around GDPR, BDSG and BSI requirements for the DACH market. Includes a 17-test suite.',
-          de: 'Air-gapped On-Premise-Legal-RAG mit lokaler Inferenz und rollenbasierter Zugriffskontrolle, konzipiert entlang den Anforderungen von DSGVO, BDSG und BSI für den DACH-Markt. Inklusive 17-Test-Suite.', // TODO(review DE)
+          en: 'Air-gapped on-premise legal RAG with local inference and role-based access control, designed around GDPR, BDSG and BSI requirements for the DACH market. Tested by 250+ unit, 48 end-to-end and 16 browser tests.',
+          de: 'Air-gapped On-Premise-Legal-RAG mit lokaler Inferenz und rollenbasierter Zugriffskontrolle, konzipiert entlang den Anforderungen von DSGVO, BDSG und BSI für den DACH-Markt. Getestet mit über 250 Unit-, 48 End-to-End- und 16 Browser-Tests.', // TODO(review DE)
         },
         full: {
-          en: 'JurisGuard V2 is an air-gapped, on-premise legal retrieval system with local inference and role-based access control, designed around GDPR, BDSG and BSI requirements for the DACH market. It is not certified compliant; the design is aligned to those requirements. The build includes a 17-test suite.',
-          de: 'JurisGuard V2 ist ein air-gapped On-Premise- Rechts-Retrieval-System mit lokaler Inferenz und rollenbasierter Zugriffskontrolle, konzipiert entlang den Anforderungen von DSGVO, BDSG und BSI für den DACH-Markt. Es ist nicht zertifiziert konform; das Design orientiert sich an diesen Anforderungen. Der Build umfasst eine 17-Test-Suite.', // TODO(review DE)
+          en: 'JurisGuard V2 is an air-gapped, on-premise legal retrieval system with local inference and role-based access control, designed around GDPR, BDSG and BSI requirements for the DACH market. It is not certified compliant; the design is aligned to those requirements. It is tested by 250+ unit, 48 end-to-end and 16 browser tests.',
+          de: 'JurisGuard V2 ist ein air-gapped On-Premise- Rechts-Retrieval-System mit lokaler Inferenz und rollenbasierter Zugriffskontrolle, konzipiert entlang den Anforderungen von DSGVO, BDSG und BSI für den DACH-Markt. Es ist nicht zertifiziert konform; das Design orientiert sich an diesen Anforderungen. Getestet mit über 250 Unit-, 48 End-to-End- und 16 Browser-Tests.', // TODO(review DE)
         },
         metrics: {
-          en: ['17-test suite', 'On-premise, local inference', 'Role-based access control'],
-          de: ['17-Test-Suite', 'On-Premise, lokale Inferenz', 'Rollenbasierte Zugriffskontrolle'], // TODO(review DE)
+          en: ['250+ unit, 48 end-to-end, 16 browser tests', 'On-premise, local inference', 'Role-based access control'],
+          de: ['250+ Unit-, 48 E2E-, 16 Browser-Tests', 'On-Premise, lokale Inferenz', 'Rollenbasierte Zugriffskontrolle'], // TODO(review DE)
         },
         credit: null,
         tech: [tech('Python', 'language'), tech('PostgreSQL', 'database'), tech('Docker', 'tool')],
